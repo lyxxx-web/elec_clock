@@ -1,4 +1,4 @@
-# Install script for directory: /home/luoyunxin/esp/SquareLine_Project/managed_components/espressif__zlib
+# Install script for directory: /home/luoyunxin/esp/elec_clock_local/managed_components/espressif__zlib
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

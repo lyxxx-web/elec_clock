@@ -88,6 +88,7 @@ LV_IMG_DECLARE(ui_img_clody_png);    // assets/clody.png
 LV_IMG_DECLARE(ui_img_wifi_png);    // assets/wifi.png
 LV_IMG_DECLARE(ui_img_battery_png);    // assets/battery.png
 LV_IMG_DECLARE(ui_img_muyu_png);    // assets/muyu.png
+LV_IMG_DECLARE(ui_img_wifi_disconnection_png);
 
 
 

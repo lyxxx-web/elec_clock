@@ -48,7 +48,6 @@ void ui_muyuplay_screen_init(void)
     ui_Panel5 = ui_Panel2_create(ui_muyuplay);
     lv_obj_set_x(ui_Panel5, 0);
     lv_obj_set_y(ui_Panel5, 0);
-    lv_obj_set_align(ui_Panel5, LV_ALIGN_TOP_MID);
 
 
 

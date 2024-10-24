@@ -11,6 +11,7 @@ SET(SOURCES components/ui_comp_panel2.c
     images/ui_img_wifi_png.c
     images/ui_img_battery_png.c
     images/ui_img_muyu_png.c
+    images/ui_img_wifi_disconnection_png.c
     fonts/ui_font_ComfortaaBold75.c
     fonts/ui_font_ComfortaaLight70.c
     fonts/ui_font_OPPOSansH18.c

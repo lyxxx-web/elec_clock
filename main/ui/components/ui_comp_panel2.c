@@ -4,10 +4,15 @@
 // Project name: SquareLine_Project
 
 #include "../ui.h"
+#include "../app/app_wifi.h"
 
 
 // COMPONENT Panel2
 
+lv_obj_t * cui_wifistate;
+lv_obj_t * cui_powerstate;
+lv_obj_t * cui_batterytxt;
+lv_obj_t * cui_timestate;
 lv_obj_t * ui_Panel2_create(lv_obj_t * comp_parent)
 {
 
@@ -26,9 +31,11 @@ lv_obj_t * ui_Panel2_create(lv_obj_t * comp_parent)
     lv_obj_set_style_pad_top(cui_Panel2, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_pad_bottom(cui_Panel2, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    lv_obj_t * cui_wifistate;
+
     cui_wifistate = lv_img_create(cui_Panel2);
-    lv_img_set_src(cui_wifistate, &ui_img_wifi_png);
+    if(wifi_connected){
+        lv_img_set_src(cui_wifistate, &ui_img_wifi_png);
+    }else     lv_img_set_src(cui_wifistate, &ui_img_wifi_disconnection_png);
     lv_obj_set_width(cui_wifistate, LV_SIZE_CONTENT);   /// 10
     lv_obj_set_height(cui_wifistate, LV_SIZE_CONTENT);    /// 10
     lv_obj_set_x(cui_wifistate, 55);
@@ -40,7 +47,7 @@ lv_obj_t * ui_Panel2_create(lv_obj_t * comp_parent)
     lv_obj_set_style_img_recolor(cui_wifistate, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_img_recolor_opa(cui_wifistate, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    lv_obj_t * cui_powerstate;
+
     cui_powerstate = lv_slider_create(cui_Panel2);
     lv_slider_set_value(cui_powerstate, 70, LV_ANIM_OFF);
     if(lv_slider_get_mode(cui_powerstate) == LV_SLIDER_MODE_RANGE) lv_slider_set_left_value(cui_powerstate, 0, LV_ANIM_OFF);
@@ -80,7 +87,7 @@ lv_obj_t * ui_Panel2_create(lv_obj_t * comp_parent)
     lv_obj_set_style_img_recolor(cui_batterybor, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_img_recolor_opa(cui_batterybor, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    lv_obj_t * cui_timestate;
+
     cui_timestate = lv_label_create(cui_Panel2);
     lv_obj_set_width(cui_timestate, LV_SIZE_CONTENT);   /// 1
     lv_obj_set_height(cui_timestate, LV_SIZE_CONTENT);    /// 1
@@ -92,17 +99,17 @@ lv_obj_t * ui_Panel2_create(lv_obj_t * comp_parent)
     lv_obj_set_style_text_opa(cui_timestate, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_font(cui_timestate, &lv_font_montserrat_12, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    lv_obj_t * cui_batteryborder;
-    cui_batteryborder = lv_label_create(cui_Panel2);
-    lv_obj_set_width(cui_batteryborder, LV_SIZE_CONTENT);   /// 1
-    lv_obj_set_height(cui_batteryborder, LV_SIZE_CONTENT);    /// 1
-    lv_obj_set_x(cui_batteryborder, 80);
-    lv_obj_set_y(cui_batteryborder, 0);
-    lv_obj_set_align(cui_batteryborder, LV_ALIGN_CENTER);
-    lv_label_set_text(cui_batteryborder, "50%");
-    lv_obj_set_style_text_color(cui_batteryborder, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_text_opa(cui_batteryborder, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_text_font(cui_batteryborder, &lv_font_montserrat_10, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    cui_batterytxt = lv_label_create(cui_Panel2);
+    lv_obj_set_width(cui_batterytxt, LV_SIZE_CONTENT);   /// 1
+    lv_obj_set_height(cui_batterytxt, LV_SIZE_CONTENT);    /// 1
+    lv_obj_set_x(cui_batterytxt, 80);
+    lv_obj_set_y(cui_batterytxt, 0);
+    lv_obj_set_align(cui_batterytxt, LV_ALIGN_CENTER);
+    lv_label_set_text(cui_batterytxt, "75%");
+    lv_obj_set_style_text_color(cui_batterytxt, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_opa(cui_batterytxt, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(cui_batterytxt, &lv_font_montserrat_10, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     lv_obj_t ** children = lv_mem_alloc(sizeof(lv_obj_t *) * _UI_COMP_PANEL2_NUM);
     children[UI_COMP_PANEL2_PANEL2] = cui_Panel2;
@@ -110,7 +117,7 @@ lv_obj_t * ui_Panel2_create(lv_obj_t * comp_parent)
     children[UI_COMP_PANEL2_POWERSTATE] = cui_powerstate;
     children[UI_COMP_PANEL2_BATTERYBOR] = cui_batterybor;
     children[UI_COMP_PANEL2_TIMESTATE] = cui_timestate;
-    children[UI_COMP_PANEL2_BATTERYBORDER] = cui_batteryborder;
+    children[UI_COMP_PANEL2_BATTERYBORDER] = cui_batterytxt;
     lv_obj_add_event_cb(cui_Panel2, get_component_child_event_cb, LV_EVENT_GET_COMP_CHILD, children);
     lv_obj_add_event_cb(cui_Panel2, del_component_child_event_cb, LV_EVENT_DELETE, children);
     ui_comp_Panel2_create_hook(cui_Panel2);

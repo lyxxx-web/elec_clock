@@ -268,7 +268,6 @@ void ui_shaiziplay_screen_init(void)
     ui_Panel6 = ui_Panel2_create(ui_shaiziplay);
     lv_obj_set_x(ui_Panel6, 0);
     lv_obj_set_y(ui_Panel6, 0);
-    lv_obj_set_align(ui_Panel6, LV_ALIGN_TOP_MID);
 
 
 

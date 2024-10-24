@@ -16,6 +16,7 @@
 #include "nvs_flash.h"
 #include <time.h>
 #include <sys/time.h>
+#include "ui/components/ui_comp_panel2.h"
 
 #define TAG "ESP-EXAMPLE"
 
@@ -34,7 +35,7 @@ struct timeval tv_now =
 void ui_clock_update(lv_timer_t *timer)
 {
     struct tm timeinfo;
-    char hour_str[3], min_str[3];
+    char hour_str[3], min_str[3],time_str[6];
     char date_str[16], weekday_str[16];
     
     gettimeofday(&tv_now, NULL);
@@ -43,6 +44,7 @@ void ui_clock_update(lv_timer_t *timer)
     // 格式化小时、分钟和秒
     snprintf(hour_str, sizeof(hour_str), "%02d", timeinfo.tm_hour);
     snprintf(min_str, sizeof(min_str), "%02d", timeinfo.tm_min);
+    snprintf(time_str, sizeof(time_str), "%02d:%02d", timeinfo.tm_hour, timeinfo.tm_min);
 
     // 格式化月和日（如：10月18日）
     snprintf(date_str, sizeof(date_str), "%02d/%02d", 
@@ -58,6 +60,7 @@ void ui_clock_update(lv_timer_t *timer)
     lv_label_set_text(ui_min, min_str);
     lv_label_set_text(ui_date, date_str);
     lv_label_set_text(ui_weekday, weekday_str);
+    lv_label_set_text(cui_timestate,time_str);
 }
 
 void ui_init_timer()

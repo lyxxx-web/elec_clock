@@ -1,4 +1,4 @@
-/* * Data converted from /home/luoyunxin/esp/SquareLine_Project/build/esp-idf/mbedtls/x509_crt_bundle
+/* * Data converted from /home/luoyunxin/esp/elec_clock_local/build/esp-idf/mbedtls/x509_crt_bundle
  */
 .data
 #if !defined (__APPLE__) && !defined (__linux__)

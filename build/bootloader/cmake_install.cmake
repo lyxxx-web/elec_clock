@@ -39,7 +39,7 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/luoyunxin/esp/SquareLine_Project/build/bootloader/esp-idf/cmake_install.cmake")
+  include("/home/luoyunxin/esp/elec_clock_local/build/bootloader/esp-idf/cmake_install.cmake")
 endif()
 
 if(CMAKE_INSTALL_COMPONENT)
@@ -50,5 +50,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/luoyunxin/esp/SquareLine_Project/build/bootloader/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/luoyunxin/esp/elec_clock_local/build/bootloader/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

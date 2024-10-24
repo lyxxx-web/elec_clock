@@ -75,7 +75,7 @@ static const char *TAG = "wifi station";
 static int s_retry_num = 0;
 static bool s_reconnect = true;
 
-static bool wifi_connected = false;
+bool wifi_connected = false;
 static QueueHandle_t wifi_event_queue = NULL;
 // static sys_param_t g_sys_param ={
 //     .password = "11112222",

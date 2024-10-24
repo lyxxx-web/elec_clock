@@ -39,6 +39,6 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/luoyunxin/esp/SquareLine_Project/build/esp-idf/newlib/port/cmake_install.cmake")
+  include("/home/luoyunxin/esp/elec_clock_local/build/esp-idf/newlib/port/cmake_install.cmake")
 endif()
 

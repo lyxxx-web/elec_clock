@@ -1,4 +1,4 @@
-# Install script for directory: /home/luoyunxin/esp/SquareLine_Project/main
+# Install script for directory: /home/luoyunxin/esp/elec_clock_local/main
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
