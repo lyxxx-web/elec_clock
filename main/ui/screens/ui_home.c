@@ -85,7 +85,7 @@ void ui_home_screen_init(void)
     lv_obj_set_x(ui_weather, -60);
     lv_obj_set_y(ui_weather, 15);
     lv_obj_set_align(ui_weather, LV_ALIGN_CENTER);
-    lv_label_set_text(ui_weather, "多云");
+    lv_label_set_text(ui_weather, "Cloudy");
     lv_obj_set_style_text_color(ui_weather, lv_color_hex(0xF1BA3B), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_opa(ui_weather, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_font(ui_weather, &ui_font_OPPOSansH25, LV_PART_MAIN | LV_STATE_DEFAULT);

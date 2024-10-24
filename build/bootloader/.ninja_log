@@ -118,3 +118,5 @@
 962	1039	1729767712696113152	/home/luoyunxin/esp/elec_clock_local/build/bootloader/.bin_timestamp	8023597c5653e732
 1039	1064	0	esp-idf/esptool_py/CMakeFiles/bootloader_check_size	cc0a28d244e8e0e8
 1039	1064	0	/home/luoyunxin/esp/elec_clock_local/build/bootloader/esp-idf/esptool_py/CMakeFiles/bootloader_check_size	cc0a28d244e8e0e8
+1	28	0	esp-idf/esptool_py/CMakeFiles/bootloader_check_size	cc0a28d244e8e0e8
+1	28	0	/home/luoyunxin/esp/elec_clock_local/build/bootloader/esp-idf/esptool_py/CMakeFiles/bootloader_check_size	cc0a28d244e8e0e8

@@ -35,7 +35,7 @@ struct timeval tv_now =
 void ui_clock_update(lv_timer_t *timer)
 {
     struct tm timeinfo;
-    char hour_str[3], min_str[3],time_str[6];
+    static char hour_str[3], min_str[3],time_str[6];
     char date_str[16], weekday_str[16];
     
     gettimeofday(&tv_now, NULL);
@@ -45,6 +45,7 @@ void ui_clock_update(lv_timer_t *timer)
     snprintf(hour_str, sizeof(hour_str), "%02d", timeinfo.tm_hour);
     snprintf(min_str, sizeof(min_str), "%02d", timeinfo.tm_min);
     snprintf(time_str, sizeof(time_str), "%02d:%02d", timeinfo.tm_hour, timeinfo.tm_min);
+    printf("timestate:%s\n",time_str);
 
     // 格式化月和日（如：10月18日）
     snprintf(date_str, sizeof(date_str), "%02d/%02d", 
@@ -119,7 +120,7 @@ void app_main(void)
     /* Add and show objects on display */
     app_lvgl_display();
 
-    //app_weather_start();
+    app_weather_start();
     app_network_start();
 
     ESP_LOGI(TAG, "Example initialization done.");

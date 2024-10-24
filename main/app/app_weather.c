@@ -37,7 +37,7 @@ static const char *TAG = "app_weather";
  *
  */
 #define QWEATHER_REQUEST_KEY_LEN        (32)
-#define CONFIG_QWEATHER_REQUEST_KEY     "f4632c9d0ecb42af9b713967f70ccdd8"
+#define CONFIG_QWEATHER_REQUEST_KEY     "9c86afc7cf354d0e94f0b63855f7d4b0"
 #define _KEY_VALUE_                     CONFIG_QWEATHER_REQUEST_KEY
 #define _KEY_                           "key=" _KEY_VALUE_
 
