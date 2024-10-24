@@ -1,0 +1,187 @@
+[0;33m--- esp-idf-monitor 1.5.0 on /dev/ttyACM0 115200[0m
+[0;33m--- Quit: Ctrl+] | Menu: Ctrl+T | Help: Ctrl+T followed by Ctrl+H[0m
+[0;33m--- 0x40056f64: memcpy in ROM
+[0m
+[1;31m--- Error: device reports readiness to read but returned no data (device disconnected or multiple access on port?)[0m
+[0;33m--- Waiting for the device to reconnect[0m[0;33m.[0m[0;33m[0m
+[0;33m--- 0x4200bfa9: app_weather_parse_now at /home/luoyunxin/esp/SquareLine_Project/main/app/app_weather.c:278 (discriminator 1)
+ (inlined by) response_handler at /home/luoyunxin/esp/SquareLine_Project/main/app/app_weather.c:154 (discriminator 1)
+[0m
+[0;33m--- 0x400556d5: strlen in ROM
+0x400556e5: strlen in ROM
+[0m
+[0;33m--- 0x4200bfa6: app_weather_parse_now at /home/luoyunxin/esp/SquareLine_Project/main/app/app_weather.c:278 (discriminator 1)
+ (inlined by) response_handler at /home/luoyunxin/esp/SquareLine_Project/main/app/app_weather.c:154 (discriminator 1)
+0x42063028: http_dispatch_event at /home/luoyunxin/esp/esp-idf/components/esp_http_client/esp_http_client.c:204
+ (inlined by) esp_http_client_perform at /home/luoyunxin/esp/esp-idf/components/esp_http_client/esp_http_client.c:1368
+0x4200c125: app_weather_request at /home/luoyunxin/esp/SquareLine_Project/main/app/app_weather.c:219
+0x4200b55f: network_task at /home/luoyunxin/esp/SquareLine_Project/main/app/app_wifi.c:319
+[0m
+[0;33m--- 0x40376060: esp_restart_noos at /home/luoyunxin/esp/esp-idf/components/esp_system/port/soc/esp32s3/system_internal.c:160
+[0m
+[0;33m--- 0x4200bfa9: app_weather_parse_now at /home/luoyunxin/esp/SquareLine_Project/main/app/app_weather.c:278 (discriminator 1)
+ (inlined by) response_handler at /home/luoyunxin/esp/SquareLine_Project/main/app/app_weather.c:154 (discriminator 1)
+[0m
+[0;33m--- 0x400556d5: strlen in ROM
+0x400556e5: strlen in ROM
+[0m
+[0;33m--- 0x4200bfa6: app_weather_parse_now at /home/luoyunxin/esp/SquareLine_Project/main/app/app_weather.c:278 (discriminator 1)
+ (inlined by) response_handler at /home/luoyunxin/esp/SquareLine_Project/main/app/app_weather.c:154 (discriminator 1)
+0x42063028: http_dispatch_event at /home/luoyunxin/esp/esp-idf/components/esp_http_client/esp_http_client.c:204
+ (inlined by) esp_http_client_perform at /home/luoyunxin/esp/esp-idf/components/esp_http_client/esp_http_client.c:1368
+0x4200c125: app_weather_request at /home/luoyunxin/esp/SquareLine_Project/main/app/app_weather.c:219
+0x4200b55f: network_task at /home/luoyunxin/esp/SquareLine_Project/main/app/app_wifi.c:319
+[0m
+[0;33m--- 0x40376060: esp_restart_noos at /home/luoyunxin/esp/esp-idf/components/esp_system/port/soc/esp32s3/system_internal.c:160
+[0m
+[0;33m--- 0x4200bfa9: app_weather_parse_now at /home/luoyunxin/esp/SquareLine_Project/main/app/app_weather.c:278 (discriminator 1)
+ (inlined by) response_handler at /home/luoyunxin/esp/SquareLine_Project/main/app/app_weather.c:154 (discriminator 1)
+[0m
+[0;33m--- 0x400556d5: strlen in ROM
+0x400556e5: strlen in ROM
+[0m
+[0;33m--- 0x4200bfa6: app_weather_parse_now at /home/luoyunxin/esp/SquareLine_Project/main/app/app_weather.c:278 (discriminator 1)
+ (inlined by) response_handler at /home/luoyunxin/esp/SquareLine_Project/main/app/app_weather.c:154 (discriminator 1)
+0x42063028: http_dispatch_event at /home/luoyunxin/esp/esp-idf/components/esp_http_client/esp_http_client.c:204
+ (inlined by) esp_http_client_perform at /home/luoyunxin/esp/esp-idf/components/esp_http_client/esp_http_client.c:1368
+0x4200c125: app_weather_request at /home/luoyunxin/esp/SquareLine_Project/main/app/app_weather.c:219
+0x4200b55f: network_task at /home/luoyunxin/esp/SquareLine_Project/main/app/app_wifi.c:319
+[0m
+[0;33m--- 0x40376060: esp_restart_noos at /home/luoyunxin/esp/esp-idf/components/esp_system/port/soc/esp32s3/system_internal.c:160
+[0m
+[0;33m--- 0x4200bfa9: app_weather_parse_now at /home/luoyunxin/esp/SquareLine_Project/main/app/app_weather.c:278 (discriminator 1)
+ (inlined by) response_handler at /home/luoyunxin/esp/SquareLine_Project/main/app/app_weather.c:154 (discriminator 1)
+[0m
+[0;33m--- 0x400556d5: strlen in ROM
+0x400556e5: strlen in ROM
+[0m
+[0;33m--- 0x4200bfa6: app_weather_parse_now at /home/luoyunxin/esp/SquareLine_Project/main/app/app_weather.c:278 (discriminator 1)
+ (inlined by) response_handler at /home/luoyunxin/esp/SquareLine_Project/main/app/app_weather.c:154 (discriminator 1)
+0x42063028: http_dispatch_event at /home/luoyunxin/esp/esp-idf/components/esp_http_client/esp_http_client.c:204
+ (inlined by) esp_http_client_perform at /home/luoyunxin/esp/esp-idf/components/esp_http_client/esp_http_client.c:1368
+0x4200c125: app_weather_request at /home/luoyunxin/esp/SquareLine_Project/main/app/app_weather.c:219
+0x4200b564: network_task at /home/luoyunxin/esp/SquareLine_Project/main/app/app_wifi.c:320
+[0m
+[0;33m--- 0x40376060: esp_restart_noos at /home/luoyunxin/esp/esp-idf/components/esp_system/port/soc/esp32s3/system_internal.c:160
+[0m
+[0;33m--- 0x4200bfa9: app_weather_parse_now at /home/luoyunxin/esp/SquareLine_Project/main/app/app_weather.c:278 (discriminator 1)
+ (inlined by) response_handler at /home/luoyunxin/esp/SquareLine_Project/main/app/app_weather.c:154 (discriminator 1)
+[0m
+[0;33m--- 0x400556d5: strlen in ROM
+0x400556e5: strlen in ROM
+[0m
+[0;33m--- 0x4200bfa6: app_weather_parse_now at /home/luoyunxin/esp/SquareLine_Project/main/app/app_weather.c:278 (discriminator 1)
+ (inlined by) response_handler at /home/luoyunxin/esp/SquareLine_Project/main/app/app_weather.c:154 (discriminator 1)
+0x42063028: http_dispatch_event at /home/luoyunxin/esp/esp-idf/components/esp_http_client/esp_http_client.c:204
+ (inlined by) esp_http_client_perform at /home/luoyunxin/esp/esp-idf/components/esp_http_client/esp_http_client.c:1368
+0x4200c125: app_weather_request at /home/luoyunxin/esp/SquareLine_Project/main/app/app_weather.c:219
+0x4200b55f: network_task at /home/luoyunxin/esp/SquareLine_Project/main/app/app_wifi.c:319
+[0m
+[0;33m--- 0x40376060: esp_restart_noos at /home/luoyunxin/esp/esp-idf/components/esp_system/port/soc/esp32s3/system_internal.c:160
+[0m
+[0;33m--- 0x4200bfa9: app_weather_parse_now at /home/luoyunxin/esp/SquareLine_Project/main/app/app_weather.c:278 (discriminator 1)
+ (inlined by) response_handler at /home/luoyunxin/esp/SquareLine_Project/main/app/app_weather.c:154 (discriminator 1)
+[0m
+[0;33m--- 0x400556d5: strlen in ROM
+0x400556e5: strlen in ROM
+[0m
+[0;33m--- 0x4200bfa6: app_weather_parse_now at /home/luoyunxin/esp/SquareLine_Project/main/app/app_weather.c:278 (discriminator 1)
+ (inlined by) response_handler at /home/luoyunxin/esp/SquareLine_Project/main/app/app_weather.c:154 (discriminator 1)
+0x42063028: http_dispatch_event at /home/luoyunxin/esp/esp-idf/components/esp_http_client/esp_http_client.c:204
+ (inlined by) esp_http_client_perform at /home/luoyunxin/esp/esp-idf/components/esp_http_client/esp_http_client.c:1368
+0x4200c125: app_weather_request at /home/luoyunxin/esp/SquareLine_Project/main/app/app_weather.c:219
+0x4200b564: network_task at /home/luoyunxin/esp/SquareLine_Project/main/app/app_wifi.c:320
+[0m
+[0;33m--- 0x40376060: esp_restart_noos at /home/luoyunxin/esp/esp-idf/components/esp_system/port/soc/esp32s3/system_internal.c:160
+[0m
+[0;33m--- 0x4200bfa9: app_weather_parse_now at /home/luoyunxin/esp/SquareLine_Project/main/app/app_weather.c:278 (discriminator 1)
+ (inlined by) response_handler at /home/luoyunxin/esp/SquareLine_Project/main/app/app_weather.c:154 (discriminator 1)
+[0m
+[0;33m--- 0x400556d5: strlen in ROM
+0x400556e5: strlen in ROM
+[0m
+[0;33m--- 0x4200bfa6: app_weather_parse_now at /home/luoyunxin/esp/SquareLine_Project/main/app/app_weather.c:278 (discriminator 1)
+ (inlined by) response_handler at /home/luoyunxin/esp/SquareLine_Project/main/app/app_weather.c:154 (discriminator 1)
+0x42063028: http_dispatch_event at /home/luoyunxin/esp/esp-idf/components/esp_http_client/esp_http_client.c:204
+ (inlined by) esp_http_client_perform at /home/luoyunxin/esp/esp-idf/components/esp_http_client/esp_http_client.c:1368
+0x4200c125: app_weather_request at /home/luoyunxin/esp/SquareLine_Project/main/app/app_weather.c:219
+0x4200b55f: network_task at /home/luoyunxin/esp/SquareLine_Project/main/app/app_wifi.c:319
+[0m
+[0;33m--- 0x40376060: esp_restart_noos at /home/luoyunxin/esp/esp-idf/components/esp_system/port/soc/esp32s3/system_internal.c:160
+[0m
+[0;33m--- 0x4200bfa9: app_weather_parse_now at /home/luoyunxin/esp/SquareLine_Project/main/app/app_weather.c:278 (discriminator 1)
+ (inlined by) response_handler at /home/luoyunxin/esp/SquareLine_Project/main/app/app_weather.c:154 (discriminator 1)
+[0m
+[0;33m--- 0x400556d5: strlen in ROM
+0x400556e5: strlen in ROM
+[0m
+[0;33m--- 0x4200bfa6: app_weather_parse_now at /home/luoyunxin/esp/SquareLine_Project/main/app/app_weather.c:278 (discriminator 1)
+ (inlined by) response_handler at /home/luoyunxin/esp/SquareLine_Project/main/app/app_weather.c:154 (discriminator 1)
+0x42063028: http_dispatch_event at /home/luoyunxin/esp/esp-idf/components/esp_http_client/esp_http_client.c:204
+ (inlined by) esp_http_client_perform at /home/luoyunxin/esp/esp-idf/components/esp_http_client/esp_http_client.c:1368
+0x4200c125: app_weather_request at /home/luoyunxin/esp/SquareLine_Project/main/app/app_weather.c:219
+0x4200b55f: network_task at /home/luoyunxin/esp/SquareLine_Project/main/app/app_wifi.c:319
+[0m
+[0;33m--- 0x40376060: esp_restart_noos at /home/luoyunxin/esp/esp-idf/components/esp_system/port/soc/esp32s3/system_internal.c:160
+[0m
+[0;33m--- 0x4200bfa9: app_weather_parse_now at /home/luoyunxin/esp/SquareLine_Project/main/app/app_weather.c:278 (discriminator 1)
+ (inlined by) response_handler at /home/luoyunxin/esp/SquareLine_Project/main/app/app_weather.c:154 (discriminator 1)
+[0m
+[0;33m--- 0x400556d5: strlen in ROM
+0x400556e5: strlen in ROM
+[0m
+[0;33m--- 0x4200bfa6: app_weather_parse_now at /home/luoyunxin/esp/SquareLine_Project/main/app/app_weather.c:278 (discriminator 1)
+ (inlined by) response_handler at /home/luoyunxin/esp/SquareLine_Project/main/app/app_weather.c:154 (discriminator 1)
+0x42063028: http_dispatch_event at /home/luoyunxin/esp/esp-idf/components/esp_http_client/esp_http_client.c:204
+ (inlined by) esp_http_client_perform at /home/luoyunxin/esp/esp-idf/components/esp_http_client/esp_http_client.c:1368
+0x4200c125: app_weather_request at /home/luoyunxin/esp/SquareLine_Project/main/app/app_weather.c:219
+0x4200b55f: network_task at /home/luoyunxin/esp/SquareLine_Project/main/app/app_wifi.c:319
+[0m
+[0;33m--- 0x40376060: esp_restart_noos at /home/luoyunxin/esp/esp-idf/components/esp_system/port/soc/esp32s3/system_internal.c:160
+[0m
+[0;33m--- 0x4200bfa9: app_weather_parse_now at /home/luoyunxin/esp/SquareLine_Project/main/app/app_weather.c:278 (discriminator 1)
+ (inlined by) response_handler at /home/luoyunxin/esp/SquareLine_Project/main/app/app_weather.c:154 (discriminator 1)
+[0m
+[0;33m--- 0x400556d5: strlen in ROM
+0x400556e5: strlen in ROM
+[0m
+[0;33m--- 0x4200bfa6: app_weather_parse_now at /home/luoyunxin/esp/SquareLine_Project/main/app/app_weather.c:278 (discriminator 1)
+ (inlined by) response_handler at /home/luoyunxin/esp/SquareLine_Project/main/app/app_weather.c:154 (discriminator 1)
+0x42063028: http_dispatch_event at /home/luoyunxin/esp/esp-idf/components/esp_http_client/esp_http_client.c:204
+ (inlined by) esp_http_client_perform at /home/luoyunxin/esp/esp-idf/components/esp_http_client/esp_http_client.c:1368
+0x4200c125: app_weather_request at /home/luoyunxin/esp/SquareLine_Project/main/app/app_weather.c:219
+0x4200b564: network_task at /home/luoyunxin/esp/SquareLine_Project/main/app/app_wifi.c:320
+[0m
+[0;33m--- 0x40376060: esp_restart_noos at /home/luoyunxin/esp/esp-idf/components/esp_system/port/soc/esp32s3/system_internal.c:160
+[0m
+[0;33m--- 0x4200bfa9: app_weather_parse_now at /home/luoyunxin/esp/SquareLine_Project/main/app/app_weather.c:278 (discriminator 1)
+ (inlined by) response_handler at /home/luoyunxin/esp/SquareLine_Project/main/app/app_weather.c:154 (discriminator 1)
+[0m
+[0;33m--- 0x400556d5: strlen in ROM
+0x400556e5: strlen in ROM
+[0m
+[0;33m--- 0x4200bfa6: app_weather_parse_now at /home/luoyunxin/esp/SquareLine_Project/main/app/app_weather.c:278 (discriminator 1)
+ (inlined by) response_handler at /home/luoyunxin/esp/SquareLine_Project/main/app/app_weather.c:154 (discriminator 1)
+0x42063028: http_dispatch_event at /home/luoyunxin/esp/esp-idf/components/esp_http_client/esp_http_client.c:204
+ (inlined by) esp_http_client_perform at /home/luoyunxin/esp/esp-idf/components/esp_http_client/esp_http_client.c:1368
+0x4200c125: app_weather_request at /home/luoyunxin/esp/SquareLine_Project/main/app/app_weather.c:219
+0x4200b55f: network_task at /home/luoyunxin/esp/SquareLine_Project/main/app/app_wifi.c:319
+[0m
+[0;33m--- 0x40376060: esp_restart_noos at /home/luoyunxin/esp/esp-idf/components/esp_system/port/soc/esp32s3/system_internal.c:160
+[0m
+[0;33m--- 0x4200bfa9: app_weather_parse_now at /home/luoyunxin/esp/SquareLine_Project/main/app/app_weather.c:278 (discriminator 1)
+ (inlined by) response_handler at /home/luoyunxin/esp/SquareLine_Project/main/app/app_weather.c:154 (discriminator 1)
+[0m
+[0;33m--- 0x400556d5: strlen in ROM
+0x400556e5: strlen in ROM
+[0m
+[0;33m--- 0x4200bfa6: app_weather_parse_now at /home/luoyunxin/esp/SquareLine_Project/main/app/app_weather.c:278 (discriminator 1)
+ (inlined by) response_handler at /home/luoyunxin/esp/SquareLine_Project/main/app/app_weather.c:154 (discriminator 1)
+0x42063028: http_dispatch_event at /home/luoyunxin/esp/esp-idf/components/esp_http_client/esp_http_client.c:204
+ (inlined by) esp_http_client_perform at /home/luoyunxin/esp/esp-idf/components/esp_http_client/esp_http_client.c:1368
+0x4200c125: app_weather_request at /home/luoyunxin/esp/SquareLine_Project/main/app/app_weather.c:219
+0x4200b55f: network_task at /home/luoyunxin/esp/SquareLine_Project/main/app/app_wifi.c:319
+[0m
+[0;33m--- 0x40376060: esp_restart_noos at /home/luoyunxin/esp/esp-idf/components/esp_system/port/soc/esp32s3/system_internal.c:160
+[0m
+[0m

@@ -1,0 +1,13 @@
+# Target labels
+ bootloader
+# Source files and their labels
+/home/luoyunxin/esp/SquareLine_Project/build/CMakeFiles/bootloader
+/home/luoyunxin/esp/SquareLine_Project/build/CMakeFiles/bootloader.rule
+/home/luoyunxin/esp/SquareLine_Project/build/CMakeFiles/bootloader-complete.rule
+/home/luoyunxin/esp/SquareLine_Project/build/bootloader-prefix/src/bootloader-stamp/bootloader-build.rule
+/home/luoyunxin/esp/SquareLine_Project/build/bootloader-prefix/src/bootloader-stamp/bootloader-configure.rule
+/home/luoyunxin/esp/SquareLine_Project/build/bootloader-prefix/src/bootloader-stamp/bootloader-download.rule
+/home/luoyunxin/esp/SquareLine_Project/build/bootloader-prefix/src/bootloader-stamp/bootloader-install.rule
+/home/luoyunxin/esp/SquareLine_Project/build/bootloader-prefix/src/bootloader-stamp/bootloader-mkdir.rule
+/home/luoyunxin/esp/SquareLine_Project/build/bootloader-prefix/src/bootloader-stamp/bootloader-patch.rule
+/home/luoyunxin/esp/SquareLine_Project/build/bootloader-prefix/src/bootloader-stamp/bootloader-update.rule
