@@ -9,10 +9,6 @@
 
 // COMPONENT Panel2
 
-lv_obj_t * cui_wifistate;
-lv_obj_t * cui_powerstate;
-lv_obj_t * cui_batterytxt;
-lv_obj_t * cui_timestate;
 lv_obj_t * ui_Panel2_create(lv_obj_t * comp_parent)
 {
 
@@ -31,9 +27,10 @@ lv_obj_t * ui_Panel2_create(lv_obj_t * comp_parent)
     lv_obj_set_style_pad_top(cui_Panel2, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_pad_bottom(cui_Panel2, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-
+    lv_obj_t * cui_wifistate;
     cui_wifistate = lv_img_create(cui_Panel2);
-    if(wifi_connected){
+    //printf("wifi_connected:%d",wifi_connected);
+    if(1){
         lv_img_set_src(cui_wifistate, &ui_img_wifi_png);
     }else     lv_img_set_src(cui_wifistate, &ui_img_wifi_disconnection_png);
     lv_obj_set_width(cui_wifistate, LV_SIZE_CONTENT);   /// 10
@@ -47,7 +44,7 @@ lv_obj_t * ui_Panel2_create(lv_obj_t * comp_parent)
     lv_obj_set_style_img_recolor(cui_wifistate, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_img_recolor_opa(cui_wifistate, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-
+    lv_obj_t * cui_powerstate;
     cui_powerstate = lv_slider_create(cui_Panel2);
     lv_slider_set_value(cui_powerstate, 70, LV_ANIM_OFF);
     if(lv_slider_get_mode(cui_powerstate) == LV_SLIDER_MODE_RANGE) lv_slider_set_left_value(cui_powerstate, 0, LV_ANIM_OFF);
@@ -87,7 +84,7 @@ lv_obj_t * ui_Panel2_create(lv_obj_t * comp_parent)
     lv_obj_set_style_img_recolor(cui_batterybor, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_img_recolor_opa(cui_batterybor, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-
+    lv_obj_t * cui_timestate;
     cui_timestate = lv_label_create(cui_Panel2);
     lv_obj_set_width(cui_timestate, LV_SIZE_CONTENT);   /// 1
     lv_obj_set_height(cui_timestate, LV_SIZE_CONTENT);    /// 1
@@ -99,7 +96,7 @@ lv_obj_t * ui_Panel2_create(lv_obj_t * comp_parent)
     lv_obj_set_style_text_opa(cui_timestate, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_font(cui_timestate, &lv_font_montserrat_12, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-
+    lv_obj_t * cui_batterytxt;
     cui_batterytxt = lv_label_create(cui_Panel2);
     lv_obj_set_width(cui_batterytxt, LV_SIZE_CONTENT);   /// 1
     lv_obj_set_height(cui_batterytxt, LV_SIZE_CONTENT);    /// 1

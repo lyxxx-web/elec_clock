@@ -21,10 +21,6 @@ extern "C" {
 #define UI_COMP_PANEL2_BATTERYBORDER 5
 #define _UI_COMP_PANEL2_NUM 6
 lv_obj_t * ui_Panel2_create(lv_obj_t * comp_parent);
-extern lv_obj_t * cui_wifistate;
-extern lv_obj_t * cui_powerstate;
-extern lv_obj_t * cui_batterytxt;
-extern lv_obj_t * cui_timestate;
 
 #ifdef __cplusplus
 } /*extern "C"*/

@@ -17,6 +17,7 @@
 #include <time.h>
 #include <sys/time.h>
 #include "ui/components/ui_comp_panel2.h"
+#include "app/app_weather.h"
 
 #define TAG "ESP-EXAMPLE"
 
@@ -45,7 +46,6 @@ void ui_clock_update(lv_timer_t *timer)
     snprintf(hour_str, sizeof(hour_str), "%02d", timeinfo.tm_hour);
     snprintf(min_str, sizeof(min_str), "%02d", timeinfo.tm_min);
     snprintf(time_str, sizeof(time_str), "%02d:%02d", timeinfo.tm_hour, timeinfo.tm_min);
-    printf("timestate:%s\n",time_str);
 
     // 格式化月和日（如：10月18日）
     snprintf(date_str, sizeof(date_str), "%02d/%02d", 
@@ -61,7 +61,11 @@ void ui_clock_update(lv_timer_t *timer)
     lv_label_set_text(ui_min, min_str);
     lv_label_set_text(ui_date, date_str);
     lv_label_set_text(ui_weekday, weekday_str);
-    lv_label_set_text(cui_timestate,time_str);
+    lv_label_set_text(ui_comp_get_child(ui_Panel2,UI_COMP_PANEL2_TIMESTATE), time_str);
+    lv_label_set_text(ui_comp_get_child(ui_Panel5,UI_COMP_PANEL2_TIMESTATE), time_str);
+    lv_label_set_text(ui_comp_get_child(ui_Panel6,UI_COMP_PANEL2_TIMESTATE), time_str);
+    lv_label_set_text(ui_weather, item_text);
+    lv_label_set_text(ui_temp, item_temp);
 }
 
 void ui_init_timer()

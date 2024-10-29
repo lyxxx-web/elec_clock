@@ -37,7 +37,7 @@ static const char *TAG = "app_weather";
  *
  */
 #define QWEATHER_REQUEST_KEY_LEN        (32)
-#define CONFIG_QWEATHER_REQUEST_KEY     "9c86afc7cf354d0e94f0b63855f7d4b0"
+#define CONFIG_QWEATHER_REQUEST_KEY     "fefdad78ca2542ec93558240b30bb289"
 #define _KEY_VALUE_                     CONFIG_QWEATHER_REQUEST_KEY
 #define _KEY_                           "key=" _KEY_VALUE_
 
@@ -65,6 +65,9 @@ static esp_err_t app_weather_parse_now(char *buffer, location_num_t location);
 
 static air_info_t *air_info = NULL;
 static weather_info_t *weather_info[LOCATION_NUM_MAX];
+
+char item_temp [3];
+char item_text [16];
 
 static int network_gzip_decompress(void *in_buf, size_t in_size, void *out_buf, size_t *out_size, size_t out_buf_size)
 {
@@ -269,6 +272,8 @@ static esp_err_t app_weather_parse_now(char *buffer, location_num_t location)
             cJSON *json_item_icon = cJSON_GetObjectItem(json_now, "icon");
             cJSON *json_item_text = cJSON_GetObjectItem(json_now, "text");
             cJSON *json_item_humidity = cJSON_GetObjectItem(json_now, "humidity");
+            snprintf(item_temp, sizeof(item_temp), "%s°", json_item_temp->valuestring);
+            snprintf(item_text, sizeof(item_text), "%s", json_item_text->valuestring);
 
             ESP_LOGI(TAG, "Temp : [%s]", json_item_temp->valuestring);
             ESP_LOGI(TAG, "Icon : [%s]", json_item_icon->valuestring);

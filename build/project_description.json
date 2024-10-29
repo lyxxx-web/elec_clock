@@ -1,7 +1,7 @@
 {
     "version":            "1.1",
     "project_name":       "SquareLine_Project",
-    "project_version":    "ef97ae8-dirty",
+    "project_version":    "9fdc04d-dirty",
     "project_path":       "/home/luoyunxin/esp/elec_clock_local",
     "idf_path":           "/home/luoyunxin/esp/esp-idf",
     "build_dir":          "/home/luoyunxin/esp/elec_clock_local/build",
