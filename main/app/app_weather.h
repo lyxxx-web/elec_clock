@@ -26,7 +26,7 @@
 extern "C" {
 #endif
 
-extern char item_temp[3];
+extern char item_temp[5];
 extern char item_text[16];
 typedef enum {
     LOCATION_NUM_SHANGHAI,

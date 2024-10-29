@@ -94,6 +94,7 @@ void app_main(void)
         ESP_ERROR_CHECK(nvs_flash_erase());
         err = nvs_flash_init();
     }
+    ESP_ERROR_CHECK(err);
     /* Initialize display and LVGL */
     //bsp_display_start();
     bsp_display_cfg_t custom_cfg = {

@@ -66,7 +66,7 @@ static esp_err_t app_weather_parse_now(char *buffer, location_num_t location);
 static air_info_t *air_info = NULL;
 static weather_info_t *weather_info[LOCATION_NUM_MAX];
 
-char item_temp [3];
+char item_temp [5];
 char item_text [16];
 
 static int network_gzip_decompress(void *in_buf, size_t in_size, void *out_buf, size_t *out_size, size_t out_buf_size)
