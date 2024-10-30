@@ -86,13 +86,14 @@ static EventGroupHandle_t s_wifi_event_group;
 #define portTICK_RATE_MS        10
 
 /* Constants that aren't configurable in menuconfig */
-#define WEB_SERVER "www.ip.cn"
+#define WEB_SERVER "restapi.amap.com"
 #define WEB_PORT "443"
-#define WEB_URL "https://www.ip.cn/api/index?ip&type=0"
+#define WEB_URL "https://restapi.amap.com/v3/ip?key=6aefab4f1fd2749d0aac1e9f16e22514"
 
 static const char *TAG = "wifi station";
 static int s_retry_num = 0;
 static bool s_reconnect = true;
+char adcode_text[10];
 
 static const char *REQUEST = "GET " WEB_URL " HTTP/1.0\r\n"
     "Host: "WEB_SERVER"\r\n"
@@ -106,9 +107,32 @@ scan_info_t scan_info_result = {
     .ap_count = 0,
 };
 
-static void https_get_task(void *pvParameters)
+static esp_err_t parse_location_data(const char *buffer) {
+
+    ESP_LOGE(TAG, "header_end:%d = %s",strlen(buffer), buffer);
+    char *header_end = strstr(buffer, "\r\n\r\n");
+    header_end += strlen("\r\n\r\n");
+    assert(header_end);
+    ESP_LOGE(TAG, "header_end = %s",header_end);
+    if(header_end){
+        cJSON *json = cJSON_Parse(header_end);
+        if (NULL != json){
+            cJSON *adcode = cJSON_GetObjectItem(json, "adcode");
+            snprintf(adcode_text, sizeof(adcode_text), "%s", adcode->valuestring);
+            cJSON_Delete(json);
+        } 
+        else {
+            ESP_LOGE(TAG, "Error parsing object - [%s] - [%d]", __FILE__, __LINE__);
+            return ESP_FAIL;
+        }
+        return ESP_OK;
+    }
+    return ESP_FAIL;
+}
+
+static void https_get_task()
 {
-    char buf[512];
+    char buf[1024];
     int ret, flags, len;
 
     mbedtls_entropy_context entropy;
@@ -242,7 +266,7 @@ static void https_get_task(void *pvParameters)
                 goto exit;
             }
         } while(written_bytes < strlen(REQUEST));
-
+        
         ESP_LOGI(TAG, "Reading HTTP response...");
 
         do
@@ -278,13 +302,16 @@ static void https_get_task(void *pvParameters)
             }
 
             len = ret;
-            ESP_LOGD(TAG, "%d bytes read", len);
+            ESP_LOGI(TAG, "%d bytes read", len);
             /* Print response directly to stdout as it is read */
             for (int i = 0; i < len; i++) {
                 putchar(buf[i]);
             }
+            break;
         } while(1);
-
+        ESP_LOGE(TAG, "header_end  111:%d = %s",strlen(buf), buf);
+        vTaskDelay(1000 / portTICK_PERIOD_MS);
+        parse_location_data(buf);
         mbedtls_ssl_close_notify(&ssl);
 
     exit:
@@ -302,6 +329,7 @@ static void https_get_task(void *pvParameters)
         ESP_LOGI(TAG, "Completed %d requests", ++request_count);
         printf("Minimum free heap size: %" PRIu32 " bytes\n", esp_get_minimum_free_heap_size());
 
+        break;
         for (int countdown = 10; countdown >= 0; countdown--) {
             ESP_LOGI(TAG, "%d...", countdown);
             vTaskDelay(1000 / portTICK_PERIOD_MS);
@@ -511,55 +539,6 @@ static void wifi_init_sta(void)
     // }
 }
 
-// void get_location_data()
-// {
-//     esp_http_client_config_t config = {
-//         .url = "https://www.ip.cn/api/index?ip&type=0",
-//         .method = HTTP_METHOD_GET,
-//         .buffer_size = 1024,
-//         .timeout_ms = 5000,
-//     };
-//     // Set the headers
-//     esp_http_client_handle_t client = esp_http_client_init(&config);
-//     esp_http_client_set_header(client, "Content-Type", "application/json");
-//     esp_http_client_set_header(client, "Host", "www.ip.cn");
-//     esp_http_client_set_header(client, "User-Agent", "esp_box");
-//     esp_http_client_set_header(client, "Accept-Encoding", "deflate");
-//     esp_http_client_set_header(client, "Cache-Control", "no-cache");
-//     esp_http_client_set_header(client, "Accept", "*/*");
-
-//     esp_err_t err = esp_http_client_perform(client);
-//     ESP_LOGI(TAG,"ret_val is %x",err);
-//     if (err == ESP_OK) {
-//         // 获取响应内容
-//         int content_length = esp_http_client_get_content_length(client);
-//         char *buffer = malloc(content_length + 1);
-//         if (buffer) {
-//             int read_len = esp_http_client_read(client, buffer, content_length);
-//             buffer[read_len] = 0; // 添加字符串结束符
-//             ESP_LOGI(TAG, "Response: %s", buffer);
-
-//             // 解析JSON数据
-//             cJSON *json = cJSON_Parse(buffer);
-//             if (json) {
-//                 cJSON *addr = cJSON_GetObjectItem(json, "addr");
-//                 if (addr) {
-//                     ESP_LOGI(TAG, "Location: %s", addr->valuestring);
-//                 } else {
-//                     ESP_LOGE(TAG, "Unable to find 'addr' in response.");
-//                 }
-//                 cJSON_Delete(json);
-//             } else {
-//                 ESP_LOGE(TAG, "JSON parse error");
-//             }
-//             free(buffer);
-//         }
-//     } else {
-//         ESP_LOGE(TAG, "HTTP GET request failed: %s", esp_err_to_name(err));
-//     }
-//     esp_http_client_cleanup(client);
-// }
-
 static void network_task(void *args)
 {
     static WiFi_Connect_Status wifi_status;
@@ -568,7 +547,6 @@ static void network_task(void *args)
     struct tm timeinfo;
     bool weather_sent_today = false;
     wifi_init_sta();
-
 
     tick = xTaskGetTickCount();
     while (1) {
@@ -590,7 +568,8 @@ static void network_task(void *args)
             case NET_EVENT_WEATHER:
                 ESP_LOGI(TAG, "NET_EVENT_WEATHER");
                 // get_location_data();
-                app_weather_request(LOCATION_NUM_SHANGHAI);
+                https_get_task();
+                app_weather_request(adcode_text);
                 // app_weather_request(LOCATION_NUM_BEIJING);
                 // app_weather_request(LOCATION_NUM_SHENZHEN);
                 break;
@@ -667,7 +646,7 @@ void app_network_start(void)
     wifi_event_queue = xQueueCreate(4, sizeof(net_event_t));
     ESP_ERROR_CHECK_WITHOUT_ABORT((wifi_event_queue) ? ESP_OK : ESP_FAIL);
 
-    ret_val = xTaskCreatePinnedToCore(network_task, "NetWork Task", 5 * 1024, NULL, 1, NULL, 0);
-    xTaskCreate(&https_get_task, "https_get_task", 8192, NULL, 5, NULL);
+    ret_val = xTaskCreatePinnedToCore(network_task, "NetWork Task", 8 * 1024, NULL, 1, NULL, 0);
+    //xTaskCreate(&https_get_task, "https_get_task", 8192, NULL, 5, NULL);
     ESP_ERROR_CHECK_WITHOUT_ABORT((pdPASS == ret_val) ? ESP_OK : ESP_FAIL);
 }

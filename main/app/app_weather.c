@@ -51,7 +51,7 @@ static const char *TAG = "app_weather";
 #define LOCATION_SHENZHEN               "101280601"
 
 #define _OPTION_                        "location=101020100&gzip=n&lang=zh"
-#define _OPTION_MULTI                   "location=%s&lang=en"
+#define _OPTION_MULTI                   "location=%s&lang=zh"
 
 /**
  * @brief See more at https://dev.qweather.com/docs/api/
@@ -145,7 +145,7 @@ esp_err_t response_handler(esp_http_client_event_t *evt)
 
     case HTTP_EVENT_ON_FINISH:
         size_t out_size = 0;
-        location_num_t location = (location_num_t)evt->user_data;
+        location_num_t location = 0;
         size_t decode_maxlen = data_len*2;
         char *decode_out = heap_caps_malloc(decode_maxlen, MALLOC_CAP_SPIRAM);
         if (NULL == decode_out) {
@@ -177,28 +177,28 @@ esp_err_t response_handler(esp_http_client_event_t *evt)
     return ESP_OK;
 }
 
-esp_err_t app_weather_request(location_num_t location)
+esp_err_t app_weather_request(char *adcode)
 {
-    char *cityID = NULL;
-
+    // char *cityID = NULL;
+    ESP_LOGI(TAG,"adcode = %s\n", adcode);
     char *url_request = heap_caps_malloc(200, MALLOC_CAP_SPIRAM);
     CHECK(url_request, "Failed allocate mem", ESP_ERR_NO_MEM);
 
-    switch (location) {
-    case LOCATION_NUM_SHANGHAI:
-        cityID = LOCATION_SHANGHAI;
-        break;
-    case LOCATION_NUM_BEIJING:
-        cityID = LOCATION_BEIJING;
-        break;
-    case LOCATION_NUM_SHENZHEN:
-        cityID = LOCATION_SHENZHEN;
-        break;
-    default:
-        cityID = LOCATION_SHANGHAI;
-        break;
-    }
-    sprintf(url_request, WEB_URL_NOW, cityID);
+    // switch (location) {
+    // case LOCATION_NUM_SHANGHAI:
+    //     cityID = LOCATION_SHANGHAI;
+    //     break;
+    // case LOCATION_NUM_BEIJING:
+    //     cityID = LOCATION_BEIJING;
+    //     break;
+    // case LOCATION_NUM_SHENZHEN:
+    //     cityID = LOCATION_SHENZHEN;
+    //     break;
+    // default:
+    //     cityID = LOCATION_SHANGHAI;
+    //     break;
+    // }
+    sprintf(url_request, WEB_URL_NOW, "120.83,30.77");
     ESP_LOGI(TAG, "url_request:%s\r\n", url_request);
 
     esp_http_client_config_t config = {
@@ -207,7 +207,7 @@ esp_err_t app_weather_request(location_num_t location)
         .event_handler = response_handler,
         .buffer_size = MAX_HTTP_RECV_BUFFER,
         .timeout_ms = 5000,
-        .user_data = (void *)location,
+        //.user_data = (void *)location,
     };
     // Set the headers
     esp_http_client_handle_t client = esp_http_client_init(&config);

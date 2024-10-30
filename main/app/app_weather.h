@@ -32,7 +32,7 @@ typedef enum {
     LOCATION_NUM_SHANGHAI,
     LOCATION_NUM_BEIJING,
     LOCATION_NUM_SHENZHEN,
-    LOCATION_NUM_MAX,
+    LOCATION_NUM_MAX = 1,
 } location_num_t;
 
 typedef enum {
@@ -86,7 +86,7 @@ esp_err_t app_weather_start(void);
  *
  * @return esp_err_t request status.
  */
-esp_err_t app_weather_request(location_num_t location);
+esp_err_t app_weather_request(char *adcode);
 
 /**
  * @brief Get air info.
