@@ -177,28 +177,12 @@ esp_err_t response_handler(esp_http_client_event_t *evt)
     return ESP_OK;
 }
 
-esp_err_t app_weather_request(char *adcode)
+esp_err_t app_weather_request(char *data)
 {
-    // char *cityID = NULL;
-    ESP_LOGI(TAG,"adcode = %s\n", adcode);
+    ESP_LOGI(TAG,"data = %s\n", data);
     char *url_request = heap_caps_malloc(200, MALLOC_CAP_SPIRAM);
     CHECK(url_request, "Failed allocate mem", ESP_ERR_NO_MEM);
-
-    // switch (location) {
-    // case LOCATION_NUM_SHANGHAI:
-    //     cityID = LOCATION_SHANGHAI;
-    //     break;
-    // case LOCATION_NUM_BEIJING:
-    //     cityID = LOCATION_BEIJING;
-    //     break;
-    // case LOCATION_NUM_SHENZHEN:
-    //     cityID = LOCATION_SHENZHEN;
-    //     break;
-    // default:
-    //     cityID = LOCATION_SHANGHAI;
-    //     break;
-    // }
-    sprintf(url_request, WEB_URL_NOW, "120.83,30.77");
+    sprintf(url_request, WEB_URL_NOW, data);
     ESP_LOGI(TAG, "url_request:%s\r\n", url_request);
 
     esp_http_client_config_t config = {
@@ -207,7 +191,6 @@ esp_err_t app_weather_request(char *adcode)
         .event_handler = response_handler,
         .buffer_size = MAX_HTTP_RECV_BUFFER,
         .timeout_ms = 5000,
-        //.user_data = (void *)location,
     };
     // Set the headers
     esp_http_client_handle_t client = esp_http_client_init(&config);

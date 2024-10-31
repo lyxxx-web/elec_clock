@@ -18,7 +18,7 @@ extern "C" {
 #define UI_COMP_PANEL2_POWERSTATE 2
 #define UI_COMP_PANEL2_BATTERYBOR 3
 #define UI_COMP_PANEL2_TIMESTATE 4
-#define UI_COMP_PANEL2_BATTERYBORDER 5
+#define UI_COMP_PANEL2_BATTERYTXT 5
 #define _UI_COMP_PANEL2_NUM 6
 lv_obj_t * ui_Panel2_create(lv_obj_t * comp_parent);
 

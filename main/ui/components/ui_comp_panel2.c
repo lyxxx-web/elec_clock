@@ -4,7 +4,6 @@
 // Project name: SquareLine_Project
 
 #include "../ui.h"
-#include "../app/app_wifi.h"
 
 
 // COMPONENT Panel2
@@ -30,9 +29,7 @@ lv_obj_t * ui_Panel2_create(lv_obj_t * comp_parent)
     lv_obj_t * cui_wifistate;
     cui_wifistate = lv_img_create(cui_Panel2);
     //printf("wifi_connected:%d",wifi_connected);
-    if(1){
-        lv_img_set_src(cui_wifistate, &ui_img_wifi_png);
-    }else     lv_img_set_src(cui_wifistate, &ui_img_wifi_disconnection_png);
+    lv_img_set_src(cui_wifistate, &ui_img_wifi_png);
     lv_obj_set_width(cui_wifistate, LV_SIZE_CONTENT);   /// 10
     lv_obj_set_height(cui_wifistate, LV_SIZE_CONTENT);    /// 10
     lv_obj_set_x(cui_wifistate, 55);
@@ -114,7 +111,7 @@ lv_obj_t * ui_Panel2_create(lv_obj_t * comp_parent)
     children[UI_COMP_PANEL2_POWERSTATE] = cui_powerstate;
     children[UI_COMP_PANEL2_BATTERYBOR] = cui_batterybor;
     children[UI_COMP_PANEL2_TIMESTATE] = cui_timestate;
-    children[UI_COMP_PANEL2_BATTERYBORDER] = cui_batterytxt;
+    children[UI_COMP_PANEL2_BATTERYTXT] = cui_batterytxt;
     lv_obj_add_event_cb(cui_Panel2, get_component_child_event_cb, LV_EVENT_GET_COMP_CHILD, children);
     lv_obj_add_event_cb(cui_Panel2, del_component_child_event_cb, LV_EVENT_DELETE, children);
     ui_comp_Panel2_create_hook(cui_Panel2);

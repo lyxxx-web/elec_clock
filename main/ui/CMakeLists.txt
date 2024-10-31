@@ -3,6 +3,7 @@ SET(SOURCES components/ui_comp_panel2.c
     screens/ui_home.c
     screens/ui_muyuplay.c
     screens/ui_shaiziplay.c
+    screens/ui_title.c
     ui.c
     components/ui_comp_hook.c
     ui_helpers.c

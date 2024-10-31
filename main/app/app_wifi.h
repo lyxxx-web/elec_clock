@@ -60,7 +60,6 @@ typedef enum {
 } WiFi_Connect_Status;
 
 extern scan_info_t scan_info_result;
-extern bool wifi_connected;
 
 esp_err_t send_network_event(net_event_t event);
 WiFi_Connect_Status wifi_connected_already(void);

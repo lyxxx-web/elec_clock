@@ -93,12 +93,12 @@ static EventGroupHandle_t s_wifi_event_group;
 static const char *TAG = "wifi station";
 static int s_retry_num = 0;
 static bool s_reconnect = true;
-char adcode_text[10];
+static char west_south[20];
 
 static const char *REQUEST = "GET " WEB_URL " HTTP/1.0\r\n"
-    "Host: "WEB_SERVER"\r\n"
-    "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36 Edg/130.0.0.0\r\n"
-    "\r\n";
+                             "Host: "WEB_SERVER"\r\n"
+                             "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36 Edg/130.0.0.0\r\n"
+                             "\r\n";
 
 bool wifi_connected = false;
 static QueueHandle_t wifi_event_queue = NULL;
@@ -107,21 +107,25 @@ scan_info_t scan_info_result = {
     .ap_count = 0,
 };
 
-static esp_err_t parse_location_data(const char *buffer) {
-
-    ESP_LOGE(TAG, "header_end:%d = %s",strlen(buffer), buffer);
+static esp_err_t parse_location_data(const char *buffer)
+{
     char *header_end = strstr(buffer, "\r\n\r\n");
     header_end += strlen("\r\n\r\n");
-    assert(header_end);
-    ESP_LOGE(TAG, "header_end = %s",header_end);
-    if(header_end){
+    //ESP_LOGE(TAG, "header_end = %s", header_end);
+    if (header_end) {
         cJSON *json = cJSON_Parse(header_end);
-        if (NULL != json){
-            cJSON *adcode = cJSON_GetObjectItem(json, "adcode");
-            snprintf(adcode_text, sizeof(adcode_text), "%s", adcode->valuestring);
+        if (NULL != json) {
+            cJSON *rectangle = cJSON_GetObjectItem(json, "rectangle");
+            char *rectangle_str = rectangle->valuestring;
+            char *semicolon_pos = strchr(rectangle_str, ';');
+            if (semicolon_pos != NULL) {
+                *semicolon_pos = '\0';
+            }
+            double latitude, longitude;
+            sscanf(rectangle_str, "%lf,%lf", &longitude, &latitude);
+            snprintf(west_south, sizeof(west_south), "%.2f,%.2f", longitude, latitude);
             cJSON_Delete(json);
-        } 
-        else {
+        } else {
             ESP_LOGE(TAG, "Error parsing object - [%s] - [%d]", __FILE__, __LINE__);
             return ESP_FAIL;
         }
@@ -158,9 +162,8 @@ static void https_get_task()
     mbedtls_ssl_config_init(&conf);
 
     mbedtls_entropy_init(&entropy);
-    if((ret = mbedtls_ctr_drbg_seed(&ctr_drbg, mbedtls_entropy_func, &entropy,
-                                    NULL, 0)) != 0)
-    {
+    if ((ret = mbedtls_ctr_drbg_seed(&ctr_drbg, mbedtls_entropy_func, &entropy,
+                                     NULL, 0)) != 0) {
         ESP_LOGE(TAG, "mbedtls_ctr_drbg_seed returned %d", ret);
         abort();
     }
@@ -169,28 +172,25 @@ static void https_get_task()
 
     ret = esp_crt_bundle_attach(&conf);
 
-    if(ret < 0)
-    {
+    if (ret < 0) {
         ESP_LOGE(TAG, "esp_crt_bundle_attach returned -0x%x", -ret);
         abort();
     }
 
     ESP_LOGI(TAG, "Setting hostname for TLS session...");
 
-     /* Hostname set here should match CN in server certificate */
-    if((ret = mbedtls_ssl_set_hostname(&ssl, WEB_SERVER)) != 0)
-    {
+    /* Hostname set here should match CN in server certificate */
+    if ((ret = mbedtls_ssl_set_hostname(&ssl, WEB_SERVER)) != 0) {
         ESP_LOGE(TAG, "mbedtls_ssl_set_hostname returned -0x%x", -ret);
         abort();
     }
 
     ESP_LOGI(TAG, "Setting up the SSL/TLS structure...");
 
-    if((ret = mbedtls_ssl_config_defaults(&conf,
-                                          MBEDTLS_SSL_IS_CLIENT,
-                                          MBEDTLS_SSL_TRANSPORT_STREAM,
-                                          MBEDTLS_SSL_PRESET_DEFAULT)) != 0)
-    {
+    if ((ret = mbedtls_ssl_config_defaults(&conf,
+                                           MBEDTLS_SSL_IS_CLIENT,
+                                           MBEDTLS_SSL_TRANSPORT_STREAM,
+                                           MBEDTLS_SSL_PRESET_DEFAULT)) != 0) {
         ESP_LOGE(TAG, "mbedtls_ssl_config_defaults returned %d", ret);
         goto exit;
     }
@@ -202,20 +202,18 @@ static void https_get_task()
     mbedtls_esp_enable_debug_log(&conf, CONFIG_MBEDTLS_DEBUG_LEVEL);
 #endif
 
-    if ((ret = mbedtls_ssl_setup(&ssl, &conf)) != 0)
-    {
+    if ((ret = mbedtls_ssl_setup(&ssl, &conf)) != 0) {
         ESP_LOGE(TAG, "mbedtls_ssl_setup returned -0x%x", -ret);
         goto exit;
     }
 
-    while(1) {
+    while (1) {
         mbedtls_net_init(&server_fd);
 
         ESP_LOGI(TAG, "Connecting to %s:%s...", WEB_SERVER, WEB_PORT);
 
         if ((ret = mbedtls_net_connect(&server_fd, WEB_SERVER,
-                                      WEB_PORT, MBEDTLS_NET_PROTO_TCP)) != 0)
-        {
+                                       WEB_PORT, MBEDTLS_NET_PROTO_TCP)) != 0) {
             ESP_LOGE(TAG, "mbedtls_net_connect returned -%x", -ret);
             goto exit;
         }
@@ -226,10 +224,8 @@ static void https_get_task()
 
         ESP_LOGI(TAG, "Performing the SSL/TLS handshake...");
 
-        while ((ret = mbedtls_ssl_handshake(&ssl)) != 0)
-        {
-            if (ret != MBEDTLS_ERR_SSL_WANT_READ && ret != MBEDTLS_ERR_SSL_WANT_WRITE)
-            {
+        while ((ret = mbedtls_ssl_handshake(&ssl)) != 0) {
+            if (ret != MBEDTLS_ERR_SSL_WANT_READ && ret != MBEDTLS_ERR_SSL_WANT_WRITE) {
                 ESP_LOGE(TAG, "mbedtls_ssl_handshake returned -0x%x", -ret);
                 goto exit;
             }
@@ -237,15 +233,13 @@ static void https_get_task()
 
         ESP_LOGI(TAG, "Verifying peer X.509 certificate...");
 
-        if ((flags = mbedtls_ssl_get_verify_result(&ssl)) != 0)
-        {
+        if ((flags = mbedtls_ssl_get_verify_result(&ssl)) != 0) {
             /* In real life, we probably want to close connection if ret != 0 */
             ESP_LOGW(TAG, "Failed to verify peer certificate!");
             bzero(buf, sizeof(buf));
             mbedtls_x509_crt_verify_info(buf, sizeof(buf), "  ! ", flags);
             ESP_LOGW(TAG, "verification info: %s", buf);
-        }
-        else {
+        } else {
             ESP_LOGI(TAG, "Certificate verified.");
         }
 
@@ -265,12 +259,11 @@ static void https_get_task()
                 ESP_LOGE(TAG, "mbedtls_ssl_write returned -0x%x", -ret);
                 goto exit;
             }
-        } while(written_bytes < strlen(REQUEST));
-        
+        } while (written_bytes < strlen(REQUEST));
+
         ESP_LOGI(TAG, "Reading HTTP response...");
 
-        do
-        {
+        do {
             len = sizeof(buf) - 1;
             bzero(buf, sizeof(buf));
             ret = mbedtls_ssl_read(&ssl, (unsigned char *)buf, len);
@@ -308,13 +301,12 @@ static void https_get_task()
                 putchar(buf[i]);
             }
             break;
-        } while(1);
-        ESP_LOGE(TAG, "header_end  111:%d = %s",strlen(buf), buf);
+        } while (1);
         vTaskDelay(1000 / portTICK_PERIOD_MS);
         parse_location_data(buf);
         mbedtls_ssl_close_notify(&ssl);
 
-    exit:
+exit:
         mbedtls_ssl_session_reset(&ssl);
         mbedtls_net_free(&server_fd);
 
@@ -453,14 +445,14 @@ static void wifi_reconnect_sta(void)
     if (bits & WIFI_CONNECTED_BIT) {
         s_reconnect = false;
         xEventGroupClearBits(s_wifi_event_group, WIFI_CONNECTED_BIT);
-        ESP_ERROR_CHECK( esp_wifi_disconnect() );
+        ESP_ERROR_CHECK(esp_wifi_disconnect());
         xEventGroupWaitBits(s_wifi_event_group, WIFI_FAIL_BIT, 0, 1, portTICK_RATE_MS);
     }
 
     s_reconnect = true;
     s_retry_num = 0;
-    ESP_ERROR_CHECK( esp_wifi_set_mode(WIFI_MODE_STA) );
-    ESP_ERROR_CHECK( esp_wifi_set_config(WIFI_IF_STA, &wifi_config) );
+    ESP_ERROR_CHECK(esp_wifi_set_mode(WIFI_MODE_STA));
+    ESP_ERROR_CHECK(esp_wifi_set_config(WIFI_IF_STA, &wifi_config));
     esp_wifi_connect();
 
     ESP_LOGI(TAG, "wifi_reconnect_sta finished. %s, %s", \
@@ -485,15 +477,15 @@ static void wifi_init_sta(void)
     esp_event_handler_instance_t instance_any_id;
     esp_event_handler_instance_t instance_got_ip;
     ESP_ERROR_CHECK(esp_event_handler_instance_register(WIFI_EVENT,
-                    ESP_EVENT_ANY_ID,
-                    &event_handler,
-                    NULL,
-                    &instance_any_id));
+                                                        ESP_EVENT_ANY_ID,
+                                                        &event_handler,
+                                                        NULL,
+                                                        &instance_any_id));
     ESP_ERROR_CHECK(esp_event_handler_instance_register(IP_EVENT,
-                    IP_EVENT_STA_GOT_IP,
-                    &event_handler,
-                    NULL,
-                    &instance_got_ip));
+                                                        IP_EVENT_STA_GOT_IP,
+                                                        &event_handler,
+                                                        NULL,
+                                                        &instance_got_ip));
     wifi_config_t wifi_config = {
         .sta = {
             .ssid = "TP-LINK_Liu",
@@ -512,9 +504,9 @@ static void wifi_init_sta(void)
     // memcpy(wifi_config.sta.ssid, sys_param->ssid, sizeof(wifi_config.sta.ssid));
     // memcpy(wifi_config.sta.password, sys_param->password, sizeof(wifi_config.sta.password));
 
-    ESP_ERROR_CHECK(esp_wifi_set_mode(WIFI_MODE_STA) );
-    ESP_ERROR_CHECK(esp_wifi_set_config(WIFI_IF_STA, &wifi_config) );
-    ESP_ERROR_CHECK(esp_wifi_start() );
+    ESP_ERROR_CHECK(esp_wifi_set_mode(WIFI_MODE_STA));
+    ESP_ERROR_CHECK(esp_wifi_set_config(WIFI_IF_STA, &wifi_config));
+    ESP_ERROR_CHECK(esp_wifi_start());
     ESP_LOGI(TAG, "wifi_init_sta finished.%s, %s", \
              wifi_config.sta.ssid, wifi_config.sta.password);
 
@@ -551,7 +543,7 @@ static void network_task(void *args)
     tick = xTaskGetTickCount();
     while (1) {
         if (pdPASS == xQueueReceive(wifi_event_queue, &net_event, portTICK_RATE_MS / 5)) {
-            ESP_LOGI(TAG,"net_event:%d",net_event);
+            ESP_LOGI(TAG, "net_event:%d", net_event);
             switch (net_event) {
             case NET_EVENT_RECONNECT:
                 ESP_LOGI(TAG, "NET_EVENT_RECONNECT");
@@ -567,11 +559,8 @@ static void network_task(void *args)
                 break;
             case NET_EVENT_WEATHER:
                 ESP_LOGI(TAG, "NET_EVENT_WEATHER");
-                // get_location_data();
                 https_get_task();
-                app_weather_request(adcode_text);
-                // app_weather_request(LOCATION_NUM_BEIJING);
-                // app_weather_request(LOCATION_NUM_SHENZHEN);
+                app_weather_request(west_south);
                 break;
 
             case NET_EVENT_POWERON_SCAN:
@@ -582,19 +571,7 @@ static void network_task(void *args)
                 break;
             }
         }
-        time_t now;
-        time(&now);
-        localtime_r(&now, &timeinfo);
 
-        if (timeinfo.tm_hour == 12 && timeinfo.tm_min == 0 && !weather_sent_today) {
-            send_network_event(NET_EVENT_WEATHER);
-            weather_sent_today = true; 
-            ESP_LOGI(TAG, "Daily weather event sent at 12:00.");
-        }
-        
-        if (timeinfo.tm_hour != 12 || timeinfo.tm_min > 0) {
-            weather_sent_today = false;
-        }
         // if ((xTaskGetTickCount() - tick) > (5 * 60 * 1000)) {
         //     tick = xTaskGetTickCount();
         //     if (wifi_connected) {
@@ -608,7 +585,20 @@ static void network_task(void *args)
             if (wifi_connected) {
                 send_network_event(NET_EVENT_NTP);
                 send_network_event(NET_EVENT_WEATHER);
-                weather_sent_today = true; 
+                weather_sent_today = true;
+            }
+        } else {
+            time_t now;
+            time(&now);
+            localtime_r(&now, &timeinfo);
+
+            if (timeinfo.tm_hour == 12 && timeinfo.tm_min == 0 && !weather_sent_today) {
+                send_network_event(NET_EVENT_WEATHER);
+                weather_sent_today = true;
+                ESP_LOGI(TAG, "Daily weather event sent at 12:00.");
+            }
+            if (timeinfo.tm_hour != 12 || timeinfo.tm_min > 0) {
+                weather_sent_today = false;
             }
         }
     }

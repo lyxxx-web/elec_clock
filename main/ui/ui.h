@@ -80,6 +80,15 @@ extern lv_obj_t * ui_dot20;
 extern lv_obj_t * ui_dot21;
 extern lv_obj_t * ui_dot22;
 extern lv_obj_t * ui_Panel6;
+// SCREEN: ui_title
+void ui_title_screen_init(void);
+extern  lv_obj_t * ui_title;
+extern  lv_obj_t * title_panel;
+extern  lv_obj_t * title_wifistate;
+extern  lv_obj_t * title_powerstate;
+extern  lv_obj_t * title_batterybor;
+extern  lv_obj_t * title_timestate;
+extern  lv_obj_t * title_batterytxt;
 void ui_event____initial_actions0(lv_event_t * e);
 extern lv_obj_t * ui____initial_actions0;
 

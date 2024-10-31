@@ -38,7 +38,7 @@ void ui_clock_update(lv_timer_t *timer)
     struct tm timeinfo;
     static char hour_str[3], min_str[3],time_str[6];
     char date_str[16], weekday_str[16];
-    
+
     gettimeofday(&tv_now, NULL);
     localtime_r(&tv_now.tv_sec, &timeinfo);
 
@@ -61,9 +61,22 @@ void ui_clock_update(lv_timer_t *timer)
     lv_label_set_text(ui_min, min_str);
     lv_label_set_text(ui_date, date_str);
     lv_label_set_text(ui_weekday, weekday_str);
-    lv_label_set_text(ui_comp_get_child(ui_Panel2,UI_COMP_PANEL2_TIMESTATE), time_str);
-    lv_label_set_text(ui_comp_get_child(ui_Panel5,UI_COMP_PANEL2_TIMESTATE), time_str);
-    lv_label_set_text(ui_comp_get_child(ui_Panel6,UI_COMP_PANEL2_TIMESTATE), time_str);
+    
+    lv_label_set_text(title_panel, time_str);
+    // lv_label_set_text(ui_comp_get_child(ui_Panel2,UI_COMP_PANEL2_TIMESTATE), time_str);
+    // lv_label_set_text(ui_comp_get_child(ui_Panel5,UI_COMP_PANEL2_TIMESTATE), time_str);
+    // lv_label_set_text(ui_comp_get_child(ui_Panel6,UI_COMP_PANEL2_TIMESTATE), time_str);
+    // if(wifi_connected_already() == WIFI_STATUS_CONNECTED_OK){
+    //     lv_img_set_src(ui_comp_get_child(ui_Panel2, UI_COMP_PANEL2_WIFISTATE), &ui_img_wifi_png);
+    //     lv_img_set_src(ui_comp_get_child(ui_Panel5, UI_COMP_PANEL2_WIFISTATE), &ui_img_wifi_png);
+    //     lv_img_set_src(ui_comp_get_child(ui_Panel6, UI_COMP_PANEL2_WIFISTATE), &ui_img_wifi_png);
+
+    // }else{
+    //     lv_img_set_src(ui_comp_get_child(ui_Panel2, UI_COMP_PANEL2_WIFISTATE), &ui_img_wifi_disconnection_png);
+    //     lv_img_set_src(ui_comp_get_child(ui_Panel5, UI_COMP_PANEL2_WIFISTATE), &ui_img_wifi_disconnection_png);
+    //     lv_img_set_src(ui_comp_get_child(ui_Panel6, UI_COMP_PANEL2_WIFISTATE), &ui_img_wifi_disconnection_png);
+    // }
+
     lv_label_set_text(ui_weather, item_text);
     lv_label_set_text(ui_temp, item_temp);
 }
@@ -73,8 +86,6 @@ void ui_init_timer()
     lv_timer_t * timer_clock = lv_timer_create(ui_clock_update, 1000,  NULL);
     ui_clock_update(timer_clock);
 }
-
-
 
 void app_lvgl_display(void)
 {

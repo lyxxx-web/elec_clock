@@ -1,0 +1,17 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../esp-idf"
+		},
+		{
+			"path": "../esp-box"
+		},
+		{
+			"path": "../../demo/esp-internship-diary"
+		}
+	],
+	"settings": {}
+}

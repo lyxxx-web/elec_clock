@@ -45,10 +45,10 @@ void ui_muyuplay_screen_init(void)
     lv_obj_set_style_text_font(ui_gongdetxt, &ui_font_OPPOSansH25, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_blend_mode(ui_gongdetxt, LV_BLEND_MODE_NORMAL, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    ui_Panel5 = ui_Panel2_create(ui_muyuplay);
-    lv_obj_set_x(ui_Panel5, 0);
-    lv_obj_set_y(ui_Panel5, 0);
-
+    // ui_Panel5 = ui_Panel2_create(ui_muyuplay);
+    // lv_obj_set_x(ui_Panel5, 0);
+    // lv_obj_set_y(ui_Panel5, 0);
+    //lv_obj_set_parent(title_panel, ui_Panel3);
 
 
 

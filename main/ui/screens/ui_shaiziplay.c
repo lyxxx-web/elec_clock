@@ -265,9 +265,10 @@ void ui_shaiziplay_screen_init(void)
     lv_obj_set_style_radius(ui_dot22, 5, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_border_width(ui_dot22, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    ui_Panel6 = ui_Panel2_create(ui_shaiziplay);
-    lv_obj_set_x(ui_Panel6, 0);
-    lv_obj_set_y(ui_Panel6, 0);
+    // ui_Panel6 = ui_Panel2_create(ui_shaiziplay);
+    // lv_obj_set_x(ui_Panel6, 0);
+    // lv_obj_set_y(ui_Panel6, 0);
+    //lv_obj_set_parent(title_panel, ui_Panel4);
 
 
 

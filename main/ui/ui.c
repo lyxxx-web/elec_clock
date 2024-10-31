@@ -76,6 +76,15 @@ lv_obj_t * ui_dot20;
 lv_obj_t * ui_dot21;
 lv_obj_t * ui_dot22;
 lv_obj_t * ui_Panel6;
+// SCREEN: ui_title
+void ui_title_screen_init(void);
+lv_obj_t * ui_title;
+lv_obj_t * title_panel;
+lv_obj_t * title_wifistate;
+lv_obj_t * title_powerstate;
+lv_obj_t * title_batterybor;
+lv_obj_t * title_timestate;
+lv_obj_t * title_batterytxt;
 void ui_event____initial_actions0(lv_event_t * e);
 lv_obj_t * ui____initial_actions0;
 
@@ -321,12 +330,13 @@ void ui_event____initial_actions0(lv_event_t * e)
 
 void ui_init(void)
 {
-    LV_EVENT_GET_COMP_CHILD = lv_event_register_id();
+    //LV_EVENT_GET_COMP_CHILD = lv_event_register_id();
 
     lv_disp_t * dispp = lv_disp_get_default();
     lv_theme_t * theme = lv_theme_default_init(dispp, lv_palette_main(LV_PALETTE_BLUE), lv_palette_main(LV_PALETTE_RED),
                                                false, LV_FONT_DEFAULT);
     lv_disp_set_theme(dispp, theme);
+    ui_title_screen_init();
     ui_home_screen_init();
     ui_muyuplay_screen_init();
     ui_shaiziplay_screen_init();
