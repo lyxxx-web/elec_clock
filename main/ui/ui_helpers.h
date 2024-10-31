@@ -95,6 +95,9 @@ void _ui_anim_callback_set_height(lv_anim_t * a, int32_t v);
 void _ui_anim_callback_set_opacity(lv_anim_t * a, int32_t v);
 
 
+void _ui_anim_callback_set_text_opacity(lv_anim_t * a, int32_t v);
+
+
 void _ui_anim_callback_set_image_zoom(lv_anim_t * a, int32_t v);
 
 

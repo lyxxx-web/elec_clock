@@ -4,6 +4,7 @@
 // Project name: SquareLine_Project
 
 #include "ui_helpers.h"
+#include "esp_log.h"
 
 void _ui_bar_set_property(lv_obj_t * target, int id, int val)
 {
@@ -186,7 +187,16 @@ void _ui_anim_callback_set_opacity(lv_anim_t * a, int32_t v)
 {
 
     ui_anim_user_data_t * usr = (ui_anim_user_data_t *)a->user_data;
-    lv_obj_set_style_opa(usr->target, v, 0);
+    lv_obj_set_style_text_opa(usr->target, v, 0);
+
+}
+
+void _ui_anim_callback_set_text_opacity(lv_anim_t * a, int32_t v)
+
+{
+
+    ui_anim_user_data_t * usr = (ui_anim_user_data_t *)a->user_data;
+    lv_obj_set_style_text_opa(usr->target, v, 0);
 
 }
 

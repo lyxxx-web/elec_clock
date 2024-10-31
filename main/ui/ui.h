@@ -13,8 +13,6 @@ extern "C" {
 #include "lvgl.h"
 
 #include "ui_helpers.h"
-#include "components/ui_comp.h"
-#include "components/ui_comp_hook.h"
 #include "ui_events.h"
 
 void muyushow_Animation(lv_obj_t * TargetObject, int delay);
@@ -24,6 +22,7 @@ void weather_Animation(lv_obj_t * TargetObject, int delay);
 void bottom_Animation(lv_obj_t * TargetObject, int delay);
 void opaon_Animation(lv_obj_t * TargetObject, int delay);
 void shaizishow_Animation(lv_obj_t * TargetObject, int delay);
+void gonde_txt_Animation(lv_obj_t * TargetObject, int delay);
 // SCREEN: ui_home
 void ui_home_screen_init(void);
 void ui_event_home(lv_event_t * e);
@@ -37,7 +36,7 @@ extern lv_obj_t * ui_temp;
 extern lv_obj_t * ui_weather;
 extern lv_obj_t * ui_colon;
 extern lv_obj_t * ui_weathershow;
-extern lv_obj_t * ui_Panel2;
+
 // SCREEN: ui_muyuplay
 void ui_muyuplay_screen_init(void);
 void ui_event_muyuplay(lv_event_t * e);
@@ -46,7 +45,7 @@ void ui_event_Panel3(lv_event_t * e);
 extern lv_obj_t * ui_Panel3;
 extern lv_obj_t * ui_muyu;
 extern lv_obj_t * ui_gongdetxt;
-extern lv_obj_t * ui_Panel5;
+
 // SCREEN: ui_shaiziplay
 void ui_shaiziplay_screen_init(void);
 void ui_event_shaiziplay(lv_event_t * e);
@@ -79,7 +78,7 @@ extern lv_obj_t * ui_dot19;
 extern lv_obj_t * ui_dot20;
 extern lv_obj_t * ui_dot21;
 extern lv_obj_t * ui_dot22;
-extern lv_obj_t * ui_Panel6;
+
 // SCREEN: ui_title
 void ui_title_screen_init(void);
 extern  lv_obj_t * ui_title;
@@ -97,7 +96,7 @@ LV_IMG_DECLARE(ui_img_clody_png);    // assets/clody.png
 LV_IMG_DECLARE(ui_img_wifi_png);    // assets/wifi.png
 LV_IMG_DECLARE(ui_img_battery_png);    // assets/battery.png
 LV_IMG_DECLARE(ui_img_muyu_png);    // assets/muyu.png
-LV_IMG_DECLARE(ui_img_wifi_disconnection_png);
+LV_IMG_DECLARE(ui_img_wifi_disconnection_png);   // assets/ui_img_wifi_disconnection.png
 
 
 

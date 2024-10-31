@@ -14,6 +14,7 @@ void weather_Animation(lv_obj_t * TargetObject, int delay);
 void bottom_Animation(lv_obj_t * TargetObject, int delay);
 void opaon_Animation(lv_obj_t * TargetObject, int delay);
 void shaizishow_Animation(lv_obj_t * TargetObject, int delay);
+void gonde_txt_Animation(lv_obj_t * TargetObject, int delay);
 
 
 // SCREEN: ui_home
@@ -29,7 +30,6 @@ lv_obj_t * ui_temp;
 lv_obj_t * ui_weather;
 lv_obj_t * ui_colon;
 lv_obj_t * ui_weathershow;
-lv_obj_t * ui_Panel2;
 
 
 // SCREEN: ui_muyuplay
@@ -40,7 +40,6 @@ void ui_event_Panel3(lv_event_t * e);
 lv_obj_t * ui_Panel3;
 lv_obj_t * ui_muyu;
 lv_obj_t * ui_gongdetxt;
-lv_obj_t * ui_Panel5;
 
 
 // SCREEN: ui_shaiziplay
@@ -75,7 +74,7 @@ lv_obj_t * ui_dot19;
 lv_obj_t * ui_dot20;
 lv_obj_t * ui_dot21;
 lv_obj_t * ui_dot22;
-lv_obj_t * ui_Panel6;
+
 // SCREEN: ui_title
 void ui_title_screen_init(void);
 lv_obj_t * ui_title;
@@ -85,6 +84,8 @@ lv_obj_t * title_powerstate;
 lv_obj_t * title_batterybor;
 lv_obj_t * title_timestate;
 lv_obj_t * title_batterytxt;
+
+// SCREEN:ui_fish
 void ui_event____initial_actions0(lv_event_t * e);
 lv_obj_t * ui____initial_actions0;
 
@@ -120,6 +121,37 @@ void muyushow_Animation(lv_obj_t * TargetObject, int delay)
     lv_anim_start(&PropertyAnimation_0);
 
 }
+void gonde_txt_Animation(lv_obj_t * TargetObject, int delay)
+{
+    ui_anim_user_data_t * opacity_anim_user_data = lv_mem_alloc(sizeof(ui_anim_user_data_t));
+    opacity_anim_user_data->target = TargetObject;
+
+    lv_anim_t opacity_anim;
+    lv_anim_init(&opacity_anim);
+    lv_anim_set_time(&opacity_anim, 600);
+    lv_anim_set_user_data(&opacity_anim, opacity_anim_user_data);
+    lv_anim_set_custom_exec_cb(&opacity_anim, _ui_anim_callback_set_text_opacity);
+    lv_anim_set_values(&opacity_anim, 255, 0);
+    lv_anim_set_path_cb(&opacity_anim, lv_anim_path_linear);
+    lv_anim_set_delay(&opacity_anim, delay);
+    lv_anim_set_deleted_cb(&opacity_anim, _ui_anim_callback_free_user_data);
+    lv_anim_start(&opacity_anim);
+
+    ui_anim_user_data_t * position_anim_user_data = lv_mem_alloc(sizeof(ui_anim_user_data_t));
+    position_anim_user_data->target = TargetObject;
+
+    lv_anim_t position_anim;
+    lv_anim_init(&position_anim);
+    lv_anim_set_time(&position_anim, 600);
+    lv_anim_set_user_data(&position_anim, position_anim_user_data);
+    lv_anim_set_custom_exec_cb(&position_anim, _ui_anim_callback_set_y);
+    lv_anim_set_values(&position_anim, -50, -95); 
+    lv_anim_set_path_cb(&position_anim, lv_anim_path_linear);
+    lv_anim_set_delay(&position_anim, delay);
+    lv_anim_set_deleted_cb(&position_anim, _ui_anim_callback_free_user_data);
+    lv_anim_start(&position_anim);
+}
+
 void blink_Animation(lv_obj_t * TargetObject, int delay)
 {
     ui_anim_user_data_t * PropertyAnimation_0_user_data = lv_mem_alloc(sizeof(ui_anim_user_data_t));
@@ -221,7 +253,7 @@ void opaon_Animation(lv_obj_t * TargetObject, int delay)
     lv_anim_init(&PropertyAnimation_0);
     lv_anim_set_time(&PropertyAnimation_0, 500);
     lv_anim_set_user_data(&PropertyAnimation_0, PropertyAnimation_0_user_data);
-    lv_anim_set_custom_exec_cb(&PropertyAnimation_0, _ui_anim_callback_set_opacity);
+    lv_anim_set_custom_exec_cb(&PropertyAnimation_0, _ui_anim_callback_set_text_opacity);
     lv_anim_set_values(&PropertyAnimation_0, 0, 255);
     lv_anim_set_path_cb(&PropertyAnimation_0, lv_anim_path_linear);
     lv_anim_set_delay(&PropertyAnimation_0, delay + 0);
@@ -235,6 +267,7 @@ void opaon_Animation(lv_obj_t * TargetObject, int delay)
     lv_anim_start(&PropertyAnimation_0);
 
 }
+
 void shaizishow_Animation(lv_obj_t * TargetObject, int delay)
 {
     ui_anim_user_data_t * PropertyAnimation_0_user_data = lv_mem_alloc(sizeof(ui_anim_user_data_t));
@@ -268,11 +301,12 @@ void ui_event_home(lv_event_t * e)
         bottom_Animation(ui_hour, 0);
         bottom_Animation(ui_min, 0);
         weather_Animation(ui_weathershow, 0);
-        // opaon_Animation(ui_weather, 0);
-        // opaon_Animation(ui_temp, 0);
-        // opaon_Animation(ui_weekday, 0);
-        // opaon_Animation(ui_date, 0);
-        top_Animation(ui_Panel2, 0);
+        opaon_Animation(ui_weather, 0);
+        opaon_Animation(ui_temp, 0);
+        opaon_Animation(ui_weekday, 0);
+        opaon_Animation(ui_date, 0);
+        top_Animation(title_panel, 0);
+        lv_obj_set_parent(title_panel, ui_Panel1);
     }
     if(event_code == LV_EVENT_GESTURE &&  lv_indev_get_gesture_dir(lv_indev_get_act()) == LV_DIR_LEFT) {
         lv_indev_wait_release(lv_indev_get_act());
@@ -283,6 +317,9 @@ void ui_event_muyuplay(lv_event_t * e)
 {
     lv_event_code_t event_code = lv_event_get_code(e);
     lv_obj_t * target = lv_event_get_target(e);
+    if(event_code == LV_EVENT_SCREEN_LOAD_START){
+        lv_obj_set_parent(title_panel, ui_Panel3);
+    }
     if(event_code == LV_EVENT_GESTURE &&  lv_indev_get_gesture_dir(lv_indev_get_act()) == LV_DIR_RIGHT) {
         lv_indev_wait_release(lv_indev_get_act());
         _ui_screen_change(&ui_home, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_home_screen_init);
@@ -298,12 +335,17 @@ void ui_event_Panel3(lv_event_t * e)
     lv_obj_t * target = lv_event_get_target(e);
     if(event_code == LV_EVENT_PRESSED) {
         muyushow_Animation(ui_muyu, 0);
+        gonde_txt_Animation(ui_gongdetxt, 0);
     }
+
 }
 void ui_event_shaiziplay(lv_event_t * e)
 {
     lv_event_code_t event_code = lv_event_get_code(e);
     lv_obj_t * target = lv_event_get_target(e);
+        if(event_code == LV_EVENT_SCREEN_LOAD_START){
+        lv_obj_set_parent(title_panel, ui_Panel4);
+    }
     if(event_code == LV_EVENT_GESTURE &&  lv_indev_get_gesture_dir(lv_indev_get_act()) == LV_DIR_RIGHT) {
         lv_indev_wait_release(lv_indev_get_act());
         _ui_screen_change(&ui_muyuplay, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_muyuplay_screen_init);

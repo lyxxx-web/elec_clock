@@ -16,7 +16,6 @@
 #include "nvs_flash.h"
 #include <time.h>
 #include <sys/time.h>
-#include "ui/components/ui_comp_panel2.h"
 #include "app/app_weather.h"
 
 #define TAG "ESP-EXAMPLE"
@@ -61,24 +60,15 @@ void ui_clock_update(lv_timer_t *timer)
     lv_label_set_text(ui_min, min_str);
     lv_label_set_text(ui_date, date_str);
     lv_label_set_text(ui_weekday, weekday_str);
-    
-    lv_label_set_text(title_panel, time_str);
-    // lv_label_set_text(ui_comp_get_child(ui_Panel2,UI_COMP_PANEL2_TIMESTATE), time_str);
-    // lv_label_set_text(ui_comp_get_child(ui_Panel5,UI_COMP_PANEL2_TIMESTATE), time_str);
-    // lv_label_set_text(ui_comp_get_child(ui_Panel6,UI_COMP_PANEL2_TIMESTATE), time_str);
-    // if(wifi_connected_already() == WIFI_STATUS_CONNECTED_OK){
-    //     lv_img_set_src(ui_comp_get_child(ui_Panel2, UI_COMP_PANEL2_WIFISTATE), &ui_img_wifi_png);
-    //     lv_img_set_src(ui_comp_get_child(ui_Panel5, UI_COMP_PANEL2_WIFISTATE), &ui_img_wifi_png);
-    //     lv_img_set_src(ui_comp_get_child(ui_Panel6, UI_COMP_PANEL2_WIFISTATE), &ui_img_wifi_png);
-
-    // }else{
-    //     lv_img_set_src(ui_comp_get_child(ui_Panel2, UI_COMP_PANEL2_WIFISTATE), &ui_img_wifi_disconnection_png);
-    //     lv_img_set_src(ui_comp_get_child(ui_Panel5, UI_COMP_PANEL2_WIFISTATE), &ui_img_wifi_disconnection_png);
-    //     lv_img_set_src(ui_comp_get_child(ui_Panel6, UI_COMP_PANEL2_WIFISTATE), &ui_img_wifi_disconnection_png);
-    // }
+    lv_label_set_text(title_timestate, time_str);
 
     lv_label_set_text(ui_weather, item_text);
     lv_label_set_text(ui_temp, item_temp);
+    if(wifi_connected_already() == WIFI_STATUS_CONNECTED_OK){
+        lv_img_set_src(title_wifistate, &ui_img_wifi_png);   
+    }else{
+        lv_img_set_src(title_wifistate, &ui_img_wifi_disconnection_png); 
+    } 
 }
 
 void ui_init_timer()

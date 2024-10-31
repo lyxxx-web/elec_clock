@@ -114,16 +114,6 @@ void ui_home_screen_init(void)
     lv_obj_clear_flag(ui_weathershow, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
     lv_img_set_zoom(ui_weathershow, 95);
 
-    // ui_Panel2 = ui_Panel2_create(ui_home);
-    // lv_obj_set_x(ui_Panel2, 0);
-    // lv_obj_set_y(ui_Panel2, 0);
-    printf("pointer to title panel (use):%p\n",title_panel);
-    // assert(title_panel);
-    
-    // lv_obj_set_parent(title_panel, ui_Panel1);
-
-
-
 
 
 

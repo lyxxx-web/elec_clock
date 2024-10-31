@@ -37,18 +37,14 @@ void ui_muyuplay_screen_init(void)
     lv_obj_set_width(ui_gongdetxt, LV_SIZE_CONTENT);   /// 1
     lv_obj_set_height(ui_gongdetxt, LV_SIZE_CONTENT);    /// 1
     lv_obj_set_x(ui_gongdetxt, -59);
-    lv_obj_set_y(ui_gongdetxt, -79);
+    lv_obj_set_y(ui_gongdetxt, -50);
     lv_obj_set_align(ui_gongdetxt, LV_ALIGN_CENTER);
     lv_label_set_text(ui_gongdetxt, "功德+1");
     lv_obj_set_style_text_color(ui_gongdetxt, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_text_opa(ui_gongdetxt, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_opa(ui_gongdetxt, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+    //lv_obj_set_style_opa(ui_gongdetxt, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_font(ui_gongdetxt, &ui_font_OPPOSansH25, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_blend_mode(ui_gongdetxt, LV_BLEND_MODE_NORMAL, LV_PART_MAIN | LV_STATE_DEFAULT);
-
-    // ui_Panel5 = ui_Panel2_create(ui_muyuplay);
-    // lv_obj_set_x(ui_Panel5, 0);
-    // lv_obj_set_y(ui_Panel5, 0);
-    //lv_obj_set_parent(title_panel, ui_Panel3);
 
 
 

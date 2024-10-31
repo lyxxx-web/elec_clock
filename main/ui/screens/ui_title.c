@@ -1,5 +1,5 @@
 #include "../ui.h"
-#include <stdio.h>
+#include "app_wifi.h"
 
 void ui_title_screen_init(void)
 {
@@ -7,7 +7,6 @@ void ui_title_screen_init(void)
     lv_obj_clear_flag(ui_title, LV_OBJ_FLAG_SCROLLABLE);
 
     title_panel = lv_obj_create(ui_title);
-    printf("pointer to title panel (created):%p\n",title_panel);
     lv_obj_set_width(title_panel, 240);
     lv_obj_set_height(title_panel, 20);
     lv_obj_set_align(title_panel, LV_ALIGN_TOP_MID);
@@ -22,7 +21,7 @@ void ui_title_screen_init(void)
     lv_obj_set_style_pad_bottom(title_panel, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     title_wifistate = lv_img_create(title_panel);
-    lv_img_set_src(title_wifistate, &ui_img_wifi_png);
+    lv_img_set_src(title_wifistate, &ui_img_wifi_disconnection_png); 
     lv_obj_set_width(title_wifistate, LV_SIZE_CONTENT);   /// 10
     lv_obj_set_height(title_wifistate, LV_SIZE_CONTENT);    /// 10
     lv_obj_set_x(title_wifistate, 55);
