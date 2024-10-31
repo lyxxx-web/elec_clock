@@ -91,8 +91,8 @@ extern  lv_obj_t * title_batterytxt;
 
 // SCREEN: ui_fish
 void ui_fish_screen_init(void);
-lv_obj_t * ui_fish;
-lv_obj_t * ui_img_fish;
+extern lv_obj_t * ui_fish;
+extern lv_obj_t * ui_img_fish;
 
 void ui_event____initial_actions0(lv_event_t * e);
 extern lv_obj_t * ui____initial_actions0;

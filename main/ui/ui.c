@@ -385,6 +385,7 @@ void ui_init(void)
     ui_home_screen_init();
     ui_muyuplay_screen_init();
     ui_shaiziplay_screen_init();
+    ui_fish_screen_init();
     // ui____initial_actions0 = lv_obj_create(NULL);
     // lv_obj_add_event_cb(ui____initial_actions0, ui_event____initial_actions0, LV_EVENT_ALL, NULL);
 

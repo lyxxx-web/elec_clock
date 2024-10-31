@@ -3,7 +3,7 @@ dependencies:
     component_hash: e162e6c8fc670ae297dca5ec75037966c1d69a1509f0b2048a883a7c54fb7aba
     dependencies:
     - name: espressif/cmake_utilities
-      registry_url: https://components.espressif.com
+      registry_url: https://components.espressif.com/
       require: private
       version: 0.*
     - name: idf
@@ -21,7 +21,7 @@ dependencies:
       require: private
       version: '>=4.1'
     source:
-      registry_url: https://components.espressif.com
+      registry_url: https://components.espressif.com/
       type: service
     version: 0.5.3
   espressif/esp-box:
@@ -127,7 +127,7 @@ dependencies:
       require: private
       version: '>=4.4'
     - name: lvgl/lvgl
-      registry_url: https://components.espressif.com
+      registry_url: https://components.espressif.com/
       require: public
       version: '>=8,<10'
     source:
@@ -158,7 +158,7 @@ dependencies:
   idf:
     source:
       type: idf
-    version: 5.4.0
+    version: 5.3.1
   lvgl/lvgl:
     component_hash: 0f2006e7b800eee17b73ed4f92ffbaa76d61c02ba4779ec9efbcd5f453bb0102
     dependencies: []
