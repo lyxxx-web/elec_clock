@@ -1,13 +1,13 @@
 # Target labels
  bootloader
 # Source files and their labels
-/home/leon/esp/elec_clock/build/CMakeFiles/bootloader
-/home/leon/esp/elec_clock/build/CMakeFiles/bootloader.rule
-/home/leon/esp/elec_clock/build/CMakeFiles/bootloader-complete.rule
-/home/leon/esp/elec_clock/build/bootloader-prefix/src/bootloader-stamp/bootloader-install.rule
-/home/leon/esp/elec_clock/build/bootloader-prefix/src/bootloader-stamp/bootloader-mkdir.rule
-/home/leon/esp/elec_clock/build/bootloader-prefix/src/bootloader-stamp/bootloader-download.rule
-/home/leon/esp/elec_clock/build/bootloader-prefix/src/bootloader-stamp/bootloader-update.rule
-/home/leon/esp/elec_clock/build/bootloader-prefix/src/bootloader-stamp/bootloader-patch.rule
-/home/leon/esp/elec_clock/build/bootloader-prefix/src/bootloader-stamp/bootloader-configure.rule
-/home/leon/esp/elec_clock/build/bootloader-prefix/src/bootloader-stamp/bootloader-build.rule
+/home/luoyunxin/esp/elec_clock_local/build/CMakeFiles/bootloader
+/home/luoyunxin/esp/elec_clock_local/build/CMakeFiles/bootloader.rule
+/home/luoyunxin/esp/elec_clock_local/build/CMakeFiles/bootloader-complete.rule
+/home/luoyunxin/esp/elec_clock_local/build/bootloader-prefix/src/bootloader-stamp/bootloader-build.rule
+/home/luoyunxin/esp/elec_clock_local/build/bootloader-prefix/src/bootloader-stamp/bootloader-configure.rule
+/home/luoyunxin/esp/elec_clock_local/build/bootloader-prefix/src/bootloader-stamp/bootloader-download.rule
+/home/luoyunxin/esp/elec_clock_local/build/bootloader-prefix/src/bootloader-stamp/bootloader-install.rule
+/home/luoyunxin/esp/elec_clock_local/build/bootloader-prefix/src/bootloader-stamp/bootloader-mkdir.rule
+/home/luoyunxin/esp/elec_clock_local/build/bootloader-prefix/src/bootloader-stamp/bootloader-patch.rule
+/home/luoyunxin/esp/elec_clock_local/build/bootloader-prefix/src/bootloader-stamp/bootloader-update.rule

@@ -1,4 +1,4 @@
-# Install script for directory: /home/leon/esp/elec_clock/managed_components/espressif__esp_lcd_touch_tt21100
+# Install script for directory: /home/luoyunxin/esp/elec_clock_local/managed_components/espressif__esp_lcd_touch_tt21100
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -30,5 +30,10 @@ endif()
 # Is this installation the result of a crosscompile?
 if(NOT DEFINED CMAKE_CROSSCOMPILING)
   set(CMAKE_CROSSCOMPILING "TRUE")
+endif()
+
+# Set default install directory permissions.
+if(NOT DEFINED CMAKE_OBJDUMP)
+  set(CMAKE_OBJDUMP "/home/luoyunxin/.espressif/tools/xtensa-esp-elf/esp-14.2.0_20240906/xtensa-esp-elf/bin/xtensa-esp32s3-elf-objdump")
 endif()
 
