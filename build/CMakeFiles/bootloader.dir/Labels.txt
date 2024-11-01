@@ -1,13 +1,13 @@
 # Target labels
  bootloader
 # Source files and their labels
-/home/luoyunxin/esp/elec_clock_local/build/CMakeFiles/bootloader
-/home/luoyunxin/esp/elec_clock_local/build/CMakeFiles/bootloader.rule
-/home/luoyunxin/esp/elec_clock_local/build/CMakeFiles/bootloader-complete.rule
-/home/luoyunxin/esp/elec_clock_local/build/bootloader-prefix/src/bootloader-stamp/bootloader-build.rule
-/home/luoyunxin/esp/elec_clock_local/build/bootloader-prefix/src/bootloader-stamp/bootloader-configure.rule
-/home/luoyunxin/esp/elec_clock_local/build/bootloader-prefix/src/bootloader-stamp/bootloader-download.rule
-/home/luoyunxin/esp/elec_clock_local/build/bootloader-prefix/src/bootloader-stamp/bootloader-install.rule
-/home/luoyunxin/esp/elec_clock_local/build/bootloader-prefix/src/bootloader-stamp/bootloader-mkdir.rule
-/home/luoyunxin/esp/elec_clock_local/build/bootloader-prefix/src/bootloader-stamp/bootloader-patch.rule
-/home/luoyunxin/esp/elec_clock_local/build/bootloader-prefix/src/bootloader-stamp/bootloader-update.rule
+/home/xuxin/esp_work/third_party/elec_clock/build/CMakeFiles/bootloader
+/home/xuxin/esp_work/third_party/elec_clock/build/CMakeFiles/bootloader.rule
+/home/xuxin/esp_work/third_party/elec_clock/build/CMakeFiles/bootloader-complete.rule
+/home/xuxin/esp_work/third_party/elec_clock/build/bootloader-prefix/src/bootloader-stamp/bootloader-build.rule
+/home/xuxin/esp_work/third_party/elec_clock/build/bootloader-prefix/src/bootloader-stamp/bootloader-configure.rule
+/home/xuxin/esp_work/third_party/elec_clock/build/bootloader-prefix/src/bootloader-stamp/bootloader-download.rule
+/home/xuxin/esp_work/third_party/elec_clock/build/bootloader-prefix/src/bootloader-stamp/bootloader-install.rule
+/home/xuxin/esp_work/third_party/elec_clock/build/bootloader-prefix/src/bootloader-stamp/bootloader-mkdir.rule
+/home/xuxin/esp_work/third_party/elec_clock/build/bootloader-prefix/src/bootloader-stamp/bootloader-patch.rule
+/home/xuxin/esp_work/third_party/elec_clock/build/bootloader-prefix/src/bootloader-stamp/bootloader-update.rule

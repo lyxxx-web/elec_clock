@@ -2,34 +2,34 @@
 	"sources" : 
 	[
 		{
-			"file" : "/home/luoyunxin/esp/elec_clock_local/build/CMakeFiles/bootloader"
+			"file" : "/home/xuxin/esp_work/third_party/elec_clock/build/CMakeFiles/bootloader"
 		},
 		{
-			"file" : "/home/luoyunxin/esp/elec_clock_local/build/CMakeFiles/bootloader.rule"
+			"file" : "/home/xuxin/esp_work/third_party/elec_clock/build/CMakeFiles/bootloader.rule"
 		},
 		{
-			"file" : "/home/luoyunxin/esp/elec_clock_local/build/CMakeFiles/bootloader-complete.rule"
+			"file" : "/home/xuxin/esp_work/third_party/elec_clock/build/CMakeFiles/bootloader-complete.rule"
 		},
 		{
-			"file" : "/home/luoyunxin/esp/elec_clock_local/build/bootloader-prefix/src/bootloader-stamp/bootloader-build.rule"
+			"file" : "/home/xuxin/esp_work/third_party/elec_clock/build/bootloader-prefix/src/bootloader-stamp/bootloader-build.rule"
 		},
 		{
-			"file" : "/home/luoyunxin/esp/elec_clock_local/build/bootloader-prefix/src/bootloader-stamp/bootloader-configure.rule"
+			"file" : "/home/xuxin/esp_work/third_party/elec_clock/build/bootloader-prefix/src/bootloader-stamp/bootloader-configure.rule"
 		},
 		{
-			"file" : "/home/luoyunxin/esp/elec_clock_local/build/bootloader-prefix/src/bootloader-stamp/bootloader-download.rule"
+			"file" : "/home/xuxin/esp_work/third_party/elec_clock/build/bootloader-prefix/src/bootloader-stamp/bootloader-download.rule"
 		},
 		{
-			"file" : "/home/luoyunxin/esp/elec_clock_local/build/bootloader-prefix/src/bootloader-stamp/bootloader-install.rule"
+			"file" : "/home/xuxin/esp_work/third_party/elec_clock/build/bootloader-prefix/src/bootloader-stamp/bootloader-install.rule"
 		},
 		{
-			"file" : "/home/luoyunxin/esp/elec_clock_local/build/bootloader-prefix/src/bootloader-stamp/bootloader-mkdir.rule"
+			"file" : "/home/xuxin/esp_work/third_party/elec_clock/build/bootloader-prefix/src/bootloader-stamp/bootloader-mkdir.rule"
 		},
 		{
-			"file" : "/home/luoyunxin/esp/elec_clock_local/build/bootloader-prefix/src/bootloader-stamp/bootloader-patch.rule"
+			"file" : "/home/xuxin/esp_work/third_party/elec_clock/build/bootloader-prefix/src/bootloader-stamp/bootloader-patch.rule"
 		},
 		{
-			"file" : "/home/luoyunxin/esp/elec_clock_local/build/bootloader-prefix/src/bootloader-stamp/bootloader-update.rule"
+			"file" : "/home/xuxin/esp_work/third_party/elec_clock/build/bootloader-prefix/src/bootloader-stamp/bootloader-update.rule"
 		}
 	],
 	"target" : 

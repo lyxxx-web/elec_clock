@@ -17,6 +17,7 @@
 #include <time.h>
 #include <sys/time.h>
 #include "app/app_weather.h"
+#include "mmap_generate_assets.h"
 
 #define TAG "ESP-EXAMPLE"
 
@@ -87,8 +88,55 @@ void app_lvgl_display(void)
     bsp_display_unlock();
 }
 
+mmap_assets_handle_t asset_handle;
+
+void app_mount_mmap_fs()
+{
+    const mmap_assets_config_t config = {
+        .partition_label = "assets_A",
+        .max_files = MMAP_ASSETS_FILES,
+        .checksum = MMAP_ASSETS_CHECKSUM,
+        .flags = {
+            .mmap_enable = true,
+            .app_bin_check = true,
+        },
+    };
+
+    mmap_assets_new(&config, &asset_handle);
+
+    int stored_files = mmap_assets_get_stored_files(asset_handle);
+    ESP_LOGI(TAG, "stored_files:%d", stored_files);
+
+    for (int i = 0; i < MMAP_ASSETS_FILES; i++) {
+        const char *name = mmap_assets_get_name(asset_handle, i);
+        const uint8_t *mem = mmap_assets_get_mem(asset_handle, i);
+        int size = mmap_assets_get_size(asset_handle, i);
+        int width = mmap_assets_get_width(asset_handle, i);
+        int height = mmap_assets_get_height(asset_handle, i);
+
+        ESP_LOGI(TAG, "name:[%s], mem:[%p], size:[%d bytes], w:[%d], h:[%d]", name, mem, size, width, height);
+    }
+}
+
 void app_main(void)
 {
+    //zero-initialize the config structure.
+    gpio_config_t io_conf = {};
+    //disable interrupt
+    io_conf.intr_type = GPIO_INTR_DISABLE;
+    //set as output mode
+    io_conf.mode = GPIO_MODE_OUTPUT;
+    //bit mask of the pins that you want to set,e.g.GPIO18/19
+    io_conf.pin_bit_mask = (1ULL<<5);
+    //disable pull-down mode
+    io_conf.pull_down_en = 0;
+    //disable pull-up mode
+    io_conf.pull_up_en = 0;
+    //configure GPIO with the given settings
+    gpio_config(&io_conf);
+
+    gpio_set_level(5, 0);
+
     /* Initialize NVS. */
     esp_err_t err = nvs_flash_init();
     if (err == ESP_ERR_NVS_NO_FREE_PAGES || err == ESP_ERR_NVS_NEW_VERSION_FOUND) {
@@ -122,6 +170,8 @@ void app_main(void)
 
     /* Turn on display backlight */
     bsp_display_backlight_on();
+
+    app_mount_mmap_fs();
 
     /* Add and show objects on display */
     app_lvgl_display();

@@ -114,9 +114,6 @@ void ui_home_screen_init(void)
     lv_obj_clear_flag(ui_weathershow, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
     lv_img_set_zoom(ui_weathershow, 95);
 
-
-
-
     lv_obj_add_event_cb(ui_home, ui_event_home, LV_EVENT_ALL, NULL);
 
 }

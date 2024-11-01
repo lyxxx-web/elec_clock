@@ -266,10 +266,6 @@ void ui_shaiziplay_screen_init(void)
     lv_obj_set_style_radius(ui_dot22, 5, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_border_width(ui_dot22, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-
-
-
-
     lv_obj_add_event_cb(ui_shaizibut, ui_event_shaizibut, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_shaiziplay, ui_event_shaiziplay, LV_EVENT_ALL, NULL);
 

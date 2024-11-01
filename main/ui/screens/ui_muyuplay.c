@@ -46,10 +46,6 @@ void ui_muyuplay_screen_init(void)
     lv_obj_set_style_text_font(ui_gongdetxt, &ui_font_OPPOSansH25, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_blend_mode(ui_gongdetxt, LV_BLEND_MODE_NORMAL, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-
-
-
-
     lv_obj_add_event_cb(ui_Panel3, ui_event_Panel3, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_muyuplay, ui_event_muyuplay, LV_EVENT_ALL, NULL);
 

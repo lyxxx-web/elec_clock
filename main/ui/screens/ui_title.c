@@ -21,7 +21,7 @@ void ui_title_screen_init(void)
     lv_obj_set_style_pad_bottom(title_panel, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     title_wifistate = lv_img_create(title_panel);
-    lv_img_set_src(title_wifistate, &ui_img_wifi_disconnection_png); 
+    lv_img_set_src(title_wifistate, &ui_img_wifi_disconnection_png);
     lv_obj_set_width(title_wifistate, LV_SIZE_CONTENT);   /// 10
     lv_obj_set_height(title_wifistate, LV_SIZE_CONTENT);    /// 10
     lv_obj_set_x(title_wifistate, 55);

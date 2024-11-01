@@ -91,7 +91,9 @@ $<TARGET_FILE:__idf_espressif__icm42670>
 $<TARGET_FILE:__idf_espressif__esp_lcd_touch>
 $<TARGET_FILE:__idf_espressif__esp_lcd_touch_tt21100>
 $<TARGET_FILE:__idf_espressif__esp-box>
-$<TARGET_FILE:__idf_espressif__esp-dsp>
-$<TARGET_FILE:__idf_espressif__esp-sr>
 $<TARGET_FILE:__idf_espressif__zlib>
+$<TARGET_FILE:__idf_espressif__libpng>
+$<TARGET_FILE:__idf_espressif__esp_lv_decoder>
+$<TARGET_FILE:__idf_espressif__esp_mmap_assets>
+$<TARGET_FILE:__idf_espressif__thorvg>
 $<TARGET_FILE:__idf_main>

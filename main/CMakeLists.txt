@@ -1,16 +1,21 @@
 #Add sources from ui directory
-set(UI_DIR ./ui)
-file(GLOB_RECURSE UI_SRC ${UI_DIR}/*.c)
-
-set(APP_DIR ./app)
-file(GLOB_RECURSE APP_SRC ${APP_DIR}*.c)
-
 idf_component_register(
-    SRCS
-        "main.c"
-        ${APP_SRC}
-        ${UI_SRC}
+    SRC_DIRS 
+        "." 
+        "./ui"
+        "./ui/screens"
+        "./ui/fonts"
+        "./ui/images"
+        "./app"
     INCLUDE_DIRS 
         "." 
-        ${UI_DIR}
-        ${APP_DIR})
+        "./ui" 
+        "./app"
+    )
+
+spiffs_create_partition_assets(
+    assets_A
+    "../assets"
+    FLASH_IN_PROJECT
+    MMAP_FILE_SUPPORT_FORMAT ".png,.jpg"
+)
