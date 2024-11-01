@@ -1,8 +1,6 @@
 # Additional clean files
-cmake_minimum_required(VERSION 3.16)
 
-if("${CONFIG}" STREQUAL "" OR "${CONFIG}" STREQUAL "")
-  file(REMOVE_RECURSE
+file(REMOVE_RECURSE
   "SquareLine_Project.bin"
   "SquareLine_Project.map"
   "bootloader/bootloader.bin"
@@ -20,5 +18,4 @@ if("${CONFIG}" STREQUAL "" OR "${CONFIG}" STREQUAL "")
   "ldgen_libraries.in"
   "project_elf_src_esp32s3.c"
   "x509_crt_bundle.S"
-  )
-endif()
+)
