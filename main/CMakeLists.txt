@@ -7,15 +7,17 @@ idf_component_register(
         "./ui/fonts"
         "./ui/images"
         "./app"
+        "./cube_dice"
     INCLUDE_DIRS 
         "." 
         "./ui" 
         "./app"
+        "./cube_dice"
     )
 
 spiffs_create_partition_assets(
     assets_A
     "../assets"
     FLASH_IN_PROJECT
-    MMAP_FILE_SUPPORT_FORMAT ".png,.jpg"
+    MMAP_FILE_SUPPORT_FORMAT ".bmp,json"
 )

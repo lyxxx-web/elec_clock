@@ -4,22 +4,19 @@
  * SPDX-License-Identifier: CC0-1.0
  */
 
-#include "esp_log.h"
-//#include "bsp/esp32_s3_eye.h"
-#include "bsp/esp-box.h"
-#include "lvgl.h"
-#include "ui/ui.h"
-#include "lv_examples.h"
-#include "esp_log.h"
-#include "app_wifi.h"
-#include "app_weather.h"
-#include "nvs_flash.h"
 #include <time.h>
 #include <sys/time.h>
-#include "app/app_weather.h"
+#include "esp_log.h"
+#include "ui/ui.h"
+#include "app_wifi.h"
+#include "app_weather.h"
+#include "app_imu.h"
+#include "nvs_flash.h"
+
+#include "bsp/esp-bsp.h"
 #include "mmap_generate_assets.h"
 
-#define TAG "ESP-EXAMPLE"
+#define TAG "main"
 
 /*******************************************************************************
 * Private functions
@@ -144,8 +141,8 @@ void app_main(void)
         err = nvs_flash_init();
     }
     ESP_ERROR_CHECK(err);
+
     /* Initialize display and LVGL */
-    //bsp_display_start();
     bsp_display_cfg_t custom_cfg = {
         .lvgl_port_cfg = 
         {
@@ -178,6 +175,8 @@ void app_main(void)
 
     app_weather_start();
     app_network_start();
+
+    app_imu_init();
 
     ESP_LOGI(TAG, "Example initialization done.");
 }

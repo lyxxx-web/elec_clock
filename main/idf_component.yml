@@ -2,12 +2,10 @@ description: ESP-BSP SquareLine LVGL Example
 targets:
     - esp32s3
 dependencies:
-  espressif/thorvg: "^0.14.9"
-  esp_mmap_assets: "1.*"
-  esp_lv_fs: "0.1.0"
-  esp_lv_decoder: "0.1.*"
-  idf: ">=4.4"
-  # esp32_s3_eye: "*"
   espressif/esp-box: "^3.1.0~1"
+  espressif/thorvg: "0.*"
+  esp_mmap_assets: "1.*"
+  esp_lv_fs: "0.*"
+  esp_lv_decoder: "0.1.*"
   lvgl/lvgl: "8.*"
   espressif/zlib: ^1
