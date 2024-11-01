@@ -16,7 +16,6 @@ void opaon_Animation(lv_obj_t * TargetObject, int delay);
 void shaizishow_Animation(lv_obj_t * TargetObject, int delay);
 void gonde_txt_Animation(lv_obj_t * TargetObject, int delay);
 
-
 // SCREEN: ui_home
 void ui_home_screen_init(void);
 void ui_event_home(lv_event_t * e);
@@ -31,7 +30,6 @@ lv_obj_t * ui_weather;
 lv_obj_t * ui_colon;
 lv_obj_t * ui_weathershow;
 
-
 // SCREEN: ui_muyuplay
 void ui_muyuplay_screen_init(void);
 void ui_event_muyuplay(lv_event_t * e);
@@ -40,7 +38,6 @@ void ui_event_Panel3(lv_event_t * e);
 lv_obj_t * ui_Panel3;
 lv_obj_t * ui_muyu;
 lv_obj_t * ui_gongdetxt;
-
 
 // SCREEN: ui_shaiziplay
 void ui_shaiziplay_screen_init(void);
@@ -88,16 +85,23 @@ lv_obj_t * title_batterytxt;
 // SCREEN:ui_fish
 void ui_fish_screen_init(void);
 lv_obj_t * ui_fish;
+void ui_event_fish(lv_event_t *e);
 lv_obj_t * ui_img_fish;
+
+// SCREEN:ui_game_2048
+void ui_game_screen_init(void);
+lv_obj_t * ui_game;
+void ui_event_game(lv_event_t *e);
+
 void ui_event____initial_actions0(lv_event_t * e);
 lv_obj_t * ui____initial_actions0;
 
 ///////////////////// TEST LVGL SETTINGS ////////////////////
 #if LV_COLOR_DEPTH != 16
-    #error "LV_COLOR_DEPTH should be 16bit to match SquareLine Studio's settings"
+#error "LV_COLOR_DEPTH should be 16bit to match SquareLine Studio's settings"
 #endif
 #if LV_COLOR_16_SWAP !=1
-    #error "LV_COLOR_16_SWAP should be 1 to match SquareLine Studio's settings"
+#error "LV_COLOR_16_SWAP should be 1 to match SquareLine Studio's settings"
 #endif
 
 ///////////////////// ANIMATIONS ////////////////////
@@ -148,7 +152,7 @@ void gonde_txt_Animation(lv_obj_t * TargetObject, int delay)
     lv_anim_set_time(&position_anim, 600);
     lv_anim_set_user_data(&position_anim, position_anim_user_data);
     lv_anim_set_custom_exec_cb(&position_anim, _ui_anim_callback_set_y);
-    lv_anim_set_values(&position_anim, -50, -95); 
+    lv_anim_set_values(&position_anim, -50, -95);
     lv_anim_set_path_cb(&position_anim, lv_anim_path_linear);
     lv_anim_set_delay(&position_anim, delay);
     lv_anim_set_deleted_cb(&position_anim, _ui_anim_callback_free_user_data);
@@ -300,7 +304,7 @@ void ui_event_home(lv_event_t * e)
 {
     lv_event_code_t event_code = lv_event_get_code(e);
     lv_obj_t * target = lv_event_get_target(e);
-    if(event_code == LV_EVENT_SCREEN_LOAD_START) {
+    if (event_code == LV_EVENT_SCREEN_LOAD_START) {
         bottom_Animation(ui_hour, 0);
         bottom_Animation(ui_min, 0);
         weather_Animation(ui_weathershow, 0);
@@ -311,7 +315,7 @@ void ui_event_home(lv_event_t * e)
         top_Animation(title_panel, 0);
         lv_obj_set_parent(title_panel, ui_Panel1);
     }
-    if(event_code == LV_EVENT_GESTURE &&  lv_indev_get_gesture_dir(lv_indev_get_act()) == LV_DIR_LEFT) {
+    if (event_code == LV_EVENT_GESTURE &&  lv_indev_get_gesture_dir(lv_indev_get_act()) == LV_DIR_LEFT) {
         lv_indev_wait_release(lv_indev_get_act());
         _ui_screen_change(&ui_muyuplay, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_muyuplay_screen_init);
     }
@@ -320,14 +324,14 @@ void ui_event_muyuplay(lv_event_t * e)
 {
     lv_event_code_t event_code = lv_event_get_code(e);
     lv_obj_t * target = lv_event_get_target(e);
-    if(event_code == LV_EVENT_SCREEN_LOAD_START){
+    if (event_code == LV_EVENT_SCREEN_LOAD_START) {
         lv_obj_set_parent(title_panel, ui_Panel3);
     }
-    if(event_code == LV_EVENT_GESTURE &&  lv_indev_get_gesture_dir(lv_indev_get_act()) == LV_DIR_RIGHT) {
+    if (event_code == LV_EVENT_GESTURE &&  lv_indev_get_gesture_dir(lv_indev_get_act()) == LV_DIR_RIGHT) {
         lv_indev_wait_release(lv_indev_get_act());
         _ui_screen_change(&ui_home, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_home_screen_init);
     }
-    if(event_code == LV_EVENT_GESTURE &&  lv_indev_get_gesture_dir(lv_indev_get_act()) == LV_DIR_LEFT) {
+    if (event_code == LV_EVENT_GESTURE &&  lv_indev_get_gesture_dir(lv_indev_get_act()) == LV_DIR_LEFT) {
         lv_indev_wait_release(lv_indev_get_act());
         _ui_screen_change(&ui_shaiziplay, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_shaiziplay_screen_init);
     }
@@ -336,7 +340,7 @@ void ui_event_Panel3(lv_event_t * e)
 {
     lv_event_code_t event_code = lv_event_get_code(e);
     lv_obj_t * target = lv_event_get_target(e);
-    if(event_code == LV_EVENT_PRESSED) {
+    if (event_code == LV_EVENT_PRESSED) {
         muyushow_Animation(ui_muyu, 0);
         gonde_txt_Animation(ui_gongdetxt, 0);
     }
@@ -346,10 +350,14 @@ void ui_event_shaiziplay(lv_event_t * e)
 {
     lv_event_code_t event_code = lv_event_get_code(e);
     lv_obj_t * target = lv_event_get_target(e);
-        if(event_code == LV_EVENT_SCREEN_LOAD_START){
+    if (event_code == LV_EVENT_SCREEN_LOAD_START) {
         lv_obj_set_parent(title_panel, ui_Panel4);
     }
-    if(event_code == LV_EVENT_GESTURE &&  lv_indev_get_gesture_dir(lv_indev_get_act()) == LV_DIR_RIGHT) {
+    if (event_code == LV_EVENT_GESTURE &&  lv_indev_get_gesture_dir(lv_indev_get_act()) == LV_DIR_LEFT) {
+        lv_indev_wait_release(lv_indev_get_act());
+        _ui_screen_change(&ui_fish, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_fish_screen_init);
+    }
+    if (event_code == LV_EVENT_GESTURE &&  lv_indev_get_gesture_dir(lv_indev_get_act()) == LV_DIR_RIGHT) {
         lv_indev_wait_release(lv_indev_get_act());
         _ui_screen_change(&ui_muyuplay, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_muyuplay_screen_init);
     }
@@ -358,15 +366,47 @@ void ui_event_shaizibut(lv_event_t * e)
 {
     lv_event_code_t event_code = lv_event_get_code(e);
     lv_obj_t * target = lv_event_get_target(e);
-    if(event_code == LV_EVENT_PRESSED) {
+    if (event_code == LV_EVENT_PRESSED) {
         shaiziblink(e);
+    }
+}
+void ui_event_fish(lv_event_t *e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+    lv_obj_t * target = lv_event_get_target(e);
+    if (event_code == LV_EVENT_SCREEN_LOAD_START) {
+        lv_obj_set_parent(title_panel, ui_fish);
+    }
+    if (event_code == LV_EVENT_GESTURE &&  lv_indev_get_gesture_dir(lv_indev_get_act()) == LV_DIR_LEFT) {
+        lv_indev_wait_release(lv_indev_get_act());
+        _ui_screen_change(&ui_game, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_game_screen_init);
+    }
+    if (event_code == LV_EVENT_GESTURE &&  lv_indev_get_gesture_dir(lv_indev_get_act()) == LV_DIR_RIGHT) {
+        lv_indev_wait_release(lv_indev_get_act());
+        _ui_screen_change(&ui_shaiziplay, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_shaiziplay_screen_init);
+    }
+}
+void ui_event_game(lv_event_t *e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+    lv_obj_t * target = lv_event_get_target(e);
+    if (event_code == LV_EVENT_SCREEN_LOAD_START) {
+        lv_obj_set_parent(title_panel, ui_game);
+    }
+    if (event_code == LV_EVENT_GESTURE &&  lv_indev_get_gesture_dir(lv_indev_get_act()) == LV_DIR_LEFT) {
+        lv_indev_wait_release(lv_indev_get_act());
+        _ui_screen_change(&ui_home, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_home_screen_init);
+    }
+    if (event_code == LV_EVENT_GESTURE &&  lv_indev_get_gesture_dir(lv_indev_get_act()) == LV_DIR_RIGHT) {
+        lv_indev_wait_release(lv_indev_get_act());
+        _ui_screen_change(&ui_fish, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_fish_screen_init);
     }
 }
 void ui_event____initial_actions0(lv_event_t * e)
 {
     lv_event_code_t event_code = lv_event_get_code(e);
     lv_obj_t * target = lv_event_get_target(e);
-    if(event_code == LV_EVENT_SCREEN_LOAD_START) {
+    if (event_code == LV_EVENT_SCREEN_LOAD_START) {
         blink_Animation(ui_colon, 0);
     }
 }
@@ -386,6 +426,7 @@ void ui_init(void)
     ui_muyuplay_screen_init();
     ui_shaiziplay_screen_init();
     ui_fish_screen_init();
+    ui_game_screen_init();
     // ui____initial_actions0 = lv_obj_create(NULL);
     // lv_obj_add_event_cb(ui____initial_actions0, ui_event____initial_actions0, LV_EVENT_ALL, NULL);
 

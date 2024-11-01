@@ -40,11 +40,12 @@ void ui_shaiziplay_screen_init(void)
     lv_obj_set_style_shadow_ofs_y(ui_shaizibut, 2, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_color(ui_shaizibut, lv_color_hex(0x808080), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_opa(ui_shaizibut, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_shadow_color(ui_shaizibut, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_PRESSED);
-    lv_obj_set_style_shadow_opa(ui_shaizibut, 255, LV_PART_MAIN | LV_STATE_PRESSED);
-    lv_obj_set_style_transform_zoom(ui_shaizibut, 240, LV_PART_MAIN | LV_STATE_PRESSED);
-    lv_obj_set_style_transform_pivot_x(ui_shaizibut, 100, LV_PART_MAIN | LV_STATE_PRESSED);
-    lv_obj_set_style_transform_pivot_y(ui_shaizibut, 100, LV_PART_MAIN | LV_STATE_PRESSED);
+
+    // lv_obj_set_style_shadow_color(ui_shaizibut, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_PRESSED);
+    // lv_obj_set_style_shadow_opa(ui_shaizibut, 255, LV_PART_MAIN | LV_STATE_PRESSED);
+    // lv_obj_set_style_transform_zoom(ui_shaizibut, 240, LV_PART_MAIN | LV_STATE_PRESSED);
+    //lv_obj_set_style_transform_pivot_x(ui_shaizibut, 100, LV_PART_MAIN | LV_STATE_PRESSED);
+    //lv_obj_set_style_transform_pivot_y(ui_shaizibut, 100, LV_PART_MAIN | LV_STATE_PRESSED);
 
     ui_shaizitxt = lv_label_create(ui_shaizibut);
     lv_obj_set_width(ui_shaizitxt, LV_SIZE_CONTENT);   /// 1
