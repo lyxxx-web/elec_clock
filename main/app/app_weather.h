@@ -80,7 +80,6 @@ typedef struct {
  */
 esp_err_t app_weather_start(void);
 
-
 /**
  * @brief Post weather request.
  *

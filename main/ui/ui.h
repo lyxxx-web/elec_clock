@@ -11,6 +11,7 @@ extern "C" {
 #endif
 
 #include "lvgl.h"
+#include "esp_log.h"
 
 #include "ui_helpers.h"
 #include "ui_events.h"
@@ -54,30 +55,7 @@ extern lv_obj_t * ui_Panel4;
 void ui_event_shaizibut(lv_event_t * e);
 extern lv_obj_t * ui_shaizibut;
 extern lv_obj_t * ui_shaizitxt;
-extern lv_obj_t * ui_shaizi1;
-extern lv_obj_t * ui_dot1;
-extern lv_obj_t * ui_dot2;
-extern lv_obj_t * ui_dot3;
-extern lv_obj_t * ui_dot5;
-extern lv_obj_t * ui_dot6;
-extern lv_obj_t * ui_dot4;
-extern lv_obj_t * ui_dot7;
-extern lv_obj_t * ui_shaizi2;
-extern lv_obj_t * ui_dot15;
-extern lv_obj_t * ui_dot8;
-extern lv_obj_t * ui_dot9;
-extern lv_obj_t * ui_dot10;
-extern lv_obj_t * ui_dot11;
-extern lv_obj_t * ui_dot12;
-extern lv_obj_t * ui_dot13;
-extern lv_obj_t * ui_shaizi3;
-extern lv_obj_t * ui_dot16;
-extern lv_obj_t * ui_dot17;
-extern lv_obj_t * ui_dot18;
-extern lv_obj_t * ui_dot19;
-extern lv_obj_t * ui_dot20;
-extern lv_obj_t * ui_dot21;
-extern lv_obj_t * ui_dot22;
+extern lv_obj_t * ui_cide_canvas;
 
 // SCREEN: ui_title
 void ui_title_screen_init(void);

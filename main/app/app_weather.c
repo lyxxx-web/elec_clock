@@ -25,7 +25,6 @@ static const char *TAG = "app_weather";
         } \
     } while(0)
 
-
 #define MAX_HTTP_RECV_BUFFER            (1024)
 /**
  * @brief User Agent string
@@ -146,15 +145,15 @@ esp_err_t response_handler(esp_http_client_event_t *evt)
     case HTTP_EVENT_ON_FINISH:
         size_t out_size = 0;
         location_num_t location = 0;
-        size_t decode_maxlen = data_len*2;
+        size_t decode_maxlen = data_len * 2;
         char *decode_out = heap_caps_malloc(decode_maxlen, MALLOC_CAP_SPIRAM);
         if (NULL == decode_out) {
             printf("Failed allocate mem\n");
             break;
         }
         network_gzip_decompress(data, data_len, decode_out, &out_size, decode_maxlen);
-        printf("HTTP_EVENT_ON_FINISH, location:%d, out_size:%d, %s\n",location, out_size, decode_out);
-        app_weather_parse_now(decode_out,location);
+        printf("HTTP_EVENT_ON_FINISH, location:%d, out_size:%d, %s\n", location, out_size, decode_out);
+        app_weather_parse_now(decode_out, location);
 
         if (decode_out) {
             free(decode_out);
@@ -179,7 +178,7 @@ esp_err_t response_handler(esp_http_client_event_t *evt)
 
 esp_err_t app_weather_request(char *data)
 {
-    ESP_LOGI(TAG,"data = %s\n", data);
+    ESP_LOGI(TAG, "data = %s\n", data);
     char *url_request = heap_caps_malloc(200, MALLOC_CAP_SPIRAM);
     CHECK(url_request, "Failed allocate mem", ESP_ERR_NO_MEM);
     sprintf(url_request, WEB_URL_NOW, data);

@@ -6,6 +6,8 @@
 #include "ui.h"
 #include "ui_helpers.h"
 
+#define TAG "ui"
+
 ///////////////////// VARIABLES ////////////////////
 void muyushow_Animation(lv_obj_t * TargetObject, int delay);
 void blink_Animation(lv_obj_t * TargetObject, int delay);
@@ -47,30 +49,7 @@ lv_obj_t * ui_Panel4;
 void ui_event_shaizibut(lv_event_t * e);
 lv_obj_t * ui_shaizibut;
 lv_obj_t * ui_shaizitxt;
-lv_obj_t * ui_shaizi1;
-lv_obj_t * ui_dot1;
-lv_obj_t * ui_dot2;
-lv_obj_t * ui_dot3;
-lv_obj_t * ui_dot5;
-lv_obj_t * ui_dot6;
-lv_obj_t * ui_dot4;
-lv_obj_t * ui_dot7;
-lv_obj_t * ui_shaizi2;
-lv_obj_t * ui_dot15;
-lv_obj_t * ui_dot8;
-lv_obj_t * ui_dot9;
-lv_obj_t * ui_dot10;
-lv_obj_t * ui_dot11;
-lv_obj_t * ui_dot12;
-lv_obj_t * ui_dot13;
-lv_obj_t * ui_shaizi3;
-lv_obj_t * ui_dot16;
-lv_obj_t * ui_dot17;
-lv_obj_t * ui_dot18;
-lv_obj_t * ui_dot19;
-lv_obj_t * ui_dot20;
-lv_obj_t * ui_dot21;
-lv_obj_t * ui_dot22;
+lv_obj_t * ui_cide_canvas;
 
 // SCREEN: ui_title
 void ui_title_screen_init(void);
@@ -346,20 +325,93 @@ void ui_event_Panel3(lv_event_t * e)
     }
 
 }
+
+#include "cube_dice.h"
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
+
+#include "bsp/esp-bsp.h"
+
+#define WINDOWX                 100*2
+#define WINDOWY                 100*2
+#define swap16(x)               (((x) << 8) | ((x) >> 8))
+
+static uint8_t *framebuf = NULL;
+static lv_timer_t *timer_tinyGL = NULL;
+
+static esp_lcd_panel_handle_t panel_handle;
+
+static void frame_rgb888_to_rgb565(uint8_t *rgb888, uint16_t *rgb565, int width, int height)
+{
+    int numPixels = width * height;
+    for (int i = 0; i < numPixels; i++) {
+        uint8_t r = rgb888[i * 3 + 2];
+        uint8_t g = rgb888[i * 3 + 1];
+        uint8_t b = rgb888[i * 3 + 0];
+
+        uint16_t r565 = (r >> 3) & 0x1F;
+        uint16_t g565 = (g >> 2) & 0x3F;
+        uint16_t b565 = (b >> 3) & 0x1F;
+
+        uint16_t rgb565Value = (r565 << 11) | (g565 << 5) | b565;
+        // rgb565[i] = rgb565Value;
+        rgb565[i] = swap16(rgb565Value);
+    }
+}
+
+static void tinygl_win_timer_cb(lv_timer_t *tmr)
+{
+    cube_dice_update();
+    frame_rgb888_to_rgb565(framebuf, (uint16_t *)framebuf, WINDOWX, WINDOWY);
+
+    lv_canvas_set_buffer(ui_cide_canvas, framebuf, WINDOWX, WINDOWY, LV_IMG_CF_TRUE_COLOR);
+
+    // int x_offset = (BSP_LCD_H_RES - WINDOWX) / 2;
+    // int y_offset = (BSP_LCD_V_RES - WINDOWY) / 2;
+    // esp_lcd_panel_draw_bitmap(panel_handle, 0 + x_offset, 0 + y_offset, WINDOWX + x_offset, WINDOWY + y_offset, framebuf);
+}
+
 void ui_event_shaiziplay(lv_event_t * e)
 {
     lv_event_code_t event_code = lv_event_get_code(e);
     lv_obj_t * target = lv_event_get_target(e);
     if (event_code == LV_EVENT_SCREEN_LOAD_START) {
         lv_obj_set_parent(title_panel, ui_Panel4);
+        ESP_LOGI(TAG, "load start");
+
+        size_t blend_size = WINDOWX * WINDOWY * 3;
+        framebuf = heap_caps_calloc(blend_size, 1, MALLOC_CAP_SPIRAM);
+        assert(framebuf);
+        cube_dice_init(WINDOWX, WINDOWY, framebuf);
+
+        bsp_get_panel_handle(&panel_handle);
+
+        timer_tinyGL = lv_timer_create(tinygl_win_timer_cb, 10, NULL);
     }
+
     if (event_code == LV_EVENT_GESTURE &&  lv_indev_get_gesture_dir(lv_indev_get_act()) == LV_DIR_LEFT) {
         lv_indev_wait_release(lv_indev_get_act());
         _ui_screen_change(&ui_fish, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_fish_screen_init);
+        ESP_LOGI(TAG, "load ui_fish");
+
+        lv_timer_del(timer_tinyGL);
+        timer_tinyGL = NULL;
+        cube_dice_deinit();
+        heap_caps_free(framebuf);
+        framebuf = NULL;
     }
+
     if (event_code == LV_EVENT_GESTURE &&  lv_indev_get_gesture_dir(lv_indev_get_act()) == LV_DIR_RIGHT) {
         lv_indev_wait_release(lv_indev_get_act());
         _ui_screen_change(&ui_muyuplay, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_muyuplay_screen_init);
+        ESP_LOGI(TAG, "load ui_muyuplay");
+
+        lv_timer_del(timer_tinyGL);
+        timer_tinyGL = NULL;
+
+        cube_dice_deinit();
+        heap_caps_free(framebuf);
+        framebuf = NULL;
     }
 }
 void ui_event_shaizibut(lv_event_t * e)

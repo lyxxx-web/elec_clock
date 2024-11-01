@@ -4,21 +4,19 @@
  * SPDX-License-Identifier: CC0-1.0
  */
 
-#include "esp_log.h"
-//#include "bsp/esp32_s3_eye.h"
-#include "bsp/esp-box.h"
-#include "lvgl.h"
-#include "ui/ui.h"
-#include "lv_examples.h"
-#include "esp_log.h"
-#include "app_wifi.h"
-#include "app_weather.h"
-#include "nvs_flash.h"
 #include <time.h>
 #include <sys/time.h>
-#include "app/app_weather.h"
+#include "esp_log.h"
+#include "ui/ui.h"
+#include "app_wifi.h"
+#include "app_weather.h"
+#include "app_imu.h"
+#include "nvs_flash.h"
 
-#define TAG "ESP-EXAMPLE"
+#include "bsp/esp-bsp.h"
+#include "mmap_generate_assets.h"
+
+#define TAG "main"
 
 /*******************************************************************************
 * Private functions
@@ -87,6 +85,36 @@ void app_lvgl_display(void)
     bsp_display_unlock();
 }
 
+mmap_assets_handle_t asset_handle;
+
+void app_mount_mmap_fs()
+{
+    const mmap_assets_config_t config = {
+        .partition_label = "assets_A",
+        .max_files = MMAP_ASSETS_FILES,
+        .checksum = MMAP_ASSETS_CHECKSUM,
+        .flags = {
+            .mmap_enable = true,
+            .app_bin_check = true,
+        },
+    };
+
+    mmap_assets_new(&config, &asset_handle);
+
+    int stored_files = mmap_assets_get_stored_files(asset_handle);
+    ESP_LOGI(TAG, "stored_files:%d", stored_files);
+
+    for (int i = 0; i < MMAP_ASSETS_FILES; i++) {
+        const char *name = mmap_assets_get_name(asset_handle, i);
+        const uint8_t *mem = mmap_assets_get_mem(asset_handle, i);
+        int size = mmap_assets_get_size(asset_handle, i);
+        int width = mmap_assets_get_width(asset_handle, i);
+        int height = mmap_assets_get_height(asset_handle, i);
+
+        ESP_LOGI(TAG, "name:[%s], mem:[%p], size:[%d bytes], w:[%d], h:[%d]", name, mem, size, width, height);
+    }
+}
+
 void app_main(void)
 {
     /* Initialize NVS. */
@@ -96,8 +124,8 @@ void app_main(void)
         err = nvs_flash_init();
     }
     ESP_ERROR_CHECK(err);
+
     /* Initialize display and LVGL */
-    //bsp_display_start();
     bsp_display_cfg_t custom_cfg = {
         .lvgl_port_cfg = 
         {
@@ -123,11 +151,15 @@ void app_main(void)
     /* Turn on display backlight */
     bsp_display_backlight_on();
 
+    app_mount_mmap_fs();
+
     /* Add and show objects on display */
     app_lvgl_display();
 
     app_weather_start();
     app_network_start();
+
+    app_imu_init();
 
     ESP_LOGI(TAG, "Example initialization done.");
 }
