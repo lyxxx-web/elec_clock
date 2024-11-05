@@ -65,8 +65,8 @@ static esp_err_t app_weather_parse_now(char *buffer, location_num_t location);
 static air_info_t *air_info = NULL;
 static weather_info_t *weather_info[LOCATION_NUM_MAX];
 
-char item_temp [5];
-char item_text [16];
+char weather_temp [5];
+char weather_text [16];
 
 static int network_gzip_decompress(void *in_buf, size_t in_size, void *out_buf, size_t *out_size, size_t out_buf_size)
 {
@@ -144,6 +144,7 @@ esp_err_t response_handler(esp_http_client_event_t *evt)
 
     case HTTP_EVENT_ON_FINISH:
         size_t out_size = 0;
+        //only show one city weather
         location_num_t location = 0;
         size_t decode_maxlen = data_len * 2;
         char *decode_out = heap_caps_malloc(decode_maxlen, MALLOC_CAP_SPIRAM);
@@ -178,7 +179,7 @@ esp_err_t response_handler(esp_http_client_event_t *evt)
 
 esp_err_t app_weather_request(char *data)
 {
-    ESP_LOGI(TAG, "data = %s\n", data);
+    ESP_LOGI(TAG, "location(west longtitude, south latitude) = %s\n", data);
     char *url_request = heap_caps_malloc(200, MALLOC_CAP_SPIRAM);
     CHECK(url_request, "Failed allocate mem", ESP_ERR_NO_MEM);
     sprintf(url_request, WEB_URL_NOW, data);
@@ -222,7 +223,6 @@ esp_err_t app_weather_start(void)
           "Please register at https://console.qweather.com/#/apps",
           ESP_ERR_INVALID_ARG);
 
-    // app_weather_get_air_info(NULL);
 
     for (int i = 0; i < LOCATION_NUM_MAX; i++) {
         if (NULL == weather_info[i]) {
@@ -234,7 +234,6 @@ esp_err_t app_weather_start(void)
 
             weather_info[i]->temp = 20;
             weather_info[i]->icon_code = 104;
-            weather_info[i]->humid = 80;
             strcpy(weather_info[i]->describe, "N/A");
         }
     }
@@ -253,18 +252,17 @@ static esp_err_t app_weather_parse_now(char *buffer, location_num_t location)
             cJSON *json_item_temp = cJSON_GetObjectItem(json_now, "temp");
             cJSON *json_item_icon = cJSON_GetObjectItem(json_now, "icon");
             cJSON *json_item_text = cJSON_GetObjectItem(json_now, "text");
-            cJSON *json_item_humidity = cJSON_GetObjectItem(json_now, "humidity");
-            snprintf(item_temp, sizeof(item_temp), "%s°", json_item_temp->valuestring);
-            snprintf(item_text, sizeof(item_text), "%s", json_item_text->valuestring);
+
+            snprintf(weather_temp, sizeof(weather_temp), "%s°", json_item_temp->valuestring);
+            snprintf(weather_text, sizeof(weather_text), "%s", json_item_text->valuestring);
 
             ESP_LOGI(TAG, "Temp : [%s]", json_item_temp->valuestring);
             ESP_LOGI(TAG, "Icon : [%s]", json_item_icon->valuestring);
             ESP_LOGI(TAG, "Text : [%s]", json_item_text->valuestring);
-            ESP_LOGI(TAG, "Humid: [%s]", json_item_humidity->valuestring);
 
             weather_info[location]->temp = atoi(json_item_temp->valuestring);
             weather_info[location]->icon_code = atoi(json_item_icon->valuestring);
-            weather_info[location]->humid = atoi(json_item_humidity->valuestring);
+
             strcpy(weather_info[location]->describe, json_item_text->valuestring);
         } else {
             ESP_LOGE(TAG, "Error parsing object - [%s] - [%d]", __FILE__, __LINE__);

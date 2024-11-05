@@ -41,8 +41,6 @@
    If you'd rather not, just change the below entries to strings with
    the config you want - ie #define EXAMPLE_WIFI_SSID "mywifissid"
 */
-// #define EXAMPLE_ESP_WIFI_SSID      "esp-office-2.4G"
-// #define EXAMPLE_ESP_WIFI_PASS      "1qazxsw2"
 
 #define EXAMPLE_ESP_MAXIMUM_RETRY  10
 
@@ -93,6 +91,7 @@ static EventGroupHandle_t s_wifi_event_group;
 static const char *TAG = "wifi station";
 static int s_retry_num = 0;
 static bool s_reconnect = true;
+//locaiton longtitude(west) and latitude(south)
 static char west_south[20];
 
 static const char *REQUEST = "GET " WEB_URL " HTTP/1.0\r\n"
@@ -111,7 +110,6 @@ static esp_err_t parse_location_data(const char *buffer)
 {
     char *header_end = strstr(buffer, "\r\n\r\n");
     header_end += strlen("\r\n\r\n");
-    //ESP_LOGE(TAG, "header_end = %s", header_end);
     if (header_end) {
         cJSON *json = cJSON_Parse(header_end);
         if (NULL != json) {
@@ -121,9 +119,9 @@ static esp_err_t parse_location_data(const char *buffer)
             if (semicolon_pos != NULL) {
                 *semicolon_pos = '\0';
             }
-            double latitude, longitude;
-            sscanf(rectangle_str, "%lf,%lf", &longitude, &latitude);
-            snprintf(west_south, sizeof(west_south), "%.2f,%.2f", longitude, latitude);
+            double latitude, longtitude;
+            sscanf(rectangle_str, "%lf,%lf", &longtitude, &latitude);
+            snprintf(west_south, sizeof(west_south), "%.2f,%.2f", longtitude, latitude);
             cJSON_Delete(json);
         } else {
             ESP_LOGE(TAG, "Error parsing object - [%s] - [%d]", __FILE__, __LINE__);
@@ -386,14 +384,7 @@ static void wifi_scan(void)
 
     for (int i = 0; (i < DEFAULT_SCAN_LIST_SIZE) && (i < ap_count); i++) {
         ESP_LOGI(TAG, "SSID \t\t%s", ap_info[i].ssid);
-        /*
-        ESP_LOGI(TAG, "RSSI \t\t%d", ap_info[i].rssi);
-        print_auth_mode(ap_info[i].authmode);
-        if (ap_info[i].authmode != WIFI_AUTH_WEP) {
-            print_cipher_type(ap_info[i].pairwise_cipher, ap_info[i].group_cipher);
-        }
-        ESP_LOGI(TAG, "Channel \t\t%d\n", ap_info[i].primary);
-        */
+
     }
 
     if (ap_count && (ESP_OK == ret)) {
@@ -436,11 +427,6 @@ static void wifi_reconnect_sta(void)
     int bits = xEventGroupWaitBits(s_wifi_event_group, WIFI_CONNECTED_BIT, 0, 1, 0);
 
     wifi_config_t wifi_config = { 0 };
-
-    // sys_param_t *sys_param = &g_sys_param;
-    // memcpy(wifi_config.sta.ssid, sys_param->ssid, sizeof(wifi_config.sta.ssid));
-    // memcpy(wifi_config.sta.password, sys_param->password, sizeof(wifi_config.sta.password));
-    //ESP_ERROR_CHECK( esp_wifi_set_config(WIFI_IF_STA, &wifi_config) );
 
     if (bits & WIFI_CONNECTED_BIT) {
         s_reconnect = false;
@@ -500,9 +486,6 @@ static void wifi_init_sta(void)
             .sae_h2e_identifier = EXAMPLE_H2E_IDENTIFIER,
         },
     };
-    //sys_param_t *sys_param = &g_sys_param;
-    // memcpy(wifi_config.sta.ssid, sys_param->ssid, sizeof(wifi_config.sta.ssid));
-    // memcpy(wifi_config.sta.password, sys_param->password, sizeof(wifi_config.sta.password));
 
     ESP_ERROR_CHECK(esp_wifi_set_mode(WIFI_MODE_STA));
     ESP_ERROR_CHECK(esp_wifi_set_config(WIFI_IF_STA, &wifi_config));
@@ -510,25 +493,6 @@ static void wifi_init_sta(void)
     ESP_LOGI(TAG, "wifi_init_sta finished.%s, %s", \
              wifi_config.sta.ssid, wifi_config.sta.password);
 
-    /* Waiting until either the connection is established (WIFI_CONNECTED_BIT) or connection failed for the maximum
-     * number of re-tries (WIFI_FAIL_BIT). The bits are set by event_handler() (see above) */
-    // EventBits_t bits = xEventGroupWaitBits(s_wifi_event_group,
-    //                                        WIFI_CONNECTED_BIT | WIFI_FAIL_BIT,
-    //                                        pdFALSE,
-    //                                        pdFALSE,
-    //                                        portMAX_DELAY);
-
-    /* xEventGroupWaitBits() returns the bits before the call returned, hence we can test which event actually
-     * happened. */
-    // if (bits & WIFI_CONNECTED_BIT) {
-    //     ESP_LOGI(TAG, "connected to ap SSID:%s password:%s",
-    //              wifi_config.sta.ssid, wifi_config.sta.password);
-    // } else if (bits & WIFI_FAIL_BIT) {
-    //     ESP_LOGI(TAG, "Failed to connect to SSID:%s, password:%s",
-    //              wifi_config.sta.ssid, wifi_config.sta.password);
-    // } else {
-    //     ESP_LOGE(TAG, "UNEXPECTED EVENT");
-    // }
 }
 
 static void network_task(void *args)
@@ -572,22 +536,18 @@ static void network_task(void *args)
             }
         }
 
-        // if ((xTaskGetTickCount() - tick) > (5 * 60 * 1000)) {
-        //     tick = xTaskGetTickCount();
-        //     if (wifi_connected) {
-        //         send_network_event(NET_EVENT_WEATHER);
-        //     }
-        // }
         if (wifi_status != wifi_connected_already()) {
             wifi_status = wifi_connected_already();
             ESP_LOGI(TAG, "wifi_connected changed:[%d]", wifi_status);
             app_wifi_state_set(WIFI_SCAN_UPDATE);
             if (wifi_connected) {
+                //send a weather request at first connected
                 send_network_event(NET_EVENT_NTP);
                 send_network_event(NET_EVENT_WEATHER);
                 weather_sent_today = true;
             }
         } else {
+            //send a weather request at 12:00am everyday
             time_t now;
             time(&now);
             localtime_r(&now, &timeinfo);
@@ -637,6 +597,5 @@ void app_network_start(void)
     ESP_ERROR_CHECK_WITHOUT_ABORT((wifi_event_queue) ? ESP_OK : ESP_FAIL);
 
     ret_val = xTaskCreatePinnedToCore(network_task, "NetWork Task", 8 * 1024, NULL, 1, NULL, 0);
-    //xTaskCreate(&https_get_task, "https_get_task", 8192, NULL, 5, NULL);
     ESP_ERROR_CHECK_WITHOUT_ABORT((pdPASS == ret_val) ? ESP_OK : ESP_FAIL);
 }

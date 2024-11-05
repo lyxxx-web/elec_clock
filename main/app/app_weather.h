@@ -26,8 +26,8 @@
 extern "C" {
 #endif
 
-extern char item_temp[5];
-extern char item_text[16];
+extern char weather_temp[5];
+extern char weather_text[16];
 typedef enum {
     LOCATION_NUM_SHANGHAI,
     LOCATION_NUM_BEIJING,
@@ -86,7 +86,7 @@ esp_err_t app_weather_start(void);
  *
  * @return esp_err_t request status.
  */
-esp_err_t app_weather_request(char *adcode);
+esp_err_t app_weather_request(char *data);
 
 /**
  * @brief Get air info.

@@ -63,8 +63,8 @@ void ui_clock_update(lv_timer_t *timer)
     lv_label_set_text(ui_weekday, weekday_str);
     lv_label_set_text(title_timestate, time_str);
 
-    lv_label_set_text(ui_weather, item_text);
-    lv_label_set_text(ui_temp, item_temp);
+    lv_label_set_text(ui_weather, weather_text);
+    lv_label_set_text(ui_temp, weather_temp);
     if(wifi_connected_already() == WIFI_STATUS_CONNECTED_OK){
         lv_img_set_src(title_wifistate, &ui_img_wifi_png);   
     }else{
