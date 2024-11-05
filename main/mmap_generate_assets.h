@@ -13,10 +13,71 @@
 
 #include "esp_mmap_assets.h"
 
-#define MMAP_ASSETS_FILES           2
-#define MMAP_ASSETS_CHECKSUM        0xDE2F
+#define MMAP_ASSETS_FILES           63
+#define MMAP_ASSETS_CHECKSUM        0x33A6
 
 enum MMAP_ASSETS_LISTS {
     MMAP_ASSETS_NAVI_52_JPG = 0,        /*!< navi_52.jpg */
-    MMAP_ASSETS_NAVI_52_PNG = 1,        /*!< navi_52.png */
+    MMAP_ASSETS_100_PNG = 1,        /*!< 100.png */
+    MMAP_ASSETS_101_PNG = 2,        /*!< 101.png */
+    MMAP_ASSETS_102_PNG = 3,        /*!< 102.png */
+    MMAP_ASSETS_103_PNG = 4,        /*!< 103.png */
+    MMAP_ASSETS_104_PNG = 5,        /*!< 104.png */
+    MMAP_ASSETS_150_PNG = 6,        /*!< 150.png */
+    MMAP_ASSETS_153_PNG = 7,        /*!< 153.png */
+    MMAP_ASSETS_154_PNG = 8,        /*!< 154.png */
+    MMAP_ASSETS_300_PNG = 9,        /*!< 300.png */
+    MMAP_ASSETS_301_PNG = 10,        /*!< 301.png */
+    MMAP_ASSETS_302_PNG = 11,        /*!< 302.png */
+    MMAP_ASSETS_303_PNG = 12,        /*!< 303.png */
+    MMAP_ASSETS_304_PNG = 13,        /*!< 304.png */
+    MMAP_ASSETS_305_PNG = 14,        /*!< 305.png */
+    MMAP_ASSETS_306_PNG = 15,        /*!< 306.png */
+    MMAP_ASSETS_307_PNG = 16,        /*!< 307.png */
+    MMAP_ASSETS_308_PNG = 17,        /*!< 308.png */
+    MMAP_ASSETS_309_PNG = 18,        /*!< 309.png */
+    MMAP_ASSETS_310_PNG = 19,        /*!< 310.png */
+    MMAP_ASSETS_311_PNG = 20,        /*!< 311.png */
+    MMAP_ASSETS_312_PNG = 21,        /*!< 312.png */
+    MMAP_ASSETS_313_PNG = 22,        /*!< 313.png */
+    MMAP_ASSETS_314_PNG = 23,        /*!< 314.png */
+    MMAP_ASSETS_315_PNG = 24,        /*!< 315.png */
+    MMAP_ASSETS_316_PNG = 25,        /*!< 316.png */
+    MMAP_ASSETS_317_PNG = 26,        /*!< 317.png */
+    MMAP_ASSETS_318_PNG = 27,        /*!< 318.png */
+    MMAP_ASSETS_350_PNG = 28,        /*!< 350.png */
+    MMAP_ASSETS_351_PNG = 29,        /*!< 351.png */
+    MMAP_ASSETS_399_PNG = 30,        /*!< 399.png */
+    MMAP_ASSETS_400_PNG = 31,        /*!< 400.png */
+    MMAP_ASSETS_401_PNG = 32,        /*!< 401.png */
+    MMAP_ASSETS_402_PNG = 33,        /*!< 402.png */
+    MMAP_ASSETS_403_PNG = 34,        /*!< 403.png */
+    MMAP_ASSETS_404_PNG = 35,        /*!< 404.png */
+    MMAP_ASSETS_405_PNG = 36,        /*!< 405.png */
+    MMAP_ASSETS_406_PNG = 37,        /*!< 406.png */
+    MMAP_ASSETS_407_PNG = 38,        /*!< 407.png */
+    MMAP_ASSETS_408_PNG = 39,        /*!< 408.png */
+    MMAP_ASSETS_409_PNG = 40,        /*!< 409.png */
+    MMAP_ASSETS_410_PNG = 41,        /*!< 410.png */
+    MMAP_ASSETS_456_PNG = 42,        /*!< 456.png */
+    MMAP_ASSETS_457_PNG = 43,        /*!< 457.png */
+    MMAP_ASSETS_499_PNG = 44,        /*!< 499.png */
+    MMAP_ASSETS_500_PNG = 45,        /*!< 500.png */
+    MMAP_ASSETS_501_PNG = 46,        /*!< 501.png */
+    MMAP_ASSETS_502_PNG = 47,        /*!< 502.png */
+    MMAP_ASSETS_503_PNG = 48,        /*!< 503.png */
+    MMAP_ASSETS_504_PNG = 49,        /*!< 504.png */
+    MMAP_ASSETS_507_PNG = 50,        /*!< 507.png */
+    MMAP_ASSETS_508_PNG = 51,        /*!< 508.png */
+    MMAP_ASSETS_509_PNG = 52,        /*!< 509.png */
+    MMAP_ASSETS_510_PNG = 53,        /*!< 510.png */
+    MMAP_ASSETS_511_PNG = 54,        /*!< 511.png */
+    MMAP_ASSETS_512_PNG = 55,        /*!< 512.png */
+    MMAP_ASSETS_513_PNG = 56,        /*!< 513.png */
+    MMAP_ASSETS_514_PNG = 57,        /*!< 514.png */
+    MMAP_ASSETS_515_PNG = 58,        /*!< 515.png */
+    MMAP_ASSETS_900_PNG = 59,        /*!< 900.png */
+    MMAP_ASSETS_901_PNG = 60,        /*!< 901.png */
+    MMAP_ASSETS_999_PNG = 61,        /*!< 999.png */
+    MMAP_ASSETS_NAVI_52_PNG = 62,        /*!< navi_52.png */
 };

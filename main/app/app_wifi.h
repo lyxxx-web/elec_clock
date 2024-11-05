@@ -18,10 +18,6 @@ typedef struct {
     bool need_hint;
     bool sr_enable;
     bool demo_gui;
-    //sr_language_t sr_lang;
-    //uint8_t volume;         /**< 0-100.*/
-    //uint8_t standby_time;   /**< 0-3.*/
-    //uint8_t brightness;     /**< 0-100.*/
 
     char ssid[32];      /**< SSID of target AP. */
     char password[64];  /**< Password of target AP. */

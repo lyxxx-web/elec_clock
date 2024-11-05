@@ -28,6 +28,7 @@ extern "C" {
 
 extern char weather_temp[5];
 extern char weather_text[16];
+extern char weather_icon [5];
 typedef enum {
     LOCATION_NUM_SHANGHAI,
     LOCATION_NUM_BEIJING,

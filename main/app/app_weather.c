@@ -67,6 +67,7 @@ static weather_info_t *weather_info[LOCATION_NUM_MAX];
 
 char weather_temp [5];
 char weather_text [16];
+char weather_icon [5];
 
 static int network_gzip_decompress(void *in_buf, size_t in_size, void *out_buf, size_t *out_size, size_t out_buf_size)
 {
@@ -254,6 +255,7 @@ static esp_err_t app_weather_parse_now(char *buffer, location_num_t location)
             cJSON *json_item_text = cJSON_GetObjectItem(json_now, "text");
 
             snprintf(weather_temp, sizeof(weather_temp), "%s°", json_item_temp->valuestring);
+            snprintf(weather_icon, sizeof(weather_icon), "%s", json_item_icon->valuestring);
             snprintf(weather_text, sizeof(weather_text), "%s", json_item_text->valuestring);
 
             ESP_LOGI(TAG, "Temp : [%s]", json_item_temp->valuestring);
