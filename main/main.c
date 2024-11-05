@@ -15,6 +15,7 @@
 
 #include "bsp/esp-bsp.h"
 #include "mmap_generate_assets.h"
+#include "esp_lv_decoder.h"
 
 #define TAG "main"
 
@@ -23,13 +24,13 @@
 *******************************************************************************/
 
 // *INDENT-OFF*
-
+static lv_img_dsc_t img_weather_dsc;
 struct timeval tv_now =
 {
    .tv_sec = 0,
    .tv_usec = 0 
 };
-
+void perf_decoder_fs_esp(void);
 void ui_clock_update(lv_timer_t *timer)
 {
     struct tm timeinfo;
@@ -66,7 +67,9 @@ void ui_clock_update(lv_timer_t *timer)
         lv_img_set_src(title_wifistate, &ui_img_wifi_png);   
     }else{
         lv_img_set_src(title_wifistate, &ui_img_wifi_disconnection_png); 
-    } 
+    }
+    perf_decoder_fs_esp();
+    lv_img_set_src(ui_weathershow, &img_weather_dsc); 
 }
 
 void ui_init_timer()
@@ -113,6 +116,35 @@ void app_mount_mmap_fs()
 
         // ESP_LOGI(TAG, "name:[%s], mem:[%p], size:[%d bytes], w:[%d], h:[%d]", name, mem, size, width, height);
     }
+}
+
+void perf_decoder_fs_esp(void)
+{
+    esp_lv_decoder_handle_t decoder_handle = NULL;
+    esp_err_t ret_fs = esp_lv_decoder_init(&decoder_handle);
+    if (ret_fs != ESP_OK) {
+        ESP_LOGE(TAG, "Failed to initialize SPNG decoder");
+        return;
+    }
+    int i;
+    char icon_name [10];
+    snprintf(icon_name, sizeof(icon_name), "%s.png", weather_icon);
+    for(i = 0; i < mmap_assets_get_stored_files(asset_handle); i++){
+        //ESP_LOGI(TAG, "get_stored_files: %s", mmap_assets_get_name(asset_handle, i));
+        if(!strcmp(mmap_assets_get_name(asset_handle, i), icon_name))
+            break;
+    }
+    if(i == mmap_assets_get_stored_files(asset_handle)){
+        ESP_LOGE(TAG, "cannot find corresponding weather icon");
+        int j;
+        for(j = 0; i < mmap_assets_get_stored_files(asset_handle); j++){
+            if(!strcmp(mmap_assets_get_name(asset_handle, i), "999.png"))
+                break;
+        }
+        i = j;
+    }
+    img_weather_dsc.data_size = mmap_assets_get_size(asset_handle, i);
+    img_weather_dsc.data = mmap_assets_get_mem(asset_handle, i);
 }
 
 void app_main(void)

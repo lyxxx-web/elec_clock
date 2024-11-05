@@ -105,14 +105,14 @@ void ui_home_screen_init(void)
 
     ui_weathershow = lv_img_create(ui_Panel1);
     lv_img_set_src(ui_weathershow, &ui_img_clody_png);
-    lv_obj_set_width(ui_weathershow, 263);
-    lv_obj_set_height(ui_weathershow, 200);
-    lv_obj_set_x(ui_weathershow, -52);
+    lv_obj_set_width(ui_weathershow, 128);
+    lv_obj_set_height(ui_weathershow, 128);
+    lv_obj_set_x(ui_weathershow, -54);
     lv_obj_set_y(ui_weathershow, -54);
     lv_obj_set_align(ui_weathershow, LV_ALIGN_CENTER);
     lv_obj_add_flag(ui_weathershow, LV_OBJ_FLAG_ADV_HITTEST);     /// Flags
     lv_obj_clear_flag(ui_weathershow, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
-    lv_img_set_zoom(ui_weathershow, 95);
+    lv_img_set_zoom(ui_weathershow, 255);
 
     lv_obj_add_event_cb(ui_home, ui_event_home, LV_EVENT_ALL, NULL);
 
