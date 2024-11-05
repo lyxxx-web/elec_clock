@@ -39,7 +39,7 @@ static void app_imu_read(void)
     if (fabs(gyro_val_last.x - gyro_val.x) / 1 > 5.0f) {
         gyro_offset.y = (gyro_val.x - gyro_val_last.x) / 1;
         gyro_val_last.x = gyro_val.x;
-        ESP_LOGI(TAG, "x OFFSET: %.2f", gyro_offset.y);
+        //ESP_LOGI(TAG, "x OFFSET: %.2f", gyro_offset.y);
         cube_angle_set(gyro_offset.x, gyro_offset.y, gyro_offset.z);
     }
 
