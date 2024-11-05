@@ -42,21 +42,21 @@ void ui_clock_update(lv_timer_t *timer)
     gettimeofday(&tv_now, NULL);
     localtime_r(&tv_now.tv_sec, &timeinfo);
 
-    // 格式化小时、分钟和秒
+    //format hour,minute,second
     snprintf(hour_str, sizeof(hour_str), "%02d", timeinfo.tm_hour);
     snprintf(min_str, sizeof(min_str), "%02d", timeinfo.tm_min);
     snprintf(time_str, sizeof(time_str), "%02d:%02d", timeinfo.tm_hour, timeinfo.tm_min);
 
-    // 格式化月和日（如：10月18日）
+    //format month and day(for example:10/18)
     snprintf(date_str, sizeof(date_str), "%02d/%02d", 
              timeinfo.tm_mon + 1, timeinfo.tm_mday);
 
-    // 获取星期几
+    //get weekday
     const char *weekdays[] = {"周日", "周一", "周二", "周三", 
                               "周四", "周五", "周六"};
     snprintf(weekday_str, sizeof(weekday_str), "%s", weekdays[timeinfo.tm_wday]);
 
-    // 更新各个label的文本
+    //update text of each label
     lv_label_set_text(ui_hour, hour_str);
     lv_label_set_text(ui_min, min_str);
     lv_label_set_text(ui_date, date_str);

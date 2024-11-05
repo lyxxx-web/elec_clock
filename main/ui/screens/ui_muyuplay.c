@@ -42,7 +42,6 @@ void ui_muyuplay_screen_init(void)
     lv_label_set_text(ui_gongdetxt, "功德+1");
     lv_obj_set_style_text_color(ui_gongdetxt, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_opa(ui_gongdetxt, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
-    //lv_obj_set_style_opa(ui_gongdetxt, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_font(ui_gongdetxt, &ui_font_OPPOSansH25, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_blend_mode(ui_gongdetxt, LV_BLEND_MODE_NORMAL, LV_PART_MAIN | LV_STATE_DEFAULT);
 

@@ -4,7 +4,7 @@ targets:
 dependencies:
   espressif/thorvg: "^0.14.9"
   esp_mmap_assets: "1.*"
-  esp_lv_fs: "1.*"
+  esp_lv_fs: "0.1.0"
   esp_lv_decoder: "0.1.*"
   idf: ">=4.4"
   # esp32_s3_eye: "*"

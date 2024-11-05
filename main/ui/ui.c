@@ -353,13 +353,12 @@ void ui_event_shaiziplay(lv_event_t * e)
     if (event_code == LV_EVENT_SCREEN_LOAD_START) {
         lv_obj_set_parent(title_panel, ui_Panel4);
     }
-<<<<<<< HEAD
+
     if (event_code == LV_EVENT_GESTURE &&  lv_indev_get_gesture_dir(lv_indev_get_act()) == LV_DIR_LEFT) {
         lv_indev_wait_release(lv_indev_get_act());
         _ui_screen_change(&ui_fish, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_fish_screen_init);
     }
-=======
->>>>>>> fc04d0f (fix:add filesystem)
+
     if (event_code == LV_EVENT_GESTURE &&  lv_indev_get_gesture_dir(lv_indev_get_act()) == LV_DIR_RIGHT) {
         lv_indev_wait_release(lv_indev_get_act());
         _ui_screen_change(&ui_muyuplay, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_muyuplay_screen_init);
@@ -418,7 +417,6 @@ void ui_event____initial_actions0(lv_event_t * e)
 
 void ui_init(void)
 {
-    //LV_EVENT_GET_COMP_CHILD = lv_event_register_id();
 
     lv_disp_t * dispp = lv_disp_get_default();
     lv_theme_t * theme = lv_theme_default_init(dispp, lv_palette_main(LV_PALETTE_BLUE), lv_palette_main(LV_PALETTE_RED),
@@ -430,9 +428,9 @@ void ui_init(void)
     ui_shaiziplay_screen_init();
     ui_fish_screen_init();
     ui_game_screen_init();
-    // ui____initial_actions0 = lv_obj_create(NULL);
-    // lv_obj_add_event_cb(ui____initial_actions0, ui_event____initial_actions0, LV_EVENT_ALL, NULL);
+    ui____initial_actions0 = lv_obj_create(NULL);
+    lv_obj_add_event_cb(ui____initial_actions0, ui_event____initial_actions0, LV_EVENT_ALL, NULL);
 
-    //lv_disp_load_scr(ui____initial_actions0);
+    lv_disp_load_scr(ui____initial_actions0);
     lv_disp_load_scr(ui_home);
 }
