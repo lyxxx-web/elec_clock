@@ -111,29 +111,12 @@ void app_mount_mmap_fs()
         int width = mmap_assets_get_width(asset_handle, i);
         int height = mmap_assets_get_height(asset_handle, i);
 
-        ESP_LOGI(TAG, "name:[%s], mem:[%p], size:[%d bytes], w:[%d], h:[%d]", name, mem, size, width, height);
+        // ESP_LOGI(TAG, "name:[%s], mem:[%p], size:[%d bytes], w:[%d], h:[%d]", name, mem, size, width, height);
     }
 }
 
 void app_main(void)
 {
-    //zero-initialize the config structure.
-    gpio_config_t io_conf = {};
-    //disable interrupt
-    io_conf.intr_type = GPIO_INTR_DISABLE;
-    //set as output mode
-    io_conf.mode = GPIO_MODE_OUTPUT;
-    //bit mask of the pins that you want to set,e.g.GPIO18/19
-    io_conf.pin_bit_mask = (1ULL<<5);
-    //disable pull-down mode
-    io_conf.pull_down_en = 0;
-    //disable pull-up mode
-    io_conf.pull_up_en = 0;
-    //configure GPIO with the given settings
-    gpio_config(&io_conf);
-
-    gpio_set_level(5, 0);
-
     /* Initialize NVS. */
     esp_err_t err = nvs_flash_init();
     if (err == ESP_ERR_NVS_NO_FREE_PAGES || err == ESP_ERR_NVS_NEW_VERSION_FOUND) {
@@ -144,25 +127,16 @@ void app_main(void)
 
     /* Initialize display and LVGL */
     bsp_display_cfg_t custom_cfg = {
-        .lvgl_port_cfg = 
-        {
-        .task_priority = 4,       
-        .task_stack = 30000,
-        .task_affinity = -1,
-        .task_max_sleep_ms = 500,
-        .timer_period_ms = 5,
-    },
-        .buffer_size = BSP_LCD_H_RES * CONFIG_BSP_LCD_DRAW_BUF_HEIGHT,
-#if CONFIG_BSP_LCD_DRAW_BUF_DOUBLE
-        .double_buffer = 1,
-#else
+        .lvgl_port_cfg = ESP_LVGL_PORT_INIT_CONFIG(),
+        .buffer_size = BSP_LCD_H_RES * BSP_LCD_V_RES,
+        .trans_size = BSP_LCD_H_RES * 10, // in SRAM, DMA-capable
         .double_buffer = 0,
-#endif
         .flags = {
-            .buff_dma = true,
-            .buff_spiram = false,
+            .buff_dma = false,
+            .buff_spiram = true,
         }
     };
+    custom_cfg.lvgl_port_cfg.task_stack = 1024*30,
     bsp_display_start_with_config(&custom_cfg);
 
     /* Turn on display backlight */

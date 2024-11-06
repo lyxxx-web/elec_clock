@@ -128,6 +128,7 @@ extern "C" {
 typedef struct {
     lvgl_port_cfg_t lvgl_port_cfg;  /*!< LVGL port configuration */
     uint32_t        buffer_size;    /*!< Size of the buffer for the screen in pixels */
+    uint32_t        trans_size;
     bool            double_buffer;  /*!< True, if should be allocated two buffers */
     struct {
         unsigned int buff_dma: 1;    /*!< Allocated LVGL buffer will be DMA capable */

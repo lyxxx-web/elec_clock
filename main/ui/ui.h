@@ -55,7 +55,7 @@ extern lv_obj_t * ui_Panel4;
 void ui_event_shaizibut(lv_event_t * e);
 extern lv_obj_t * ui_shaizibut;
 extern lv_obj_t * ui_shaizitxt;
-extern lv_obj_t * ui_cide_canvas;
+extern lv_obj_t * ui_dice_canvas;
 
 // SCREEN: ui_title
 void ui_title_screen_init(void);
@@ -70,6 +70,9 @@ extern  lv_obj_t * title_batterytxt;
 // SCREEN: ui_fish
 void ui_fish_screen_init(void);
 extern lv_obj_t * ui_fish;
+extern lv_obj_t * ui_Panel_fish;
+extern lv_obj_t * ui_fish_canvas;
+
 void ui_event_fish(lv_event_t *e);
 extern lv_obj_t * ui_img_fish;
 

@@ -293,11 +293,6 @@ static void https_get_task()
             }
 
             len = ret;
-            ESP_LOGI(TAG, "%d bytes read", len);
-            /* Print response directly to stdout as it is read */
-            for (int i = 0; i < len; i++) {
-                putchar(buf[i]);
-            }
             break;
         } while (1);
         vTaskDelay(1000 / portTICK_PERIOD_MS);
@@ -312,8 +307,6 @@ exit:
             mbedtls_strerror(ret, buf, 100);
             ESP_LOGE(TAG, "Last error was: -0x%x - %s", -ret, buf);
         }
-
-        putchar('\n'); // JSON output doesn't have a newline at end
 
         static int request_count;
         ESP_LOGI(TAG, "Completed %d requests", ++request_count);

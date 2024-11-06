@@ -115,22 +115,18 @@ esp_err_t response_handler(esp_http_client_event_t *evt)
 
     case HTTP_EVENT_ON_CONNECTED:
         data_len = 0;
-        printf("HTTP_EVENT_ON_CONNECTED\n");
         break;
 
     case HTTP_EVENT_HEADER_SENT:
-        printf("HTTP_EVENT_HEADER_SENT\n");
         break;
 
     case HTTP_EVENT_ON_HEADER:
         if (evt->data_len) {
-            printf("HTTP_EVENT_ON_HEADER\n");
             printf("%.*s", evt->data_len, (char *)evt->user_data);
         }
         break;
 
     case HTTP_EVENT_ON_DATA:
-        printf("HTTP_EVENT_ON_DATA (%d +)%d\n", data_len, evt->data_len);
         data = heap_caps_realloc(data, data_len + evt->data_len + 1, MALLOC_CAP_SPIRAM | MALLOC_CAP_8BIT);
         if (data == NULL) {
             printf("data realloc failed\n");
@@ -154,7 +150,7 @@ esp_err_t response_handler(esp_http_client_event_t *evt)
             break;
         }
         network_gzip_decompress(data, data_len, decode_out, &out_size, decode_maxlen);
-        printf("HTTP_EVENT_ON_FINISH, location:%d, out_size:%d, %s\n", location, out_size, decode_out);
+        // printf("HTTP_EVENT_ON_FINISH, location:%d, out_size:%d, %s\n", location, out_size, decode_out);
         app_weather_parse_now(decode_out, location);
 
         if (decode_out) {
@@ -180,7 +176,7 @@ esp_err_t response_handler(esp_http_client_event_t *evt)
 
 esp_err_t app_weather_request(char *data)
 {
-    ESP_LOGI(TAG, "location(west longtitude, south latitude) = %s\n", data);
+    ESP_LOGI(TAG, "location(west longtitude, south latitude) = %s", data);
     char *url_request = heap_caps_malloc(200, MALLOC_CAP_SPIRAM);
     CHECK(url_request, "Failed allocate mem", ESP_ERR_NO_MEM);
     sprintf(url_request, WEB_URL_NOW, data);

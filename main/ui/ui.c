@@ -3,10 +3,39 @@
 // LVGL version: 8.3.11
 // Project name: SquareLine_Project
 
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
+
+#include "esp_err.h"
+#include "esp_check.h"
 #include "ui.h"
 #include "ui_helpers.h"
+#include "bsp/esp-bsp.h"
+#include "cube_dice.h"
+#include "lottie_player.h"
+
+#include "thorvg_capi.h"
+#include "mmap_generate_assets.h"
+
+#include "bsp/esp-bsp.h"
 
 #define TAG "ui"
+
+#define DICE_SIZE_HOR           100*2
+#define DICE_SIZE_VER           100*2
+#define swap16(x)               (((x) << 8) | ((x) >> 8))
+
+#define LOTTIE_SIZE_HOR         (BSP_LCD_H_RES)
+#define LOTTIE_SIZE_VER         (BSP_LCD_V_RES)
+
+extern mmap_assets_handle_t asset_handle;
+
+static uint8_t *framebuf = NULL;
+static lv_timer_t *timer_tinygl = NULL;
+static lv_timer_t *timer_player = NULL;
+
+tinyGL_modle_handle_t tinygl_handle;
+lottie_palyer_handle_t player_handle;
 
 ///////////////////// VARIABLES ////////////////////
 void muyushow_Animation(lv_obj_t * TargetObject, int delay);
@@ -49,7 +78,7 @@ lv_obj_t * ui_Panel4;
 void ui_event_shaizibut(lv_event_t * e);
 lv_obj_t * ui_shaizibut;
 lv_obj_t * ui_shaizitxt;
-lv_obj_t * ui_cide_canvas;
+lv_obj_t * ui_dice_canvas;
 
 // SCREEN: ui_title
 void ui_title_screen_init(void);
@@ -64,6 +93,8 @@ lv_obj_t * title_batterytxt;
 // SCREEN:ui_fish
 void ui_fish_screen_init(void);
 lv_obj_t * ui_fish;
+lv_obj_t * ui_Panel_fish;
+lv_obj_t * ui_fish_canvas;
 void ui_event_fish(lv_event_t *e);
 lv_obj_t * ui_img_fish;
 
@@ -323,52 +354,119 @@ void ui_event_Panel3(lv_event_t * e)
         muyushow_Animation(ui_muyu, 0);
         gonde_txt_Animation(ui_gongdetxt, 0);
     }
-
 }
 
-#include "cube_dice.h"
-#include "freertos/FreeRTOS.h"
-#include "freertos/task.h"
-
-#include "bsp/esp-bsp.h"
-
-#define WINDOWX                 100*2
-#define WINDOWY                 100*2
-#define swap16(x)               (((x) << 8) | ((x) >> 8))
-
-static uint8_t *framebuf = NULL;
-static lv_timer_t *timer_tinyGL = NULL;
-
-static esp_lcd_panel_handle_t panel_handle;
-
-static void frame_rgb888_to_rgb565(uint8_t *rgb888, uint16_t *rgb565, int width, int height)
+static void frame_rgb888_to_rgb565(uint8_t *in, uint16_t *out, int width, int height)
 {
     int numPixels = width * height;
     for (int i = 0; i < numPixels; i++) {
-        uint8_t r = rgb888[i * 3 + 2];
-        uint8_t g = rgb888[i * 3 + 1];
-        uint8_t b = rgb888[i * 3 + 0];
+        uint8_t r = in[i * 3 + 2];
+        uint8_t g = in[i * 3 + 1];
+        uint8_t b = in[i * 3 + 0];
 
         uint16_t r565 = (r >> 3) & 0x1F;
         uint16_t g565 = (g >> 2) & 0x3F;
         uint16_t b565 = (b >> 3) & 0x1F;
 
         uint16_t rgb565Value = (r565 << 11) | (g565 << 5) | b565;
-        // rgb565[i] = rgb565Value;
-        rgb565[i] = swap16(rgb565Value);
+        out[i] = swap16(rgb565Value);
     }
 }
 
-static void tinygl_win_timer_cb(lv_timer_t *tmr)
+static void frame_argb888_to_rgb565(uint8_t *in, uint16_t *out, int width, int height)
 {
-    cube_dice_update();
-    frame_rgb888_to_rgb565(framebuf, (uint16_t *)framebuf, WINDOWX, WINDOWY);
+    int numPixels = width * height;
+    for (int i = 0; i < numPixels; i++) {
+        uint8_t r = in[i * 4 + 2];
+        uint8_t g = in[i * 4 + 1];
+        uint8_t b = in[i * 4 + 0];
 
-    lv_canvas_set_buffer(ui_cide_canvas, framebuf, WINDOWX, WINDOWY, LV_IMG_CF_TRUE_COLOR);
+        uint16_t r565 = (r >> 3) & 0x1F;
+        uint16_t g565 = (g >> 2) & 0x3F;
+        uint16_t b565 = (b >> 3) & 0x1F;
 
-    // int x_offset = (BSP_LCD_H_RES - WINDOWX) / 2;
-    // int y_offset = (BSP_LCD_V_RES - WINDOWY) / 2;
-    // esp_lcd_panel_draw_bitmap(panel_handle, 0 + x_offset, 0 + y_offset, WINDOWX + x_offset, WINDOWY + y_offset, framebuf);
+        uint16_t rgb565Value = (r565 << 11) | (g565 << 5) | b565;
+        out[i] = swap16(rgb565Value);
+    }
+}
+
+static void win_tinyGL_timer_cb(lv_timer_t *tmr)
+{
+    cube_dice_update(tinygl_handle);
+    frame_rgb888_to_rgb565(framebuf, (uint16_t *)framebuf, DICE_SIZE_HOR, DICE_SIZE_VER);
+    lv_canvas_set_buffer(ui_dice_canvas, framebuf, DICE_SIZE_HOR, DICE_SIZE_VER, LV_IMG_CF_TRUE_COLOR);
+}
+
+static void win_lottie_timer_player_cb(lv_timer_t *tmr)
+{
+    lottie_player_update(player_handle);
+    frame_argb888_to_rgb565(framebuf, (uint16_t *)framebuf, LOTTIE_SIZE_HOR, LOTTIE_SIZE_VER);
+    lv_canvas_set_buffer(ui_fish_canvas, framebuf, LOTTIE_SIZE_HOR, LOTTIE_SIZE_VER, LV_IMG_CF_TRUE_COLOR);
+}
+
+void delete_lottie_player()
+{
+    lv_timer_del(timer_player);
+    timer_player = NULL;
+
+    lottie_player_deinit(player_handle);
+    player_handle = NULL;
+
+    heap_caps_free(framebuf);
+    framebuf = NULL;
+}
+
+void delete_tinygl_dice()
+{
+    lv_timer_del(timer_tinygl);
+    timer_tinygl = NULL;
+
+    cube_dice_deinit(tinygl_handle);
+    tinygl_handle = NULL;
+
+    heap_caps_free(framebuf);
+    framebuf = NULL;
+}
+
+void create_lottie_palyer()
+{
+    lottie_player_config_t player_config = {
+        .player_width = LOTTIE_SIZE_HOR,
+        .player_height = LOTTIE_SIZE_VER,
+    };
+
+    framebuf = heap_caps_calloc(LOTTIE_SIZE_HOR * LOTTIE_SIZE_VER * 4, 1, MALLOC_CAP_SPIRAM);
+    assert(framebuf);
+
+    player_config.framebuf = framebuf;
+    player_config.file_name = mmap_assets_get_name(asset_handle, MMAP_ASSETS_FISH_JSON);
+    player_config.file_size = mmap_assets_get_size(asset_handle, MMAP_ASSETS_FISH_JSON);
+    player_config.file_data = mmap_assets_get_mem(asset_handle, MMAP_ASSETS_FISH_JSON);
+
+    lottie_player_init(&player_config, &player_handle);
+    timer_player = lv_timer_create(win_lottie_timer_player_cb, 10, NULL);
+}
+
+void create_tinygl_dice()
+{
+    tinyGL_config_t tiny_config = {
+        .width = DICE_SIZE_HOR,
+        .height = DICE_SIZE_VER,
+    };
+
+    framebuf = heap_caps_calloc(DICE_SIZE_HOR * DICE_SIZE_VER * 3, 1, MALLOC_CAP_SPIRAM);
+    assert(framebuf);
+
+    tiny_config.framebuf = framebuf;
+    for (int i = 0; i < 6; i++) {
+        tiny_config.texture[i].image = mmap_assets_get_mem(asset_handle, MMAP_ASSETS_DICE1_BMP + i);
+        tiny_config.texture[i].image += 54;
+        tiny_config.texture[i].width = mmap_assets_get_width(asset_handle, MMAP_ASSETS_DICE1_BMP + i);
+        tiny_config.texture[i].height = mmap_assets_get_height(asset_handle, MMAP_ASSETS_DICE1_BMP + i);
+    }
+
+    cube_dice_init(&tiny_config, &tinygl_handle);
+    timer_tinygl = lv_timer_create(win_tinyGL_timer_cb, 10, NULL);
 }
 
 void ui_event_shaiziplay(lv_event_t * e)
@@ -377,43 +475,29 @@ void ui_event_shaiziplay(lv_event_t * e)
     lv_obj_t * target = lv_event_get_target(e);
     if (event_code == LV_EVENT_SCREEN_LOAD_START) {
         lv_obj_set_parent(title_panel, ui_Panel4);
-        ESP_LOGI(TAG, "load start");
+        ESP_LOGI(TAG, "### load tinyGL Dice ###");
 
-        size_t blend_size = WINDOWX * WINDOWY * 3;
-        framebuf = heap_caps_calloc(blend_size, 1, MALLOC_CAP_SPIRAM);
-        assert(framebuf);
-        cube_dice_init(WINDOWX, WINDOWY, framebuf);
-
-        bsp_get_panel_handle(&panel_handle);
-
-        timer_tinyGL = lv_timer_create(tinygl_win_timer_cb, 10, NULL);
+        create_tinygl_dice();
+        lv_obj_clear_flag(ui_dice_canvas, LV_OBJ_FLAG_HIDDEN);
     }
 
     if (event_code == LV_EVENT_GESTURE &&  lv_indev_get_gesture_dir(lv_indev_get_act()) == LV_DIR_LEFT) {
+        delete_tinygl_dice();
+        lv_obj_add_flag(ui_dice_canvas, LV_OBJ_FLAG_HIDDEN);
+
         lv_indev_wait_release(lv_indev_get_act());
         _ui_screen_change(&ui_fish, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_fish_screen_init);
-        ESP_LOGI(TAG, "load ui_fish");
-
-        lv_timer_del(timer_tinyGL);
-        timer_tinyGL = NULL;
-        cube_dice_deinit();
-        heap_caps_free(framebuf);
-        framebuf = NULL;
     }
 
     if (event_code == LV_EVENT_GESTURE &&  lv_indev_get_gesture_dir(lv_indev_get_act()) == LV_DIR_RIGHT) {
+        delete_tinygl_dice();
+        lv_obj_add_flag(ui_dice_canvas, LV_OBJ_FLAG_HIDDEN);
+
         lv_indev_wait_release(lv_indev_get_act());
         _ui_screen_change(&ui_muyuplay, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_muyuplay_screen_init);
-        ESP_LOGI(TAG, "load ui_muyuplay");
-
-        lv_timer_del(timer_tinyGL);
-        timer_tinyGL = NULL;
-
-        cube_dice_deinit();
-        heap_caps_free(framebuf);
-        framebuf = NULL;
     }
 }
+
 void ui_event_shaizibut(lv_event_t * e)
 {
     lv_event_code_t event_code = lv_event_get_code(e);
@@ -422,22 +506,37 @@ void ui_event_shaizibut(lv_event_t * e)
         shaiziblink(e);
     }
 }
+
 void ui_event_fish(lv_event_t *e)
 {
     lv_event_code_t event_code = lv_event_get_code(e);
     lv_obj_t * target = lv_event_get_target(e);
     if (event_code == LV_EVENT_SCREEN_LOAD_START) {
         lv_obj_set_parent(title_panel, ui_fish);
+
+        ESP_LOGI(TAG, "### load Lottie player ###");
+
+        create_lottie_palyer();
+        lv_obj_clear_flag(ui_fish_canvas, LV_OBJ_FLAG_HIDDEN);
     }
     if (event_code == LV_EVENT_GESTURE &&  lv_indev_get_gesture_dir(lv_indev_get_act()) == LV_DIR_LEFT) {
+
+        delete_lottie_player();
+        lv_obj_add_flag(ui_fish_canvas, LV_OBJ_FLAG_HIDDEN);
+
         lv_indev_wait_release(lv_indev_get_act());
         _ui_screen_change(&ui_game, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_game_screen_init);
     }
     if (event_code == LV_EVENT_GESTURE &&  lv_indev_get_gesture_dir(lv_indev_get_act()) == LV_DIR_RIGHT) {
+
+        delete_lottie_player();
+        lv_obj_add_flag(ui_fish_canvas, LV_OBJ_FLAG_HIDDEN);
+
         lv_indev_wait_release(lv_indev_get_act());
         _ui_screen_change(&ui_shaiziplay, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_shaiziplay_screen_init);
     }
 }
+
 void ui_event_game(lv_event_t *e)
 {
     lv_event_code_t event_code = lv_event_get_code(e);

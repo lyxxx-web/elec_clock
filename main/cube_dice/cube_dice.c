@@ -4,14 +4,19 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 #include <string.h>
-#include "esp_log.h"
-
 #include <stdlib.h>
 #include <math.h>
+#include "esp_log.h"
+#include "esp_err.h"
+#include "esp_check.h"
+
 #include "zbuffer.h"
 #include "gl.h"
 #include "glu.h"
-#include "mmap_generate_assets.h"
+
+#include "cube_dice.h"
+
+static const char *TAG = "tintgl_dice";
 
 typedef struct {
     float v1;
@@ -24,7 +29,6 @@ typedef struct {
     float t2;
 } T2;
 
-// 初始化一个八个顶点的立方体
 static V3 ptrv[8] = {
     {-1.0f, 1.0f, 1.0f},
     {-1.0f, -1.0f, 1.0f},
@@ -36,7 +40,6 @@ static V3 ptrv[8] = {
     {1.0f, 1.0f, -1.0f}
 };
 
-// 初始化纹理坐标
 static T2 ptrt[4] = {
     {0.0, 0.0},
     {1.0, 0.0},
@@ -44,14 +47,14 @@ static T2 ptrt[4] = {
     {0.0, 1.0}
 };
 
-static ZBuffer *frameBuffer;
-static GLuint TexObj[6];
+typedef struct {
+    ZBuffer *frameBuffer;
+    GLuint TexObj[6];
 
-static float dice_x_set = 0.0f;
-static float dice_y_set = 0.0f;
-static float dice_z_set = 0.0f;
-
-extern mmap_assets_handle_t asset_handle;
+    float dice_x_set;
+    float dice_y_set;
+    float dice_z_set;
+} tiny_texure_dice_t;
 
 void DrawQUADS(V3 *ptr, int iv1, int iv2, int iv3, int iv4, T2 *ptrt, int it1, int it2, int it3, int it4, GLuint texture)
 {
@@ -73,14 +76,19 @@ void DrawQUADS(V3 *ptr, int iv1, int iv2, int iv3, int iv4, T2 *ptrt, int it1, i
     glEnd();
 }
 
-void cube_angle_set(float x_move, float y_move, float z_move)
+esp_err_t cube_angle_set(tinyGL_modle_handle_t handle, float x_move, float y_move, float z_move)
 {
-    dice_x_set = x_move;
-    dice_y_set = y_move;
-    dice_z_set = z_move;
+    ESP_RETURN_ON_FALSE(handle, ESP_ERR_INVALID_ARG, TAG, "handle is invalid");
+    tiny_texure_dice_t *tinygl_dice = (tiny_texure_dice_t *)(handle);
+
+    tinygl_dice->dice_x_set = x_move;
+    tinygl_dice->dice_y_set = y_move;
+    tinygl_dice->dice_z_set = z_move;
+
+    return ESP_OK;
 }
 
-static void applyDiceInertia()
+static void applyDiceInertia(tiny_texure_dice_t *tinygl_dice)
 {
     float left;
 
@@ -95,13 +103,13 @@ static void applyDiceInertia()
     static float dice_dst_y = 0.0f;
 // static float dice_dst_z = 0.0f;
 
-    dice_x_rotation += dice_x_set;
-    dice_y_rotation += dice_y_set;
+    dice_x_rotation += tinygl_dice->dice_x_set;
+    dice_y_rotation += tinygl_dice->dice_y_set;
 
     // Check if the velocities are close to zero, and stop the rotation
-    if (fabs(dice_x_set - stop_x) < 0.5f && fabs(dice_y_set - stop_y) < 0.5f) {
-        if (fabs(dice_x_set - stop_x) < 0.5f) {
-            if (dice_x_set) {
+    if (fabs(tinygl_dice->dice_x_set - stop_x) < 0.5f && fabs(tinygl_dice->dice_y_set - stop_y) < 0.5f) {
+        if (fabs(tinygl_dice->dice_x_set - stop_x) < 0.5f) {
+            if (tinygl_dice->dice_x_set) {
                 left = fmod(dice_x_rotation, 90.0f);
                 if (dice_x_rotation > 0) {
                     dice_dst_x = fabs(left) < 45 ? dice_x_rotation - left : dice_x_rotation + (90 - fabs(left));
@@ -111,8 +119,8 @@ static void applyDiceInertia()
             }
         }
 
-        if (fabs(dice_y_set - stop_y) < 0.5f) {
-            if (dice_y_set) {
+        if (fabs(tinygl_dice->dice_y_set - stop_y) < 0.5f) {
+            if (tinygl_dice->dice_y_set) {
                 left = fmod(dice_y_rotation, 90.0f);
                 if (dice_y_rotation > 0) {
                     dice_dst_y = fabs(left) < 45 ? dice_y_rotation - left : dice_y_rotation + (90 - fabs(left));
@@ -122,14 +130,14 @@ static void applyDiceInertia()
             }
         }
 
-        dice_x_set = 0.0f;
-        dice_y_set = 0.0f;
+        tinygl_dice->dice_x_set = 0.0f;
+        tinygl_dice->dice_y_set = 0.0f;
         stop_x = 0.0f;
         stop_y = 0.0f;
 
     } else {
-        stop_x = dice_x_set;
-        stop_y = dice_y_set;
+        stop_x = tinygl_dice->dice_x_set;
+        stop_y = tinygl_dice->dice_y_set;
     }
 
     if (dice_dst_x) {
@@ -163,17 +171,13 @@ void reshape()
     glMatrixMode(GL_MODELVIEW);
 }
 
-GLuint LoadTexture(uint8_t image_index)
+GLuint LoadTexture(Texture_t *texture)
 {
-    int width, height;
-    void *image;
+    void *image = texture->image;
+    int width = texture->width;
+    int height = texture->height;
 
-    image = (void *)mmap_assets_get_mem(asset_handle, MMAP_ASSETS_DICE1_BMP + image_index);
-    image += 54;
-    width = mmap_assets_get_width(asset_handle, MMAP_ASSETS_DICE1_BMP + image_index);
-    height = mmap_assets_get_height(asset_handle, MMAP_ASSETS_DICE1_BMP + image_index);
-
-    ESP_LOGI("Load", "width=%d, height=%d, %p", width, height, image);
+    ESP_LOGD("Load", "width=%d, height=%d, %p", width, height, image);
 
     glEnable(GL_DEPTH_TEST);
 
@@ -196,15 +200,18 @@ GLuint LoadTexture(uint8_t image_index)
     return TexObj;
 }
 
-void cube_dice_init(int xsize, int ysize, void *cbuf)
+esp_err_t cube_dice_init(tinyGL_config_t *config, tinyGL_modle_handle_t *handle)
 {
-    frameBuffer = ZB_open(xsize, ysize, ZB_MODE_RGB24, 0, NULL, NULL, cbuf);
+    tiny_texure_dice_t *tiny_dice = (tiny_texure_dice_t *)calloc(1, sizeof(tiny_texure_dice_t));
+    ESP_RETURN_ON_FALSE(tiny_dice, ESP_ERR_NO_MEM, TAG, "no mem for tiny_texure_dice handle");
 
-    glInit(frameBuffer);
+    tiny_dice->frameBuffer = ZB_open(config->width, config->height, ZB_MODE_RGB24, 0, NULL, NULL, config->framebuf);
+
+    glInit(tiny_dice->frameBuffer);
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-    glViewport(0, 0, xsize, ysize);
+    glViewport(0, 0, config->width, config->height);
     glEnable(GL_DEPTH_TEST);
-    GLfloat h = (GLfloat)xsize / (GLfloat)ysize;
+    GLfloat h = (GLfloat)config->width / (GLfloat)config->height;
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     glFrustum(-1.0, 1.0, -h, h, 5.0, 60.0);
@@ -212,24 +219,30 @@ void cube_dice_init(int xsize, int ysize, void *cbuf)
     glLoadIdentity();
     glTranslatef(0.0, 0.0, -45.0);
 
-    TexObj[0] = LoadTexture(0);
-    TexObj[1] = LoadTexture(1);
-    TexObj[2] = LoadTexture(2);
-    TexObj[3] = LoadTexture(3);
-    TexObj[4] = LoadTexture(4);
-    TexObj[5] = LoadTexture(5);
+    for (int i = 0; i < 6; i++) {
+        tiny_dice->TexObj[i] = LoadTexture(&config->texture[i]);
+    }
     reshape();
+
+    *handle = (tinyGL_modle_handle_t)tiny_dice;
+
+    ESP_LOGI(TAG, "new tiny_dice handle:@%p", tiny_dice);
+
+    return ESP_OK;
 }
 
-void cube_dice_deinit()
+esp_err_t cube_dice_deinit(tinyGL_modle_handle_t handle)
 {
+    ESP_RETURN_ON_FALSE(handle, ESP_ERR_INVALID_ARG, TAG, "handle is invalid");
+    tiny_texure_dice_t *tinygl_dice = (tiny_texure_dice_t *)(handle);
+
     glDisable(GL_TEXTURE_2D);
 
-    glDeleteTextures(sizeof(TexObj) / sizeof(GLuint), TexObj); // Delete the texture object
+    glDeleteTextures(sizeof(tinygl_dice->TexObj) / sizeof(GLuint), tinygl_dice->TexObj); // Delete the texture object
 
-    if (frameBuffer != NULL) {
-        ZB_close(frameBuffer);
-        frameBuffer = NULL;
+    if (tinygl_dice->frameBuffer != NULL) {
+        ZB_close(tinygl_dice->frameBuffer);
+        tinygl_dice->frameBuffer = NULL;
     }
 
     glDisable(GL_DEPTH_TEST);
@@ -238,21 +251,28 @@ void cube_dice_deinit()
     glLoadIdentity();
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
+
+    return ESP_OK;
 }
 
-void cube_dice_update()
+esp_err_t cube_dice_update(tinyGL_modle_handle_t handle)
 {
+    ESP_RETURN_ON_FALSE(handle, ESP_ERR_INVALID_ARG, TAG, "handle is invalid");
+    tiny_texure_dice_t *tinygl_dice = (tiny_texure_dice_t *)(handle);
+
     glLoadIdentity();
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     glTranslatef(0.0, 0.0, -6.0);
 
-    applyDiceInertia();
+    applyDiceInertia(tinygl_dice);
 
-    DrawQUADS((V3 *)&ptrv, 0, 1, 2, 3, (T2 *)&ptrt, 3, 0, 1, 2, TexObj[0]); //front
-    DrawQUADS((V3 *)&ptrv, 0, 3, 7, 4, (T2 *)&ptrt, 1, 2, 3, 0, TexObj[1]); //left
-    DrawQUADS((V3 *)&ptrv, 4, 7, 6, 5, (T2 *)&ptrt, 2, 3, 0, 1, TexObj[2]); //back
-    DrawQUADS((V3 *)&ptrv, 5, 6, 2, 1, (T2 *)&ptrt, 3, 0, 1, 2, TexObj[3]); //right
-    DrawQUADS((V3 *)&ptrv, 7, 3, 2, 6, (T2 *)&ptrt, 3, 0, 1, 2, TexObj[4]); //top
-    DrawQUADS((V3 *)&ptrv, 5, 1, 0, 4, (T2 *)&ptrt, 3, 0, 1, 2, TexObj[5]); //bottom
+    DrawQUADS((V3 *)&ptrv, 0, 1, 2, 3, (T2 *)&ptrt, 3, 0, 1, 2, tinygl_dice->TexObj[0]); //front
+    DrawQUADS((V3 *)&ptrv, 0, 3, 7, 4, (T2 *)&ptrt, 1, 2, 3, 0, tinygl_dice->TexObj[1]); //left
+    DrawQUADS((V3 *)&ptrv, 4, 7, 6, 5, (T2 *)&ptrt, 2, 3, 0, 1, tinygl_dice->TexObj[2]); //back
+    DrawQUADS((V3 *)&ptrv, 5, 6, 2, 1, (T2 *)&ptrt, 3, 0, 1, 2, tinygl_dice->TexObj[3]); //right
+    DrawQUADS((V3 *)&ptrv, 7, 3, 2, 6, (T2 *)&ptrt, 3, 0, 1, 2, tinygl_dice->TexObj[4]); //top
+    DrawQUADS((V3 *)&ptrv, 5, 1, 0, 4, (T2 *)&ptrt, 3, 0, 1, 2, tinygl_dice->TexObj[5]); //bottom
+
+    return ESP_OK;
 }

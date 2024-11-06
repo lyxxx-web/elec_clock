@@ -28,6 +28,8 @@ static i2c_master_bus_handle_t i2c_bus_handle;
 static icm42670_value_t gyro_val_last;
 static icm42670_handle_t imu = NULL;
 
+extern tinyGL_modle_handle_t tinygl_handle;
+
 static void app_imu_read(void)
 {
     icm42670_value_t gyro_offset = {0};
@@ -39,15 +41,19 @@ static void app_imu_read(void)
     if (fabs(gyro_val_last.x - gyro_val.x) / 1 > 5.0f) {
         gyro_offset.y = (gyro_val.x - gyro_val_last.x) / 1;
         gyro_val_last.x = gyro_val.x;
-        ESP_LOGI(TAG, "x OFFSET: %.2f", gyro_offset.y);
-        cube_angle_set(gyro_offset.x, gyro_offset.y, gyro_offset.z);
+        // ESP_LOGI(TAG, "x OFFSET: %.2f", gyro_offset.y);
+        if(tinygl_handle){
+            cube_angle_set(tinygl_handle, gyro_offset.x, gyro_offset.y, gyro_offset.z);
+        }
     }
 
     if (fabs(gyro_val_last.y - gyro_val.y) / 1 > 5.0f) {
         gyro_offset.x = (gyro_val.y - gyro_val_last.y) / 1;
         gyro_val_last.y = gyro_val.y;
         // ESP_LOGI(TAG, "y OFFSET: %.2f", gyro_offset.x);
-        cube_angle_set(gyro_offset.x, gyro_offset.y, gyro_offset.z);
+        if(tinygl_handle){
+            cube_angle_set(tinygl_handle, gyro_offset.x, gyro_offset.y, gyro_offset.z);
+        }
     }
 
     if (fabs(gyro_val_last.z - gyro_val.z) / 5 > 5.0f) {

@@ -353,6 +353,7 @@ static lv_display_t *bsp_display_lcd_init(const bsp_display_cfg_t *cfg)
         .io_handle = io_handle,
         .panel_handle = panel_handle,
         .buffer_size = cfg->buffer_size,
+        .trans_size = cfg->trans_size,
         .double_buffer = cfg->double_buffer,
         .hres = BSP_LCD_H_RES,
         .vres = BSP_LCD_V_RES,

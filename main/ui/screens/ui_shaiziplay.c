@@ -24,11 +24,10 @@ void ui_shaiziplay_screen_init(void)
     lv_obj_set_style_pad_top(ui_Panel4, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_pad_bottom(ui_Panel4, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-
-    ui_cide_canvas = lv_canvas_create(ui_Panel4);
-    // lv_canvas_set_buffer(ui_cide_canvas, cbuf, CANVAS_WIDTH, CANVAS_HEIGHT, LV_IMG_CF_TRUE_COLOR);
-    // lv_obj_center(ui_cide_canvas);
-    lv_obj_align(ui_cide_canvas, LV_ALIGN_BOTTOM_MID, 0, 0);
+    ui_dice_canvas = lv_canvas_create(ui_Panel4);
+    // lv_canvas_set_buffer(ui_dice_canvas, cbuf, CANVAS_WIDTH, CANVAS_HEIGHT, LV_IMG_CF_TRUE_COLOR);
+    // lv_obj_center(ui_dice_canvas);
+    lv_obj_align(ui_dice_canvas, LV_ALIGN_BOTTOM_MID, 0, 0);
 
     ui_shaizibut = lv_btn_create(ui_Panel4);
     lv_obj_set_width(ui_shaizibut, 100);

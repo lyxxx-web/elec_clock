@@ -6,12 +6,27 @@
 #ifndef __CUBETEXT_H__
 #define __CUBETEXT_H__
 
-void cube_dice_init(int xsize, int ysize, void *cbuf);
+typedef struct {
+    void *image;
+    uint16_t width;
+    uint16_t height;
+} Texture_t;
 
-void cube_dice_deinit();
+typedef struct {
+    uint16_t width;
+    uint16_t height;
+    uint8_t *framebuf;
+    Texture_t texture[6];
+} tinyGL_config_t;
 
-void cube_dice_update();
+typedef struct tibyGL_modle_t *tinyGL_modle_handle_t;
 
-void cube_angle_set(float x_move, float y_move, float z_move);
+esp_err_t cube_dice_init(tinyGL_config_t *config, tinyGL_modle_handle_t *handle);
+
+esp_err_t cube_dice_deinit(tinyGL_modle_handle_t handle);
+
+esp_err_t cube_dice_update(tinyGL_modle_handle_t handle);
+
+esp_err_t cube_angle_set(tinyGL_modle_handle_t handle, float x_move, float y_move, float z_move);
 
 #endif
