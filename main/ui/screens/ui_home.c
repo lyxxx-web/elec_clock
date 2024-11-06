@@ -4,8 +4,6 @@
 // Project name: SquareLine_Project
 
 #include "../ui.h"
-#include "app_wifi.h"
-#include <stdio.h>
 
 void ui_home_screen_init(void)
 {
@@ -104,7 +102,6 @@ void ui_home_screen_init(void)
     lv_obj_set_style_text_font(ui_colon, &ui_font_ComfortaaBold75, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_weathershow = lv_img_create(ui_Panel1);
-    lv_img_set_src(ui_weathershow, &ui_img_clody_png);
     lv_obj_set_width(ui_weathershow, 128);
     lv_obj_set_height(ui_weathershow, 128);
     lv_obj_set_x(ui_weathershow, -54);
