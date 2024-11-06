@@ -14,7 +14,7 @@
 #include "esp_mmap_assets.h"
 
 #define MMAP_ASSETS_FILES           71
-#define MMAP_ASSETS_CHECKSUM        0x16DA
+#define MMAP_ASSETS_CHECKSUM        0x16D8
 
 enum MMAP_ASSETS_LISTS {
     MMAP_ASSETS_DICE1_BMP = 0,        /*!< dice1.bmp */
@@ -32,7 +32,7 @@ enum MMAP_ASSETS_LISTS {
     MMAP_ASSETS_103_PNG = 12,        /*!< 103.png */
     MMAP_ASSETS_104_PNG = 13,        /*!< 104.png */
     MMAP_ASSETS_150_PNG = 14,        /*!< 150.png */
-    MMAP_ASSETS_153_PNG = 15,        /*!< 153.png */
+    MMAP_ASSETS_151_PNG = 15,        /*!< 151.png */
     MMAP_ASSETS_154_PNG = 16,        /*!< 154.png */
     MMAP_ASSETS_300_PNG = 17,        /*!< 300.png */
     MMAP_ASSETS_301_PNG = 18,        /*!< 301.png */

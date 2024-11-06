@@ -8,11 +8,13 @@ idf_component_register(
         "./ui/images"
         "./app"
         "./cube_dice"
+        "./game_2048"
     INCLUDE_DIRS 
         "." 
         "./ui" 
         "./app"
         "./cube_dice"
+        "./game_2048"
     )
 
 spiffs_create_partition_assets(

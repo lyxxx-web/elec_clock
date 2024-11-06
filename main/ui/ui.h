@@ -76,6 +76,7 @@ extern lv_obj_t * ui_img_fish;
 // SCREEN:ui_game_2048
 void ui_game_screen_init(void);
 extern lv_obj_t * ui_game;
+extern lv_obj_t * ui_2048;
 void ui_event_game(lv_event_t *e);
 
 void ui_event____initial_actions0(lv_event_t * e);
