@@ -160,7 +160,6 @@ esp_err_t response_handler(esp_http_client_event_t *evt)
         break;
 
     case HTTP_EVENT_DISCONNECTED:
-        printf("HTTP_EVENT_DISCONNECTED\n");
         if (data) {
             free(data);
             data = NULL;

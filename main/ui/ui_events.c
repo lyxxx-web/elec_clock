@@ -5,7 +5,3 @@
 
 #include "ui.h"
 
-void shaiziblink(lv_event_t * e)
-{
-    // Your code here
-}

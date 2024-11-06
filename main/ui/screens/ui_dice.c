@@ -5,12 +5,12 @@
 
 #include "../ui.h"
 
-void ui_shaiziplay_screen_init(void)
+void ui_dice_screen_init(void)
 {
-    ui_shaiziplay = lv_obj_create(NULL);
-    lv_obj_clear_flag(ui_shaiziplay, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    ui_dice = lv_obj_create(NULL);
+    lv_obj_clear_flag(ui_dice, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
 
-    ui_Panel4 = lv_obj_create(ui_shaiziplay);
+    ui_Panel4 = lv_obj_create(ui_dice);
     lv_obj_set_width(ui_Panel4, 240);
     lv_obj_set_height(ui_Panel4, 240);
     lv_obj_set_align(ui_Panel4, LV_ALIGN_CENTER);
@@ -55,6 +55,5 @@ void ui_shaiziplay_screen_init(void)
     lv_obj_set_style_text_opa(ui_shaizitxt, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_font(ui_shaizitxt, &ui_font_OPPOSansH25, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    lv_obj_add_event_cb(ui_shaizibut, ui_event_shaizibut, LV_EVENT_ALL, NULL);
-    lv_obj_add_event_cb(ui_shaiziplay, ui_event_shaiziplay, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_dice, ui_event_dice, LV_EVENT_ALL, NULL);
 }

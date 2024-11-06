@@ -70,12 +70,11 @@ lv_obj_t * ui_Panel3;
 lv_obj_t * ui_muyu;
 lv_obj_t * ui_gongdetxt;
 
-// SCREEN: ui_shaiziplay
-void ui_shaiziplay_screen_init(void);
-void ui_event_shaiziplay(lv_event_t * e);
-lv_obj_t * ui_shaiziplay;
+// SCREEN: ui_dice
+void ui_dice_screen_init(void);
+void ui_event_dice(lv_event_t * e);
+lv_obj_t * ui_dice;
 lv_obj_t * ui_Panel4;
-void ui_event_shaizibut(lv_event_t * e);
 lv_obj_t * ui_shaizibut;
 lv_obj_t * ui_shaizitxt;
 lv_obj_t * ui_dice_canvas;
@@ -90,13 +89,26 @@ lv_obj_t * title_batterybor;
 lv_obj_t * title_timestate;
 lv_obj_t * title_batterytxt;
 
+// SCREEN:ui_face
+void ui_face_screen_init(void);
+lv_obj_t * ui_face;
+lv_obj_t * ui_Panel_face;
+lv_obj_t * ui_face_canvas;
+void ui_event_face(lv_event_t *e);
+
 // SCREEN:ui_fish
 void ui_fish_screen_init(void);
 lv_obj_t * ui_fish;
 lv_obj_t * ui_Panel_fish;
 lv_obj_t * ui_fish_canvas;
 void ui_event_fish(lv_event_t *e);
-lv_obj_t * ui_img_fish;
+
+void ui_face_screen_init(void);
+lv_obj_t * ui_face;
+lv_obj_t * ui_Panel_face;
+lv_obj_t * ui_face_canvas;
+void ui_event_face(lv_event_t *e);
+lv_obj_t * ui_img_face;
 
 // SCREEN:ui_game_2048
 void ui_game_screen_init(void);
@@ -343,7 +355,7 @@ void ui_event_muyuplay(lv_event_t * e)
     }
     if (event_code == LV_EVENT_GESTURE &&  lv_indev_get_gesture_dir(lv_indev_get_act()) == LV_DIR_LEFT) {
         lv_indev_wait_release(lv_indev_get_act());
-        _ui_screen_change(&ui_shaiziplay, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_shaiziplay_screen_init);
+        _ui_screen_change(&ui_dice, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_dice_screen_init);
     }
 }
 void ui_event_Panel3(lv_event_t * e)
@@ -399,9 +411,10 @@ static void win_tinyGL_timer_cb(lv_timer_t *tmr)
 
 static void win_lottie_timer_player_cb(lv_timer_t *tmr)
 {
+    lv_obj_t * ui_canvas = tmr->user_data;
     lottie_player_update(player_handle);
     frame_argb888_to_rgb565(framebuf, (uint16_t *)framebuf, LOTTIE_SIZE_HOR, LOTTIE_SIZE_VER);
-    lv_canvas_set_buffer(ui_fish_canvas, framebuf, LOTTIE_SIZE_HOR, LOTTIE_SIZE_VER, LV_IMG_CF_TRUE_COLOR);
+    lv_canvas_set_buffer(ui_canvas, framebuf, LOTTIE_SIZE_HOR, LOTTIE_SIZE_VER, LV_IMG_CF_TRUE_COLOR);
 }
 
 void delete_lottie_player()
@@ -428,7 +441,7 @@ void delete_tinygl_dice()
     framebuf = NULL;
 }
 
-void create_lottie_palyer()
+void create_lottie_palyer(uint8_t index, lv_obj_t *ui_canvas)
 {
     lottie_player_config_t player_config = {
         .player_width = LOTTIE_SIZE_HOR,
@@ -439,12 +452,12 @@ void create_lottie_palyer()
     assert(framebuf);
 
     player_config.framebuf = framebuf;
-    player_config.file_name = mmap_assets_get_name(asset_handle, MMAP_ASSETS_FISH_JSON);
-    player_config.file_size = mmap_assets_get_size(asset_handle, MMAP_ASSETS_FISH_JSON);
-    player_config.file_data = mmap_assets_get_mem(asset_handle, MMAP_ASSETS_FISH_JSON);
+    player_config.file_name = mmap_assets_get_name(asset_handle, index);
+    player_config.file_size = mmap_assets_get_size(asset_handle, index);
+    player_config.file_data = mmap_assets_get_mem(asset_handle, index);
 
     lottie_player_init(&player_config, &player_handle);
-    timer_player = lv_timer_create(win_lottie_timer_player_cb, 10, NULL);
+    timer_player = lv_timer_create(win_lottie_timer_player_cb, 10, ui_canvas);
 }
 
 void create_tinygl_dice()
@@ -469,7 +482,7 @@ void create_tinygl_dice()
     timer_tinygl = lv_timer_create(win_tinyGL_timer_cb, 10, NULL);
 }
 
-void ui_event_shaiziplay(lv_event_t * e)
+void ui_event_dice(lv_event_t * e)
 {
     lv_event_code_t event_code = lv_event_get_code(e);
     lv_obj_t * target = lv_event_get_target(e);
@@ -486,7 +499,7 @@ void ui_event_shaiziplay(lv_event_t * e)
         lv_obj_add_flag(ui_dice_canvas, LV_OBJ_FLAG_HIDDEN);
 
         lv_indev_wait_release(lv_indev_get_act());
-        _ui_screen_change(&ui_fish, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_fish_screen_init);
+        _ui_screen_change(&ui_face, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_face_screen_init);
     }
 
     if (event_code == LV_EVENT_GESTURE &&  lv_indev_get_gesture_dir(lv_indev_get_act()) == LV_DIR_RIGHT) {
@@ -498,12 +511,33 @@ void ui_event_shaiziplay(lv_event_t * e)
     }
 }
 
-void ui_event_shaizibut(lv_event_t * e)
+void ui_event_face(lv_event_t *e)
 {
     lv_event_code_t event_code = lv_event_get_code(e);
     lv_obj_t * target = lv_event_get_target(e);
-    if (event_code == LV_EVENT_PRESSED) {
-        shaiziblink(e);
+    if (event_code == LV_EVENT_SCREEN_LOAD_START) {
+        // lv_obj_set_parent(title_panel, ui_face);
+
+        ESP_LOGI(TAG, "### load Lottie player, Face ###");
+
+        create_lottie_palyer(MMAP_ASSETS_LOOK_JSON, ui_face_canvas);
+        lv_obj_clear_flag(ui_face_canvas, LV_OBJ_FLAG_HIDDEN);
+    }
+    if (event_code == LV_EVENT_GESTURE &&  lv_indev_get_gesture_dir(lv_indev_get_act()) == LV_DIR_LEFT) {
+
+        delete_lottie_player();
+        lv_obj_add_flag(ui_face_canvas, LV_OBJ_FLAG_HIDDEN);
+
+        lv_indev_wait_release(lv_indev_get_act());
+        _ui_screen_change(&ui_fish, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_fish_screen_init);
+    }
+    if (event_code == LV_EVENT_GESTURE &&  lv_indev_get_gesture_dir(lv_indev_get_act()) == LV_DIR_RIGHT) {
+
+        delete_lottie_player();
+        lv_obj_add_flag(ui_face_canvas, LV_OBJ_FLAG_HIDDEN);
+
+        lv_indev_wait_release(lv_indev_get_act());
+        _ui_screen_change(&ui_dice, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_dice_screen_init);
     }
 }
 
@@ -514,9 +548,9 @@ void ui_event_fish(lv_event_t *e)
     if (event_code == LV_EVENT_SCREEN_LOAD_START) {
         lv_obj_set_parent(title_panel, ui_fish);
 
-        ESP_LOGI(TAG, "### load Lottie player ###");
+        ESP_LOGI(TAG, "### load Lottie player, Fish ###");
 
-        create_lottie_palyer();
+        create_lottie_palyer(MMAP_ASSETS_FISH_JSON, ui_fish_canvas);
         lv_obj_clear_flag(ui_fish_canvas, LV_OBJ_FLAG_HIDDEN);
     }
     if (event_code == LV_EVENT_GESTURE &&  lv_indev_get_gesture_dir(lv_indev_get_act()) == LV_DIR_LEFT) {
@@ -533,7 +567,7 @@ void ui_event_fish(lv_event_t *e)
         lv_obj_add_flag(ui_fish_canvas, LV_OBJ_FLAG_HIDDEN);
 
         lv_indev_wait_release(lv_indev_get_act());
-        _ui_screen_change(&ui_shaiziplay, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_shaiziplay_screen_init);
+        _ui_screen_change(&ui_face, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_dice_screen_init);
     }
 }
 
@@ -574,7 +608,8 @@ void ui_init(void)
     ui_title_screen_init();
     ui_home_screen_init();
     ui_muyuplay_screen_init();
-    ui_shaiziplay_screen_init();
+    ui_dice_screen_init();
+    ui_face_screen_init();
     ui_fish_screen_init();
     ui_game_screen_init();
     ui____initial_actions0 = lv_obj_create(NULL);

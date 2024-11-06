@@ -1,6 +1,6 @@
 SET(SOURCES screens/ui_home.c
     screens/ui_muyuplay.c
-    screens/ui_shaiziplay.c
+    screens/ui_dice.c
     screens/ui_title.c
     screens/ui_fish.c
     screens/ui_game.c

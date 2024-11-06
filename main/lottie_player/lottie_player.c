@@ -79,11 +79,11 @@ esp_err_t lottie_player_init(lottie_player_config_t *config, lottie_palyer_handl
     ESP_GOTO_ON_FALSE(tvg_res == TVG_RESULT_SUCCESS, ESP_ERR_INVALID_STATE, err, TAG, "tvg_animation_get_total_frame failed");
     ESP_GOTO_ON_FALSE((f_total != 0.0f), ESP_ERR_INVALID_STATE, err, TAG, "tvg_animation_get_total_frame failed");
     player->f_total = f_total;
-    ESP_LOGI(TAG, "totalFrame:%f", f_total);
+    ESP_LOGD(TAG, "totalFrame:%f", f_total);
 
     *handle = (lottie_palyer_handle_t)player;
 
-    ESP_LOGI(TAG, "new lottie player handle:@%p", player);
+    ESP_LOGD(TAG, "new lottie player:@%p", player);
 
     return ESP_OK;
 
