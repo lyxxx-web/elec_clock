@@ -71,6 +71,8 @@ void ui_event_Panel3(lv_event_t * e);
 lv_obj_t * ui_Panel3;
 lv_obj_t * ui_muyu;
 lv_obj_t * ui_gongdetxt;
+lv_obj_t * ui_gongde_sum;
+uint32_t gongde_sum = 0;
 
 // SCREEN: ui_dice
 void ui_dice_screen_init(void);
@@ -140,7 +142,7 @@ void muyushow_Animation(lv_obj_t * TargetObject, int delay)
     lv_anim_set_time(&PropertyAnimation_0, 150);
     lv_anim_set_user_data(&PropertyAnimation_0, PropertyAnimation_0_user_data);
     lv_anim_set_custom_exec_cb(&PropertyAnimation_0, _ui_anim_callback_set_image_zoom);
-    lv_anim_set_values(&PropertyAnimation_0, -50, 0);
+    lv_anim_set_values(&PropertyAnimation_0, -70, 0);
     lv_anim_set_path_cb(&PropertyAnimation_0, lv_anim_path_overshoot);
     lv_anim_set_delay(&PropertyAnimation_0, delay + 0);
     lv_anim_set_deleted_cb(&PropertyAnimation_0, _ui_anim_callback_free_user_data);
@@ -368,6 +370,8 @@ void ui_event_Panel3(lv_event_t * e)
     if (event_code == LV_EVENT_PRESSED) {
         muyushow_Animation(ui_muyu, 0);
         gonde_txt_Animation(ui_gongdetxt, 0);
+        gongde_sum++;
+        lv_label_set_text_fmt(ui_gongde_sum, "#f1c40f 今日功德: %d#", gongde_sum);
     }
 }
 

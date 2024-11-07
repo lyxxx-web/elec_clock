@@ -28,7 +28,7 @@ void ui_muyuplay_screen_init(void)
     lv_img_set_src(ui_muyu, &ui_img_muyu_png);
     lv_obj_set_width(ui_muyu, LV_SIZE_CONTENT);   /// 256
     lv_obj_set_height(ui_muyu, LV_SIZE_CONTENT);    /// 256
-    lv_obj_set_align(ui_muyu, LV_ALIGN_CENTER);
+    lv_obj_align(ui_muyu, LV_ALIGN_CENTER, 0, 10);
     lv_obj_add_flag(ui_muyu, LV_OBJ_FLAG_ADV_HITTEST);     /// Flags
     lv_obj_clear_flag(ui_muyu, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
     lv_img_set_zoom(ui_muyu, 200);
@@ -47,5 +47,14 @@ void ui_muyuplay_screen_init(void)
 
     lv_obj_add_event_cb(ui_Panel3, ui_event_Panel3, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_muyuplay, ui_event_muyuplay, LV_EVENT_ALL, NULL);
+
+    ui_gongde_sum = lv_label_create(ui_Panel3);
+    lv_label_set_recolor(ui_gongde_sum, true); 
+    
+    lv_label_set_text_fmt(ui_gongde_sum, "#f1c40f 今日功德: %d#", gongde_sum);
+    lv_obj_set_style_text_font(ui_gongde_sum, &ui_font_OPPOSansH18, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_align_to(ui_gongde_sum, ui_muyu, LV_ALIGN_TOP_RIGHT, -30, 25);
+
+
 
 }
