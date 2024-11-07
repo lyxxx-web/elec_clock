@@ -26,7 +26,7 @@
 
 #define LV_100ASK_2048_NUMBER_EMPTY_COLOR   lv_color_hex(0xc7b9ac)
 #define LV_100ASK_2048_NUMBER_2_COLOR 		lv_color_hex(0xeee4da)
-#define LV_100ASK_2048_NUMBER_4_COLOR 		lv_color_hex(0xede0c8)
+#define LV_100ASK_2048_NUMBER_4_COLOR 		lv_color_hex(0xf7d28d)
 #define LV_100ASK_2048_NUMBER_8_COLOR 		lv_color_hex(0xf2b179)
 #define LV_100ASK_2048_NUMBER_16_COLOR 		lv_color_hex(0xf59563)
 #define LV_100ASK_2048_NUMBER_32_COLOR 		lv_color_hex(0xf67c5f)
@@ -355,7 +355,7 @@ static void btnm_event_cb(lv_event_t * e)
         /*Change the draw descriptor the btnm main*/
         else if((dsc->id == 0) && !(dsc->label_dsc))
         {
-            dsc->rect_dsc->radius = 5;
+            dsc->rect_dsc->radius = 0;
             dsc->rect_dsc->bg_color = LV_100ASK_2048_BG_COLOR;
             dsc->rect_dsc->border_width = 0;
         }

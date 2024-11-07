@@ -53,7 +53,7 @@ static void game_2048_event_cb(lv_event_t * e)
         else if(lv_100ask_2048_get_status(obj_2048))
             lv_label_set_text(label, "#00b329 www.100ask.net: # #ff0000 GAME OVER! #");
         else
-            lv_label_set_text_fmt(label, "SCORE: #ff00ff %d #", lv_100ask_2048_get_score(obj_2048));
+            lv_label_set_text_fmt(label, "#FFFFFF SCORE:# #FF0000 %d#", lv_100ask_2048_get_score(obj_2048));
     }
 }
 
@@ -72,14 +72,14 @@ void lv_100ask_2048_simple_test(lv_obj_t * parent)
 #if LV_FONT_MONTSERRAT_40    
     lv_obj_set_style_text_font(obj_2048, &lv_font_montserrat_40, 0);
 #endif
-    lv_obj_set_size(obj_2048, 240, 240);
-    lv_obj_center(obj_2048);
+    lv_obj_set_size(obj_2048, 240, 200);
+    lv_obj_set_align(obj_2048,LV_ALIGN_BOTTOM_MID);
 
     /*Information*/
     lv_obj_t * label = lv_label_create(parent);
     lv_label_set_recolor(label, true); 
-    lv_label_set_text_fmt(label, "SCORE: #ff00ff %d #", lv_100ask_2048_get_score(obj_2048));
-    lv_obj_align_to(label, obj_2048, LV_ALIGN_OUT_TOP_RIGHT, 0, -10);
+    lv_label_set_text_fmt(label, "#FFFFFF SCORE:# #FF0000 %d#", lv_100ask_2048_get_score(obj_2048));
+    lv_obj_align_to(label, obj_2048, LV_ALIGN_TOP_MID, 0, -20);
 
     lv_obj_add_event_cb(obj_2048, game_2048_event_cb, LV_EVENT_ALL, label);
 

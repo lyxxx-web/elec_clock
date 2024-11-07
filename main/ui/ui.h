@@ -46,6 +46,8 @@ void ui_event_Panel3(lv_event_t * e);
 extern lv_obj_t * ui_Panel3;
 extern lv_obj_t * ui_muyu;
 extern lv_obj_t * ui_gongdetxt;
+extern lv_obj_t * ui_gongde_sum;
+extern uint32_t gongde_sum;
 
 // SCREEN: ui_shaiziplay
 void ui_shaiziplay_screen_init(void);
