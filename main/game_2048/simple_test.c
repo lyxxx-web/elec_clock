@@ -1,59 +1,19 @@
-
-/**
- * @file simple_test.c
- *
- */
-
-
-
-/*********************
- *      INCLUDES
- *********************/
 #include "simple_test.h"
 
-
-
-/*********************
- *      DEFINES
- *********************/
-
-/**********************
- *      TYPEDEFS
- **********************/
-
-
-
-/**********************
- *  STATIC PROTOTYPES
- **********************/
-
-
-/**********************
- *  STATIC VARIABLES
- **********************/
-
-
-/**********************
- *      MACROS
- **********************/
-
-
-/**********************
- *   GLOBAL FUNCTIONS
- **********************/
 static void game_2048_event_cb(lv_event_t * e)
 {
     lv_event_code_t code = lv_event_get_code(e);
     lv_obj_t * obj_2048 = lv_event_get_target(e);
     lv_obj_t * label = lv_event_get_user_data(e);
-    
-    if(code == LV_EVENT_VALUE_CHANGED) {
-        if (lv_100ask_2048_get_best_tile(obj_2048) >= 2048)
+
+    if (code == LV_EVENT_VALUE_CHANGED) {
+        if (lv_100ask_2048_get_best_tile(obj_2048) >= 2048) {
             lv_label_set_text(label, "#00b329 YOU WIN! #");
-        else if(lv_100ask_2048_get_status(obj_2048))
+        } else if (lv_100ask_2048_get_status(obj_2048)) {
             lv_label_set_text(label, "#00b329 www.100ask.net: # #ff0000 GAME OVER! #");
-        else
+        } else {
             lv_label_set_text_fmt(label, "#FFFFFF SCORE:# #FF0000 %d#", lv_100ask_2048_get_score(obj_2048));
+        }
     }
 }
 
@@ -64,20 +24,19 @@ static void new_game_btn_event_handler(lv_event_t * e)
     lv_100ask_2048_set_new_game(obj_2048);
 }
 
-
 void lv_100ask_2048_simple_test(lv_obj_t * parent)
 {
     /*Create 2048 game*/
     lv_obj_t * obj_2048 = lv_100ask_2048_create(parent);
-#if LV_FONT_MONTSERRAT_40    
+#if LV_FONT_MONTSERRAT_40
     lv_obj_set_style_text_font(obj_2048, &lv_font_montserrat_40, 0);
 #endif
     lv_obj_set_size(obj_2048, 240, 200);
-    lv_obj_set_align(obj_2048,LV_ALIGN_BOTTOM_MID);
+    lv_obj_set_align(obj_2048, LV_ALIGN_BOTTOM_MID);
 
     /*Information*/
     lv_obj_t * label = lv_label_create(parent);
-    lv_label_set_recolor(label, true); 
+    lv_label_set_recolor(label, true);
     lv_label_set_text_fmt(label, "#FFFFFF SCORE:# #FF0000 %d#", lv_100ask_2048_get_score(obj_2048));
     lv_obj_align_to(label, obj_2048, LV_ALIGN_TOP_MID, 0, -20);
 
@@ -92,14 +51,3 @@ void lv_100ask_2048_simple_test(lv_obj_t * parent)
     lv_label_set_text(label, "New Game");
     lv_obj_center(label);
 }
-
-
-/*=====================
- * Other functions
- *====================*/
-
-/**********************
- *   STATIC FUNCTIONS
- **********************/
-
-
