@@ -141,7 +141,7 @@ static void applyDiceInertia(tiny_texure_dice_t *tinygl_dice)
     }
 
     if (dice_dst_x) {
-        if (fabs(dice_dst_x - dice_x_rotation) < 0.1f) {
+        if (fabs(dice_dst_x - dice_x_rotation) < 0.5f) {
             dice_x_rotation = dice_dst_x;
             dice_dst_x = 0;
         } else {
@@ -150,7 +150,7 @@ static void applyDiceInertia(tiny_texure_dice_t *tinygl_dice)
     }
 
     if (dice_dst_y) {
-        if (fabs(dice_dst_y - dice_y_rotation) < 0.1f) {
+        if (fabs(dice_dst_y - dice_y_rotation) < 0.5f) {
             dice_y_rotation = dice_dst_y;
             dice_dst_y = 0;
         } else {

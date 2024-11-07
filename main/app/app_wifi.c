@@ -492,12 +492,12 @@ static void network_task(void *args)
 {
     static WiFi_Connect_Status wifi_status;
     net_event_t net_event;
-    TickType_t tick;
+    // TickType_t tick;
     struct tm timeinfo;
     bool weather_sent_today = false;
     wifi_init_sta();
 
-    tick = xTaskGetTickCount();
+    // tick = xTaskGetTickCount();
     while (1) {
         if (pdPASS == xQueueReceive(wifi_event_queue, &net_event, portTICK_RATE_MS / 5)) {
             ESP_LOGI(TAG, "net_event:%d", net_event);

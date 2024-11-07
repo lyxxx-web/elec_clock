@@ -17,6 +17,8 @@
 #include "mmap_generate_assets.h"
 #include "esp_lv_decoder.h"
 #include "esp_lv_fs.h"
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
 
 #define TAG "main"
 
@@ -160,9 +162,10 @@ void app_lvgl_display(void)
     bsp_display_lock(0);
 
     ui_init();
+    bsp_display_unlock();
     ui_init_timer();
 
-    bsp_display_unlock();
+
 }
 
 void app_main(void)
@@ -186,7 +189,8 @@ void app_main(void)
             .buff_spiram = true,
         }
     };
-    custom_cfg.lvgl_port_cfg.task_stack = 1024*100,
+    custom_cfg.lvgl_port_cfg.task_stack = 1024*30,
+    custom_cfg.lvgl_port_cfg.task_affinity = 0,
     bsp_display_start_with_config(&custom_cfg);
 
     /* Turn on display backlight */
@@ -203,13 +207,19 @@ void app_main(void)
         ESP_LOGE(TAG, "Failed to initialize SPNG decoder");
     }
     /* Add and show objects on display */
+    char buffer[512];
+    vTaskList(buffer);
+    printf("%s\n",buffer); 
     app_lvgl_display();
-
+    vTaskList(buffer);
+    printf("%s\n",buffer); 
     app_weather_start();
     app_network_start();
-
+    vTaskList(buffer);
+    printf("%s\n",buffer); 
     app_imu_init();
 
     ESP_LOGI(TAG, "Example initialization done.");
+
 }
 // *INDENT-ON*
