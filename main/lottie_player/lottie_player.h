@@ -7,19 +7,23 @@
 
 #include "esp_err.h"
 
+typedef bool (*lottie_player_end_cb_t)(void *user_data);
 typedef struct {
-    uint16_t player_width;
-    uint16_t player_height;
+    uint16_t width;
+    uint16_t height;
     uint8_t *framebuf;
 
     const char *file_name;
     void *file_data;
     uint32_t file_size;
-} lottie_player_config_t;
+
+    lottie_player_end_cb_t on_end;
+    void *target_obj;
+} lottie_player_cfg_t;
 
 typedef struct lottie_player_t *lottie_palyer_handle_t;
 
-esp_err_t lottie_player_init(lottie_player_config_t *config, lottie_palyer_handle_t *handle);
+esp_err_t lottie_player_init(lottie_player_cfg_t *config, lottie_palyer_handle_t *handle);
 
 esp_err_t lottie_player_deinit(lottie_palyer_handle_t handle);
 

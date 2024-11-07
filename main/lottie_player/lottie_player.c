@@ -22,6 +22,8 @@ typedef struct {
     Tvg_Canvas *canvas;
     Tvg_Animation *animation;
     float f_total;
+    lottie_player_end_cb_t end_cb; //callback when animation end
+    void *user_data;
 } lottie_player_t;
 
 static const char *example_get_file_extension(const char* filename)
@@ -30,7 +32,7 @@ static const char *example_get_file_extension(const char* filename)
     return (ext && ext != filename) ? ext + 1 : "";
 }
 
-esp_err_t lottie_player_init(lottie_player_config_t *config, lottie_palyer_handle_t *handle)
+esp_err_t lottie_player_init(lottie_player_cfg_t *config, lottie_palyer_handle_t *handle)
 {
     esp_err_t ret = ESP_OK;
     Tvg_Result tvg_engine = TVG_RESULT_UNKNOWN;
@@ -39,13 +41,16 @@ esp_err_t lottie_player_init(lottie_player_config_t *config, lottie_palyer_handl
     lottie_player_t *player = (lottie_player_t *)calloc(1, sizeof(lottie_player_t));
     ESP_GOTO_ON_FALSE(player, ESP_ERR_NO_MEM, err, TAG, "no mem for palyer handle");
 
+    player->end_cb = config->on_end;
+    player->user_data = config;
+
     tvg_engine = tvg_engine_init(TVG_ENGINE_SW, 0);
     ESP_GOTO_ON_FALSE(tvg_engine == TVG_RESULT_SUCCESS, ESP_ERR_INVALID_STATE, err, TAG, "tvg_engine_init failed");
 
     player->canvas = tvg_swcanvas_create();
     ESP_GOTO_ON_FALSE(player->canvas, ESP_ERR_INVALID_STATE, err, TAG, "tvg_engine_init failed");
 
-    tvg_res = tvg_swcanvas_set_target(player->canvas, (uint32_t *)config->framebuf, config->player_width, config->player_width, config->player_height, TVG_COLORSPACE_ARGB8888);
+    tvg_res = tvg_swcanvas_set_target(player->canvas, (uint32_t *)config->framebuf, config->width, config->width, config->height, TVG_COLORSPACE_ARGB8888);
     ESP_GOTO_ON_FALSE(tvg_res == TVG_RESULT_SUCCESS, ESP_ERR_INVALID_STATE, err, TAG, "tvg_engine_init failed");
 
     /* tvg Lottie */
@@ -67,7 +72,7 @@ esp_err_t lottie_player_init(lottie_player_config_t *config, lottie_palyer_handl
     tvg_res = tvg_picture_load_data(picture, (const char *)player->lottie_buf, config->file_size, ext, false);
     ESP_GOTO_ON_FALSE(picture, ESP_ERR_INVALID_STATE, err, TAG, "tvg_picture_load_data failed");
 
-    tvg_res = tvg_picture_set_size(picture, config->player_width, config->player_height);
+    tvg_res = tvg_picture_set_size(picture, config->width, config->height);
     ESP_GOTO_ON_FALSE(tvg_res == TVG_RESULT_SUCCESS, ESP_ERR_INVALID_STATE, err, TAG, "tvg_picture_set_size failed");
 
     tvg_res = tvg_canvas_push(player->canvas, picture);
@@ -79,7 +84,7 @@ esp_err_t lottie_player_init(lottie_player_config_t *config, lottie_palyer_handl
     ESP_GOTO_ON_FALSE(tvg_res == TVG_RESULT_SUCCESS, ESP_ERR_INVALID_STATE, err, TAG, "tvg_animation_get_total_frame failed");
     ESP_GOTO_ON_FALSE((f_total != 0.0f), ESP_ERR_INVALID_STATE, err, TAG, "tvg_animation_get_total_frame failed");
     player->f_total = f_total;
-    ESP_LOGD(TAG, "totalFrame:%f", f_total);
+    ESP_LOGI(TAG, "totalFrame:%f", f_total);
 
     *handle = (lottie_palyer_handle_t)player;
 
@@ -148,7 +153,12 @@ esp_err_t lottie_player_update(lottie_palyer_handle_t handle)
     /* Get the frame and refresh it to screen */
     tvg_res = tvg_animation_get_frame(player->animation, &f);
     if (++f >= player->f_total) {
-        f = 0;
+
+        if ((NULL == player->end_cb) || (true == player->end_cb(player->user_data))) {
+            f = 0;
+        } else {
+            return ESP_ERR_INVALID_STATE;
+        }
     }
     ESP_LOGD(TAG, "frame set:%f", f);
     tvg_res = tvg_animation_set_frame(player->animation, f);

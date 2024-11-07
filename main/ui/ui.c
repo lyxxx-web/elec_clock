@@ -25,8 +25,10 @@
 #define DICE_SIZE_VER           100*2
 #define swap16(x)               (((x) << 8) | ((x) >> 8))
 
-#define LOTTIE_SIZE_HOR         (BSP_LCD_H_RES)
-#define LOTTIE_SIZE_VER         (BSP_LCD_V_RES)
+#define LOTTIE_SIZE_HOR         (240)
+#define LOTTIE_SIZE_VER         (240)
+
+#define LV_EVENT_RENEW          (_LV_EVENT_LAST + 1)
 
 extern mmap_assets_handle_t asset_handle;
 
@@ -411,10 +413,29 @@ static void win_tinyGL_timer_cb(lv_timer_t *tmr)
 
 static void win_lottie_timer_player_cb(lv_timer_t *tmr)
 {
-    lv_obj_t * ui_canvas = tmr->user_data;
-    lottie_player_update(player_handle);
-    frame_argb888_to_rgb565(framebuf, (uint16_t *)framebuf, LOTTIE_SIZE_HOR, LOTTIE_SIZE_VER);
-    lv_canvas_set_buffer(ui_canvas, framebuf, LOTTIE_SIZE_HOR, LOTTIE_SIZE_VER, LV_IMG_CF_TRUE_COLOR);
+    assert(tmr->user_data);
+    lottie_player_cfg_t *data = tmr->user_data;
+
+    if (ESP_OK == lottie_player_update(player_handle)) {
+        frame_argb888_to_rgb565(framebuf, (uint16_t *)framebuf, data->width, data->height);
+        lv_canvas_set_buffer(data->target_obj, framebuf, data->width, data->height, LV_IMG_CF_TRUE_COLOR);
+    }
+}
+
+bool fish_player_end(void *user_data)
+{
+    lottie_player_cfg_t *cfg = (lottie_player_cfg_t *)user_data;
+    ESP_LOGI("UI", "fish end:%p, %p", cfg->target_obj, ui_fish_canvas);
+    lv_event_send(ui_fish, LV_EVENT_RENEW, NULL);
+    return false;
+}
+
+bool face_player_end(void *user_data)
+{
+    lottie_player_cfg_t *cfg = (lottie_player_cfg_t *)user_data;
+    ESP_LOGI("UI", "face end:%p, %p", cfg->target_obj, ui_face_canvas);
+    lv_event_send(ui_face, LV_EVENT_RENEW, NULL);
+    return true;
 }
 
 void delete_lottie_player()
@@ -429,6 +450,25 @@ void delete_lottie_player()
     framebuf = NULL;
 }
 
+void create_lottie_palyer(uint8_t index, lottie_player_cfg_t *cfg)
+{
+    if (player_handle) {
+        ESP_LOGW("UI", "delete player before create");
+        delete_lottie_player();
+    }
+
+    framebuf = heap_caps_calloc(cfg->width * cfg->height * 4, 1, MALLOC_CAP_SPIRAM);
+    assert(framebuf);
+
+    cfg->framebuf = framebuf;
+    cfg->file_name = mmap_assets_get_name(asset_handle, index);
+    cfg->file_size = mmap_assets_get_size(asset_handle, index);
+    cfg->file_data = mmap_assets_get_mem(asset_handle, index);
+
+    lottie_player_init(cfg, &player_handle);
+    timer_player = lv_timer_create(win_lottie_timer_player_cb, 10, cfg);
+}
+
 void delete_tinygl_dice()
 {
     lv_timer_del(timer_tinygl);
@@ -439,25 +479,6 @@ void delete_tinygl_dice()
 
     heap_caps_free(framebuf);
     framebuf = NULL;
-}
-
-void create_lottie_palyer(uint8_t index, lv_obj_t *ui_canvas)
-{
-    lottie_player_config_t player_config = {
-        .player_width = LOTTIE_SIZE_HOR,
-        .player_height = LOTTIE_SIZE_VER,
-    };
-
-    framebuf = heap_caps_calloc(LOTTIE_SIZE_HOR * LOTTIE_SIZE_VER * 4, 1, MALLOC_CAP_SPIRAM);
-    assert(framebuf);
-
-    player_config.framebuf = framebuf;
-    player_config.file_name = mmap_assets_get_name(asset_handle, index);
-    player_config.file_size = mmap_assets_get_size(asset_handle, index);
-    player_config.file_data = mmap_assets_get_mem(asset_handle, index);
-
-    lottie_player_init(&player_config, &player_handle);
-    timer_player = lv_timer_create(win_lottie_timer_player_cb, 10, ui_canvas);
 }
 
 void create_tinygl_dice()
@@ -513,16 +534,26 @@ void ui_event_dice(lv_event_t * e)
 
 void ui_event_face(lv_event_t *e)
 {
+    static lottie_player_cfg_t player_cfg;
     lv_event_code_t event_code = lv_event_get_code(e);
     lv_obj_t * target = lv_event_get_target(e);
+
     if (event_code == LV_EVENT_SCREEN_LOAD_START) {
         // lv_obj_set_parent(title_panel, ui_face);
+        ESP_LOGI(TAG, "### load Lottie player, Face:%p ###", ui_face_canvas);
 
-        ESP_LOGI(TAG, "### load Lottie player, Face ###");
+        player_cfg.width = LOTTIE_SIZE_HOR;
+        player_cfg.height = LOTTIE_SIZE_VER;
+        player_cfg.target_obj = ui_face_canvas;
+        player_cfg.on_end = face_player_end;
 
-        create_lottie_palyer(MMAP_ASSETS_LOOK_JSON, ui_face_canvas);
+        create_lottie_palyer(MMAP_ASSETS_LOOK_JSON, &player_cfg);
         lv_obj_clear_flag(ui_face_canvas, LV_OBJ_FLAG_HIDDEN);
     }
+    if (event_code == LV_EVENT_RENEW) {
+        ESP_LOGI(TAG, "### face renew ###");
+    }
+
     if (event_code == LV_EVENT_GESTURE &&  lv_indev_get_gesture_dir(lv_indev_get_act()) == LV_DIR_LEFT) {
 
         delete_lottie_player();
@@ -543,16 +574,48 @@ void ui_event_face(lv_event_t *e)
 
 void ui_event_fish(lv_event_t *e)
 {
+    static lottie_player_cfg_t player_cfg;
+
+    static uint16_t default_width = LOTTIE_SIZE_HOR;
+    static uint16_t default_height = LOTTIE_SIZE_VER;
+
     lv_event_code_t event_code = lv_event_get_code(e);
-    lv_obj_t * target = lv_event_get_target(e);
+    lv_obj_t *target = lv_event_get_target(e);
+    lv_obj_t *user_data = lv_event_get_user_data(e);
+
     if (event_code == LV_EVENT_SCREEN_LOAD_START) {
         lv_obj_set_parent(title_panel, ui_fish);
 
-        ESP_LOGI(TAG, "### load Lottie player, Fish ###");
+        player_cfg.width = default_width;
+        player_cfg.height = default_height;
+        player_cfg.target_obj = ui_fish_canvas;
+        player_cfg.on_end = fish_player_end;
 
-        create_lottie_palyer(MMAP_ASSETS_FISH_JSON, ui_fish_canvas);
+        ESP_LOGI(TAG, "### load Lottie player, Fish:[%d, %d], %p###", default_width, default_height, ui_fish_canvas);
+
+        create_lottie_palyer(MMAP_ASSETS_FISH_JSON, &player_cfg);
         lv_obj_clear_flag(ui_fish_canvas, LV_OBJ_FLAG_HIDDEN);
     }
+
+    if (event_code == LV_EVENT_RENEW) {
+
+        default_width *= 0.9;
+        default_height *= 0.9;
+        if (default_width < 100 || default_height < 100) {
+            default_width = LOTTIE_SIZE_HOR;
+            default_height = LOTTIE_SIZE_VER;
+        }
+        player_cfg.width = default_width;
+        player_cfg.height = default_height;
+        player_cfg.target_obj = ui_fish_canvas;
+        player_cfg.on_end = fish_player_end;
+
+        ESP_LOGI(TAG, "### load Lottie player, Fish:[%d, %d], %p ###", default_width, default_height, ui_fish_canvas);
+
+        create_lottie_palyer(MMAP_ASSETS_FISH_JSON, &player_cfg);
+        lv_obj_clear_flag(ui_fish_canvas, LV_OBJ_FLAG_HIDDEN);
+    }
+
     if (event_code == LV_EVENT_GESTURE &&  lv_indev_get_gesture_dir(lv_indev_get_act()) == LV_DIR_LEFT) {
 
         delete_lottie_player();

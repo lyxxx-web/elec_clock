@@ -20,9 +20,8 @@ void ui_face_screen_init(void)
     lv_obj_set_style_pad_bottom(ui_Panel_face, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_face_canvas = lv_canvas_create(ui_Panel_face);
-    // lv_canvas_set_buffer(ui_dice_canvas, cbuf, CANVAS_WIDTH, CANVAS_HEIGHT, LV_IMG_CF_TRUE_COLOR);
-    // lv_obj_center(ui_dice_canvas);
     lv_obj_align(ui_face_canvas, LV_ALIGN_BOTTOM_MID, 0, 0);
+    lv_obj_add_flag(ui_face_canvas, LV_OBJ_FLAG_EVENT_BUBBLE);
 
     lv_obj_add_event_cb(ui_face, ui_event_face, LV_EVENT_ALL, NULL);
 }

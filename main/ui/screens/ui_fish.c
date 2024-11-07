@@ -20,9 +20,8 @@ void ui_fish_screen_init(void)
     lv_obj_set_style_pad_bottom(ui_Panel_fish, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_fish_canvas = lv_canvas_create(ui_Panel_fish);
-    // lv_canvas_set_buffer(ui_dice_canvas, cbuf, CANVAS_WIDTH, CANVAS_HEIGHT, LV_IMG_CF_TRUE_COLOR);
-    // lv_obj_center(ui_dice_canvas);
     lv_obj_align(ui_fish_canvas, LV_ALIGN_BOTTOM_MID, 0, 0);
+    lv_obj_add_flag(ui_fish_canvas, LV_OBJ_FLAG_EVENT_BUBBLE);
 
     lv_obj_add_event_cb(ui_fish, ui_event_fish, LV_EVENT_ALL, NULL);
 }
