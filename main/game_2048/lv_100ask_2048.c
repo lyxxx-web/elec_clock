@@ -402,6 +402,7 @@ static char* int_to_str(char * str, uint16_t num)
 
     do {
         str[i++] = num % 10 + 48;
+        num /= 10;
     } while (num);
 
     str[i] = '\0';
