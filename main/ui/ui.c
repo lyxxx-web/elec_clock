@@ -598,7 +598,7 @@ void ui_event_fish(lv_event_t *e)
 
         ESP_LOGI(TAG, "### load Lottie player, Fish:[%d, %d], %p###", default_width, default_height, ui_fish_canvas);
 
-        create_lottie_palyer(MMAP_ASSETS_FISH_JSON, &player_cfg);
+        create_lottie_palyer(MMAP_ASSETS_EMOJI_STATICFISH_JSON, &player_cfg);
         lv_obj_clear_flag(ui_fish_canvas, LV_OBJ_FLAG_HIDDEN);
     }
 
@@ -617,7 +617,7 @@ void ui_event_fish(lv_event_t *e)
 
         ESP_LOGI(TAG, "### load Lottie player, Fish:[%d, %d], %p ###", default_width, default_height, ui_fish_canvas);
 
-        create_lottie_palyer(MMAP_ASSETS_FISH_JSON, &player_cfg);
+        create_lottie_palyer(MMAP_ASSETS_EMOJI_STATICFISH_JSON, &player_cfg);
         lv_obj_clear_flag(ui_fish_canvas, LV_OBJ_FLAG_HIDDEN);
     }
 

@@ -165,68 +165,6 @@ void app_lvgl_display(void)
     bsp_display_unlock();
 }
 
-<<<<<<< HEAD
-mmap_assets_handle_t asset_handle;
-
-void app_mount_mmap_fs()
-{
-    const mmap_assets_config_t config = {
-        .partition_label = "assets_A",
-        .max_files = MMAP_ASSETS_FILES,
-        .checksum = MMAP_ASSETS_CHECKSUM,
-        .flags = {
-            .mmap_enable = true,
-            .app_bin_check = true,
-        },
-    };
-
-    mmap_assets_new(&config, &asset_handle);
-
-    int stored_files = mmap_assets_get_stored_files(asset_handle);
-    ESP_LOGI(TAG, "stored_files:%d", stored_files);
-
-    for (int i = 0; i < MMAP_ASSETS_FILES; i++) {
-        const char *name = mmap_assets_get_name(asset_handle, i);
-        const uint8_t *mem = mmap_assets_get_mem(asset_handle, i);
-        int size = mmap_assets_get_size(asset_handle, i);
-        int width = mmap_assets_get_width(asset_handle, i);
-        int height = mmap_assets_get_height(asset_handle, i);
-
-        // ESP_LOGI(TAG, "name:[%s], mem:[%p], size:[%d bytes], w:[%d], h:[%d]", name, mem, size, width, height);
-    }
-}
-
-void perf_decoder_fs_esp(void)
-{
-    esp_lv_decoder_handle_t decoder_handle = NULL;
-    esp_err_t ret_fs = esp_lv_decoder_init(&decoder_handle);
-    if (ret_fs != ESP_OK) {
-        ESP_LOGE(TAG, "Failed to initialize SPNG decoder");
-        return;
-    }
-    int i;
-    char icon_name [10];
-    snprintf(icon_name, sizeof(icon_name), "%s.png", weather_icon);
-    for(i = 0; i < mmap_assets_get_stored_files(asset_handle); i++){
-        //ESP_LOGI(TAG, "get_stored_files: %s", mmap_assets_get_name(asset_handle, i));
-        if(!strcmp(mmap_assets_get_name(asset_handle, i), icon_name))
-            break;
-    }
-    if(i == mmap_assets_get_stored_files(asset_handle)){
-        ESP_LOGE(TAG, "cannot find corresponding weather icon");
-        int j;
-        for(j = 0; i < mmap_assets_get_stored_files(asset_handle); j++){
-            if(!strcmp(mmap_assets_get_name(asset_handle, i), "999.png"))
-                break;
-        }
-        i = j;
-    }
-    img_weather_dsc.data_size = mmap_assets_get_size(asset_handle, i);
-    img_weather_dsc.data = mmap_assets_get_mem(asset_handle, i);
-}
-
-=======
->>>>>>> f45c91d (complete home page)
 void app_main(void)
 {
     /* Initialize NVS. */
@@ -248,7 +186,7 @@ void app_main(void)
             .buff_spiram = true,
         }
     };
-    custom_cfg.lvgl_port_cfg.task_stack = 1024*30,
+    custom_cfg.lvgl_port_cfg.task_stack = 1024*100,
     bsp_display_start_with_config(&custom_cfg);
 
     /* Turn on display backlight */

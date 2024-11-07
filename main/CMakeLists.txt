@@ -8,21 +8,15 @@ idf_component_register(
         "./ui/images"
         "./app"
         "./cube_dice"
-<<<<<<< HEAD
         "./lottie_player"
-=======
         "./game_2048"
->>>>>>> 3d7edf1 (add 2048 game)
     INCLUDE_DIRS 
         "." 
         "./ui" 
         "./app"
         "./cube_dice"
-<<<<<<< HEAD
         "./lottie_player"
-=======
         "./game_2048"
->>>>>>> 3d7edf1 (add 2048 game)
     )
 
 spiffs_create_partition_assets(
