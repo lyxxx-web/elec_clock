@@ -24,6 +24,7 @@ void bottom_Animation(lv_obj_t * TargetObject, int delay);
 void opaon_Animation(lv_obj_t * TargetObject, int delay);
 void shaizishow_Animation(lv_obj_t * TargetObject, int delay);
 void gonde_txt_Animation(lv_obj_t * TargetObject, int delay);
+void falldown_Animation(lv_obj_t * TargetObject, int delay);
 // SCREEN: ui_home
 void ui_home_screen_init(void);
 void ui_event_home(lv_event_t * e);

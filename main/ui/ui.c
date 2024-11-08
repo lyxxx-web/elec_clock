@@ -49,6 +49,7 @@ void bottom_Animation(lv_obj_t * TargetObject, int delay);
 void opaon_Animation(lv_obj_t * TargetObject, int delay);
 void shaizishow_Animation(lv_obj_t * TargetObject, int delay);
 void gonde_txt_Animation(lv_obj_t * TargetObject, int delay);
+void falldown_Animation(lv_obj_t * TargetObject, int delay);
 
 // SCREEN: ui_home
 void ui_home_screen_init(void);
@@ -133,6 +134,28 @@ lv_obj_t * ui____initial_actions0;
 #endif
 
 ///////////////////// ANIMATIONS ////////////////////
+void falldown_Animation(lv_obj_t * TargetObject, int delay)
+{
+    ui_anim_user_data_t * PropertyAnimation_0_user_data = lv_mem_alloc(sizeof(ui_anim_user_data_t));
+    PropertyAnimation_0_user_data->target = TargetObject;
+    PropertyAnimation_0_user_data->val = -1;
+    lv_anim_t PropertyAnimation_0;
+    lv_anim_init(&PropertyAnimation_0);
+    lv_anim_set_time(&PropertyAnimation_0, 500);
+    lv_anim_set_user_data(&PropertyAnimation_0, PropertyAnimation_0_user_data);
+    lv_anim_set_custom_exec_cb(&PropertyAnimation_0, _ui_anim_callback_set_y);
+    lv_anim_set_values(&PropertyAnimation_0, 50, 0);
+    lv_anim_set_path_cb(&PropertyAnimation_0, lv_anim_path_overshoot);
+    lv_anim_set_delay(&PropertyAnimation_0, delay + 0);
+    lv_anim_set_deleted_cb(&PropertyAnimation_0, _ui_anim_callback_free_user_data);
+    lv_anim_set_playback_time(&PropertyAnimation_0, 0);
+    lv_anim_set_playback_delay(&PropertyAnimation_0, 0);
+    lv_anim_set_repeat_count(&PropertyAnimation_0, 0);
+    lv_anim_set_repeat_delay(&PropertyAnimation_0, 0);
+    lv_anim_set_early_apply(&PropertyAnimation_0, false);
+    lv_anim_set_get_value_cb(&PropertyAnimation_0, &_ui_anim_callback_get_y);
+    lv_anim_start(&PropertyAnimation_0);
+}
 void muyushow_Animation(lv_obj_t * TargetObject, int delay)
 {
     ui_anim_user_data_t * PropertyAnimation_0_user_data = lv_mem_alloc(sizeof(ui_anim_user_data_t));
@@ -345,7 +368,7 @@ void ui_event_home(lv_event_t * e)
     }
     if (event_code == LV_EVENT_GESTURE &&  lv_indev_get_gesture_dir(lv_indev_get_act()) == LV_DIR_LEFT) {
         lv_indev_wait_release(lv_indev_get_act());
-        _ui_screen_change(&ui_muyuplay, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_muyuplay_screen_init);
+        _ui_screen_change(&ui_muyuplay, LV_SCR_LOAD_ANIM_NONE, 0, 0, &ui_muyuplay_screen_init);
     }
 }
 void ui_event_muyuplay(lv_event_t * e)
@@ -354,14 +377,16 @@ void ui_event_muyuplay(lv_event_t * e)
     lv_obj_t * target = lv_event_get_target(e);
     if (event_code == LV_EVENT_SCREEN_LOAD_START) {
         lv_obj_set_parent(title_panel, ui_Panel3);
+        falldown_Animation(ui_muyu, 0);
+        opaon_Animation(ui_gongde_sum, 0);
     }
     if (event_code == LV_EVENT_GESTURE &&  lv_indev_get_gesture_dir(lv_indev_get_act()) == LV_DIR_RIGHT) {
         lv_indev_wait_release(lv_indev_get_act());
-        _ui_screen_change(&ui_home, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_home_screen_init);
+        _ui_screen_change(&ui_home, LV_SCR_LOAD_ANIM_NONE, 0, 0, &ui_home_screen_init);
     }
     if (event_code == LV_EVENT_GESTURE &&  lv_indev_get_gesture_dir(lv_indev_get_act()) == LV_DIR_LEFT) {
         lv_indev_wait_release(lv_indev_get_act());
-        _ui_screen_change(&ui_dice, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_dice_screen_init);
+        _ui_screen_change(&ui_dice, LV_SCR_LOAD_ANIM_NONE, 0, 0, &ui_dice_screen_init);
     }
 }
 void ui_event_Panel3(lv_event_t * e)
@@ -526,7 +551,7 @@ void ui_event_dice(lv_event_t * e)
         lv_obj_add_flag(ui_dice_canvas, LV_OBJ_FLAG_HIDDEN);
 
         lv_indev_wait_release(lv_indev_get_act());
-        _ui_screen_change(&ui_face, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_face_screen_init);
+        _ui_screen_change(&ui_face, LV_SCR_LOAD_ANIM_NONE, 0, 0, &ui_face_screen_init);
     }
 
     if (event_code == LV_EVENT_GESTURE &&  lv_indev_get_gesture_dir(lv_indev_get_act()) == LV_DIR_RIGHT) {
@@ -534,7 +559,7 @@ void ui_event_dice(lv_event_t * e)
         lv_obj_add_flag(ui_dice_canvas, LV_OBJ_FLAG_HIDDEN);
 
         lv_indev_wait_release(lv_indev_get_act());
-        _ui_screen_change(&ui_muyuplay, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_muyuplay_screen_init);
+        _ui_screen_change(&ui_muyuplay, LV_SCR_LOAD_ANIM_NONE, 0, 0, &ui_muyuplay_screen_init);
     }
 }
 
@@ -566,7 +591,7 @@ void ui_event_face(lv_event_t *e)
         lv_obj_add_flag(ui_face_canvas, LV_OBJ_FLAG_HIDDEN);
 
         lv_indev_wait_release(lv_indev_get_act());
-        _ui_screen_change(&ui_fish, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_fish_screen_init);
+        _ui_screen_change(&ui_fish, LV_SCR_LOAD_ANIM_NONE, 0, 0, &ui_fish_screen_init);
     }
     if (event_code == LV_EVENT_GESTURE &&  lv_indev_get_gesture_dir(lv_indev_get_act()) == LV_DIR_RIGHT) {
 
@@ -574,7 +599,7 @@ void ui_event_face(lv_event_t *e)
         lv_obj_add_flag(ui_face_canvas, LV_OBJ_FLAG_HIDDEN);
 
         lv_indev_wait_release(lv_indev_get_act());
-        _ui_screen_change(&ui_dice, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_dice_screen_init);
+        _ui_screen_change(&ui_dice, LV_SCR_LOAD_ANIM_NONE, 0, 0, &ui_dice_screen_init);
     }
 }
 
@@ -628,7 +653,7 @@ void ui_event_fish(lv_event_t *e)
         lv_obj_add_flag(ui_fish_canvas, LV_OBJ_FLAG_HIDDEN);
 
         lv_indev_wait_release(lv_indev_get_act());
-        _ui_screen_change(&ui_game, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_game_screen_init);
+        _ui_screen_change(&ui_game, LV_SCR_LOAD_ANIM_NONE, 0, 0, &ui_game_screen_init);
     }
     if (event_code == LV_EVENT_GESTURE &&  lv_indev_get_gesture_dir(lv_indev_get_act()) == LV_DIR_RIGHT) {
 
@@ -636,7 +661,7 @@ void ui_event_fish(lv_event_t *e)
         lv_obj_add_flag(ui_fish_canvas, LV_OBJ_FLAG_HIDDEN);
 
         lv_indev_wait_release(lv_indev_get_act());
-        _ui_screen_change(&ui_face, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_dice_screen_init);
+        _ui_screen_change(&ui_face, LV_SCR_LOAD_ANIM_NONE, 0, 0, &ui_dice_screen_init);
     }
 }
 
@@ -649,11 +674,11 @@ void ui_event_game(lv_event_t *e)
     }
     if (event_code == LV_EVENT_GESTURE &&  lv_indev_get_gesture_dir(lv_indev_get_act()) == LV_DIR_LEFT) {
         lv_indev_wait_release(lv_indev_get_act());
-        _ui_screen_change(&ui_home, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_home_screen_init);
+        _ui_screen_change(&ui_home, LV_SCR_LOAD_ANIM_NONE, 0, 0, &ui_home_screen_init);
     }
     if (event_code == LV_EVENT_GESTURE &&  lv_indev_get_gesture_dir(lv_indev_get_act()) == LV_DIR_RIGHT) {
         lv_indev_wait_release(lv_indev_get_act());
-        _ui_screen_change(&ui_fish, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_fish_screen_init);
+        _ui_screen_change(&ui_fish, LV_SCR_LOAD_ANIM_NONE, 0, 0, &ui_fish_screen_init);
     }
 }
 void ui_event____initial_actions0(lv_event_t * e)
