@@ -86,7 +86,6 @@ int find_icon_index(char * data)
             break;
     }
     if(i == mmap_assets_get_stored_files(asset_handle)){
-        ESP_LOGE(TAG, "cannot find corresponding weather icon");
         for(j = 0; i < mmap_assets_get_stored_files(asset_handle); j++){
             if(!strcmp(mmap_assets_get_name(asset_handle, i), "999.png"))
                 break;
@@ -162,10 +161,9 @@ void app_lvgl_display(void)
     bsp_display_lock(0);
 
     ui_init();
-    bsp_display_unlock();
+
     ui_init_timer();
-
-
+    bsp_display_unlock();
 }
 
 void app_main(void)
@@ -190,7 +188,7 @@ void app_main(void)
         }
     };
     custom_cfg.lvgl_port_cfg.task_stack = 1024*30,
-    custom_cfg.lvgl_port_cfg.task_affinity = 0,
+    custom_cfg.lvgl_port_cfg.task_affinity = 1,
     bsp_display_start_with_config(&custom_cfg);
 
     /* Turn on display backlight */
@@ -207,16 +205,12 @@ void app_main(void)
         ESP_LOGE(TAG, "Failed to initialize SPNG decoder");
     }
     /* Add and show objects on display */
-    char buffer[512];
-    vTaskList(buffer);
-    printf("%s\n",buffer); 
+
     app_lvgl_display();
-    vTaskList(buffer);
-    printf("%s\n",buffer); 
+
     app_weather_start();
     app_network_start();
-    vTaskList(buffer);
-    printf("%s\n",buffer); 
+
     app_imu_init();
 
     ESP_LOGI(TAG, "Example initialization done.");

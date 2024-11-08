@@ -680,9 +680,7 @@ void ui_init(void)
     ui_dice_screen_init();
     ui_face_screen_init();
     ui_fish_screen_init();
-    printf("game 2048 init\n");
     ui_game_screen_init();
-    printf("game 2048 init complete!\n");
     ui____initial_actions0 = lv_obj_create(NULL);
     lv_obj_add_event_cb(ui____initial_actions0, ui_event____initial_actions0, LV_EVENT_ALL, NULL);
 
