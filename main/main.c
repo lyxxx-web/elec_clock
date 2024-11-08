@@ -17,8 +17,6 @@
 #include "mmap_generate_assets.h"
 #include "esp_lv_decoder.h"
 #include "esp_lv_fs.h"
-#include "freertos/FreeRTOS.h"
-#include "freertos/task.h"
 
 #define TAG "main"
 
